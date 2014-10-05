@@ -43,6 +43,7 @@ ON_AWS = False
 ON_DOCKER = False
 ON_FIG = False
 ON_DO = False
+ON_SNAP_CI = False
 
 if 'USER' in os.environ:
     if os.environ['USER'] == "shippable":
@@ -57,8 +58,10 @@ if 'RACK_ENV' in os.environ:
         DEBUG = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
+    elif os.environ['RACK_ENV'] == "testing":
+        ON_SNAP_CI = True
 
-if ON_DO:
+if ON_DO or ON_SNAP_CI:
     REDIS_PASSWORD = ""
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
