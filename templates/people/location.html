@@ -1,0 +1,92 @@
+{% extends "people/base.html" %}
+
+{% block js %}
+
+    {{ block.super }}
+    <script>
+
+    vars = {
+        locationsUrl: '/api/v1/users/locations/'
+    }
+    </script>
+
+    <script type="text/javascript" src="/static/js/1.2.9/angular.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/1.2.9/angular-touch.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/1.2.9/angular-resource.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/ui-bootstrap-tpls-0.9.0.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xeditable.js" charset="utf-8"></script>
+
+    <!-- For Location panel -->
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script type="text/javascript" src="/static/js/angular-google-maps.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/ngAutocomplete.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/core.js" charset="utf-8"></script>
+
+{% endblock js %}
+
+{% block bodytag %} ng-app="locationsEditApp" {% endblock %}
+
+{% block panel-heading %}Saved Locations{% endblock %}
+
+{% block content %}
+{% verbatim %}
+
+    <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Saved Locations
+                    </div>
+                    <div class="panel-body" ng-controller="locationsEditCtrl">
+                         <div class="content" >
+                            <div class="col-md-7">
+
+                                <form id="form" role="form">
+
+                                    <div class="form-group move-down">
+                                        <label for="Autocomplete">Address Lookup</label>
+                                        <input type="text" id="Autocomplete" class="form-control" ng-autocomplete="result" details="details" options="options"/>
+
+                                    </div>
+                                    <div class="form-group move-down text-right">
+                                        <button type="submit"
+                                              class="btn btn-primary"
+                                              ng-click="createLocation()">
+                                          Save
+                                        </button>
+                                    </div>
+                                </form>
+                                <div ng-repeat="value in data.results">
+                                    <a ng-click="updateMap(value.geom.coordinates)" class="large-text"
+                                       ng-show="value.geom.coordinates">
+                                        {{ value.name || 'empty' }}
+                                    </a>
+                                    <a href="#" ng-click="deleteLocation(value, $index)">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <google-map center="map.center" zoom="map.zoom" draggable="true">
+                                <marker coords="map.coords"></marker>
+                            </google-map>
+                        </div>
+                        </div>
+                </div>
+            </div>
+    </div>
+
+
+    <div class="row" >
+
+        <div id="fb-root">
+        </div>
+
+</div>
+
+{% endverbatim %}
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends "people/base.html" %}
+
+{% block js %}
+
+    {{ block.super }}
+    <script>
+
+
+    vars = {
+        settingsUrl: '/api/v1/users/profiles/' + {{ request.user.pk }} + '/',
+        locationsUrl: '/api/v1/users/locations/'
+    }
+    </script>
+
+    <script type="text/javascript" src="/static/js/1.2.9/angular.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/1.2.9/angular-touch.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/1.2.9/angular-resource.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/ui-bootstrap-tpls-0.9.0.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xeditable.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/settings.js" charset="utf-8"></script>
+
+{% endblock js %}
+
+{% block bodytag %} ng-app="settingsEditApp"{% endblock %}
+
+{% block panel-heading %}Settings {% endblock %}
+
+{% block content %}
+
+{% verbatim %}
+
+    <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Your Details
+
+                    </div>
+                    <div class="panel-body"  ng-app="settingsEditApp" ng-controller="settingsEditCtrl">
+                         <div class="content" >
+                            <div class="col-md-8">
+                                <div class="bs-component">
+                                  <div class="alert alert-dismissable alert-success" ng-show="data.success">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    Details successfully updated.
+                                  </div>
+                                </div>
+                                <form editable-form name="editableForm" onaftersave="updateUser()">
+                                    <div>
+                                      <!-- editable username (text with validation) -->
+                                      <span class="title">First Name: </span>
+                                      <span editable-text="data.first_name" e-required>{{ data.first_name || 'empty' }}</span>
+                                    </div>
+
+                                    <div>
+                                      <span class="title">Last Name: </span>
+                                      <span editable-text="data.last_name" e-required>{{ data.last_name || 'empty' }}</span>
+                                    </div>
+
+                                    <div>
+                                      <span class="title">Email: </span>
+                                      <span editable-text="data.email" onbeforesave="" e-required>{{ data.email || 'empty' }}</span>
+                                    </div>
+
+                                    <div>
+                                      <!-- button to show form -->
+                                      <button type="button" class="btn btn-default" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                                        Edit
+                                      </button>
+                                      <!-- buttons to submit / cancel form -->
+                                      <span ng-show="editableForm.$visible">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+                                          Save
+                                        </button>
+                                        <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                                          Cancel
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </form>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+
+
+
+    <div class="row" >
+
+        <div id="fb-root">
+        </div>
+
+</div>
+
+{% endverbatim %}
+{% endblock content %}

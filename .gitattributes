@@ -1,0 +1,5 @@
+*.deb.txt -crlf
+*.sh -crlf
+*.crt -crlf
+*.key -crlf
+*.j2 -crlf

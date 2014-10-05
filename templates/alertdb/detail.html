@@ -1,0 +1,139 @@
+{% extends "people/base.html" %}
+
+{% block navitems %}
+  <li><a href="/home/">Home</a></li>
+  <li class="active"><a href="/locations/">Locations</a></li>
+  <li><a href="/settings/">Settings</a></li>
+  <li><a href="/past-alerts/">Past Alerts</a></li>
+  <li><a href="/logoff/">Logoff</a></li>
+{% endblock %}
+
+
+{% block js %}
+
+    {{ block.super }}
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script>
+
+
+    function initialize() {
+
+        var bounds = new google.maps.LatLngBounds(
+              new google.maps.LatLng({{ bounds_lat1 }}, {{ bounds_lng1 }}),
+              new google.maps.LatLng({{ bounds_lat2 }}, {{ bounds_lng2 }})
+          );
+
+        var styles = [
+          {
+            "stylers": [
+              { "lightness": 21 }
+            ]
+          },{
+            "featureType": "landscape.natural",
+            "stylers": [
+              { "lightness": 80 }
+            ]
+          },{
+            "featureType": "administrative.province",
+            "stylers": [
+              { "visibility": "on" }
+            ]
+          },{
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [
+              { "gamma": 0.48 },
+              { "lightness": 57 },
+              { "saturation": -34 }
+            ]
+          }
+        ];
+
+
+
+
+        var mapOptions = {
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: styles
+        };
+
+
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        map.setCenter(bounds.getCenter()); //or use custom center
+        map.fitBounds(bounds);
+
+
+        //map.data.loadGeoJson('/alerts/{{ alert.cap_slug }}/geojson/');
+        map.data.loadGeoJson('/api/v1/alerts/{{ alert.cap_slug }}/areas/');
+
+        // Set the stroke width, and fill color for each polygon
+        var featureStyle = {
+            fillColor: 'green',
+            strokeWeight: 1
+        };
+        map.data.setStyle(featureStyle);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+
+
+{% endblock js %}
+
+{% block bodytag %}{% endblock %}
+
+{% block panel-heading %}Location{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Alert Details
+
+                    </div>
+                    <div class="panel-body">
+                         <div class="content" >
+                            <div class="col-md-8">
+
+                                {% for info in alert.info_set.all %}
+                                    <h3>{{ info.cap_event }}</h3>
+
+                                    <p>Status: {{ alert.cap_status }}</p>
+                                    <p>Effective: {{ info.cap_effective }}</p>
+                                    <p>Expires: {{ info.cap_expires }}</p>
+                                    <p>Category: {{ info.get_cap_category_display }}</p>
+                                    <p>Severity: {{ info.get_cap_severity_display }}</p>
+                                    <p>Response: {{ info.get_cap_response_type_display }}</p>
+                                    <p>Certainty: {{ info.get_cap_certainty_display }}</p>
+                                    <p>Urgency: {{ info.get_cap_urgency_display }}</p>
+                                    <h4>Description</h4>
+                                    <p>{{ info.cap_description }}</p>
+                                    <h4>Instruction</h4>
+                                    <p>{{ info.cap_instruction }}</p>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div id="map-canvas"></div>
+                        </div>
+                        </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+    <div class="row" >
+
+        <div id="fb-root">
+        </div>
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,54 @@
+# Build Environment
+build_environment: Ubuntu 12.04
+
+# language setting
+language: python
+
+notifications:
+     email:
+         recipients:
+             - kelvin@kelvinism.com
+         on_success: never
+         on_failure: always
+
+# version numbers, testing against two versions of node
+python:
+  - 2.7
+
+services:
+    - redis
+
+env:
+  global:
+    - DISPLAY=:99.0
+    - secure: W5d4xxoYxAYyovI/5cihFjwtcePtvBcA3A1ZQE06LNHOQAWN0Max7TXLefnSXZGJa0SzuAurwwuhOQ3XAP2ffQdjvKO8b0G5glh3UldELcCOgFOuYd7r6fIrBXO6rfVvcDtzCKJ2OQZTVsBNwoUenQELFlTUWiVOgotxh/OZP0I1zoVhisSXNMtRvW6yxZa1sKTZGnzGvk6BCGqpWu3ljJbgRXE4A+2dc9nlOqpSmwe4P7MadnZAbI4sUwRs+7xs55GrTxobAFYpD3/0U73OlbYqyXRQpPSx4KEIhN0/Sa7Oqr6PM4/qyBSrCOjNBx1DVGHHYJw0MgX+dlbgxqNH+g==
+    - secure: or+Y6sj1QxEXGqiMdj5gJDbgqEz7nDCEwgyCA0tgrDTJUwjB4AQykB2sokLwjTeYCByhL16OJu2qSyevBN02U2CveUKadpyzxlbw1UsYA6hS4/f1cntioR9YHKq2s9iW58gurWO3iDVFtWDpT2RSmoxEskC4tt84pY2rIOaFP/1NS2vnp+uvYSDfYMYR0n1D02V4sMqpGLP+SFNDMcJ+KKmKtdrmlNGnzyK8ec/7r3L2fHnkeywFCo666b/NMs8PpmMpv/K7NhtPHwFxj6FHoRwlpSreR38pNS5evt/zrX+0na+RTKPaqgFc3i76LC5klElSSgf479IRy7wwUqj7dw==
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install gdal-bin libgeos-dev libxml2-dev libxslt1-dev python-lxml
+  - sudo apt-get install postgresql-9.3-postgis
+  - pip install --use-mirrors -r requirements.txt
+  - pip install lxml
+  - pip install --no-deps djrill django-debug-toolbar django-uuidfield django-push-notifications
+  - psql -c 'CREATE DATABASE cozysiren;' -U postgres
+  - psql -d cozysiren -c "CREATE EXTENSION postgis;" -U postgres
+  - psql -d cozysiren -c "CREATE EXTENSION postgis_topology;" -U postgres
+
+before_script:
+  - rm -f .coverage
+  - find . -name \*.pyc -delete
+
+script:
+  - python manage.py migrate --noinput
+  - python manage.py test --exe
+  - coverage xml -o shippable/codecoverage/coverage.xml
+  - cp reports/nosetests.xml shippable/testresults/nosetests.xml
+  - ssh $ANSIBLE_USER@$ANSIBLE_HOST "cd alerted-us-playbooks; git pull; ansible-playbook -i staging/inventory deploy.yml"
+  - python tests/smoke.py https://staging.alerted.us
+  - ssh $ANSIBLE_USER@$ANSIBLE_HOST "cd alerted-us-playbooks; git pull; ansible-playbook -i production/inventory deploy.yml"
+  - python tests/smoke.py https://alerted.us
+
+#after_failure:
+#  - tail -n +1 -- /tmp/*.txt
+

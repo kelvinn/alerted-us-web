@@ -1,0 +1,64 @@
+/* CSS used here will be applied after bootstrap.css */
+
+
+body {
+    background-color: white;
+}
+
+.form-group.last {
+    margin-bottom:0px;
+}
+
+.white, .white a {
+  color: #fff;
+}
+
+.large-text {
+    font-size: 2.0em;
+    font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+.huge-text {
+    font-size: 4.0em;
+    font-weight: bold;
+    font-family: Sans-Serif;
+}
+
+.extra-padding-top {
+    padding-top: 50px;
+}
+
+.navbar-default {
+    background: transparent;
+    font-family: Sans-Serif;
+    border: 0px;
+    font-size: 1.0em;
+}
+
+.navbar-brand > span {
+    font-size: 1.0em;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.navbar .nav > li > a {
+    color: #f4f3ef;
+    font-weight: 800;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color: #fdfcf8;
+    text-decoration: underline;
+}
+
+.header-container {
+    height: 50px;
+    background-color: transparent;
+}
+
+.big-text-padding {
+    padding-top: 100px;
+
+}
+

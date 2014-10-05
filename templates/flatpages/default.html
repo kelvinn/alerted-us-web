@@ -1,0 +1,26 @@
+{% extends "people/base.html" %}
+
+{% block bodytag %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        {{ flatpage.title }}
+                    </div>
+                    <div class="panel-body">
+                        {{ flatpage.content }}
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="row" >
+
+        <div id="fb-root"></div>
+
+    </div>
+
+{% endblock content %}

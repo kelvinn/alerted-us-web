@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block head %}
+    <!-- CozySiren core CSS -->
+    <link href="/static/css/internal.css" rel="stylesheet">
+{% endblock %}
+
+{% block base-title %}
+    alerted.us | Real-Time Alerts
+{% endblock %}
+
+{% block base-content %}
+
+    <div class="container col-md-12">
+
+        <div class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4 extra-padding-top">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

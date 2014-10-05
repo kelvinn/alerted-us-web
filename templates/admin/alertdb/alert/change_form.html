@@ -1,0 +1,7 @@
+{% extends "admin/change_form.html" %}
+
+{% load api_info %}
+
+{% block after_field_sets %}
+  {% if object_id %}{% display_infos object_id %}{% endif %}
+{% endblock %}

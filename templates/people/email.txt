@@ -1,0 +1,17 @@
+Urgency:
+{{ cap_urgency }}
+
+Severity:
+{{ cap_severity }}
+
+Certainty:
+{{ cap_certainty }}
+
+Category:
+{{ cap_category }}
+
+Response:
+{{ cap_response_type }}
+
+Description:
+{{ cap_description }}

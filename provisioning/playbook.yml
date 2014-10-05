@@ -1,0 +1,116 @@
+---
+- hosts: all
+  vars:
+    db_user: app_user  # Hardcoded in settings.py
+    db_password: djangouserspassword  # Hardcoded in settings.py
+    db_name: cozysiren # Hardcoded in settings.py
+    db_port: 5432
+    test_db_name: test_cozysiren
+    venv_dir: /opt/python/venv
+    project_dir: /vagrant
+    celery_cmd: "{{ venv_dir }}/bin/celery worker -A project --concurrency=1 --loglevel=INFO"
+    redis_endpoint: 127.0.0.1
+    redis_port: 6379
+    rack_env: "development"
+    postgresql_listen_addr: 127.0.0.1
+    django_secret_key: "ABC123"
+
+  tasks:
+
+    # Setup Environment variables
+    - name: copy environment into etc
+      copy: src=environment dest=/etc/environment mode=644 backup=yes
+
+    # Install Redis
+    - apt_repository: repo='ppa:chris-lea/redis-server'
+    - apt: name=redis-server
+
+    # Install and configure the Postgres
+    - apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+    - apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
+
+    - name: ensure apt cache is up to date
+      action: apt update_cache=yes
+
+    - name: postgresql - regen locales
+      command: /usr/sbin/locale-gen en_US.UTF-8
+
+    - name: set locale
+      command: /usr/sbin/update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
+    - name: ensure packages are installed
+      action: apt name={{item}}
+      with_items:
+          - postgresql-9.3
+          - postgresql-server-dev-9.3
+          - postgresql-9.3-postgis-2.1
+          - python-psycopg2
+          - libpq-dev
+      environment:
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8
+
+    - name: ensure user has access to databases
+      sudo_user: postgres
+      postgresql_user:
+                name={{ db_user }}
+                password={{ db_password }}
+                role_attr_flags=CREATEDB,SUPERUSER
+
+    - name: install postgresql db
+      sudo_user: postgres
+      postgresql_db:
+                name={{ db_name }}
+                encoding='UTF-8'
+                lc_collate='en_US.UTF-8'
+                lc_ctype='en_US.UTF-8'
+
+      register: createdb_status
+
+    - name: install postgresql test db
+      sudo_user: postgres
+      postgresql_db:
+                name={{ test_db_name }}
+                owner={{ db_user }}
+                encoding='UTF-8'
+                lc_collate='en_US.UTF-8'
+                lc_ctype='en_US.UTF-8'
+
+    - name: create extension postgis
+      sudo_user: postgres
+      action: command psql -d {{ db_name }} -c 'CREATE EXTENSION postgis;'
+      when: createdb_status.changed
+
+    - name: create extension postgis_topology
+      sudo_user: postgres
+      action: command psql -d {{ db_name }} -c 'CREATE EXTENSION postgis_topology;'
+      when: createdb_status.changed
+
+    # Setup packages for Django app
+
+    - name: ensure packages are installed for app
+      action: apt name={{item}}
+      with_items:
+          - libpq-dev
+          - python-dev
+          - python-lxml
+          - python-psycopg2
+          - python-pip
+          - supervisor
+          - binutils
+          - libproj-dev
+          - gdal-bin
+          - git
+          - libxml2-dev
+          - libxslt1-dev
+
+    - name: ensure web directory exists
+      file: dest=/opt/python owner=www-data group=www-data state=directory
+
+    - pip: name=virtualenv
+    - pip: requirements="{{ project_dir}}/requirements.txt" virtualenv={{ venv_dir }} virtualenv_site_packages=yes
+    - pip: name=django-debug-toolbar extra_args='--no-deps' virtualenv={{ venv_dir }}
+
+    # Install and configure Celery
+    - name: be sure celery is configured
+      template: src=celeryd.conf.j2 dest=/etc/supervisor/conf.d/celeryd.conf

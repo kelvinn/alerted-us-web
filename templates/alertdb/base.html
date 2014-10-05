@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+
+{% block head %}
+    <!-- CozySiren core CSS -->
+    <link href="/static/css/internal.css" rel="stylesheet">
+
+    <!-- For in-pace editing -->
+    <link href="/static/css/xeditable.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block base-title %}
+    alerted.us | Real-Time Alerts
+{% endblock %}
+
+{% block base-content %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block js %}{% endblock %}
+

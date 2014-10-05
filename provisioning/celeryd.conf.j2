@@ -1,0 +1,32 @@
+; ==================================
+;  celery worker supervisor example
+; ==================================
+
+[program:celery]
+; Set full path to celery program if using virtualenv
+command={{ celery_cmd }}
+
+directory={{ project_dir }}
+user=nobody
+numprocs=1
+stdout_logfile=/var/log/celery-worker.log
+stderr_logfile=/var/log/celery-worker.log
+autostart=true
+autorestart=true
+startsecs=10
+
+; Need to wait for currently executing tasks to finish at shutdown.
+; Increase this if you have very long running tasks.
+stopwaitsecs = 600
+
+; When resorting to send SIGKILL to the program to terminate it
+; send SIGKILL to its whole process group instead,
+; taking care of its children as well.
+killasgroup=true
+
+; if rabbitmq is supervised, set its priority higher
+; so it starts first
+priority=998
+
+environment=REDIS_ENDPOINT={{ redis_endpoint }},REDIS_PORT={{ redis_port }},DB_NAME={{ db_name }},DB_USER={{ db_user }},DB_PASSWORD={{ db_password }},DB_HOST={{ postgresql_listen_addr }},DB_PORT={{ db_port }},RACK_ENV={{ rack_env }},PROJECT_DIR={{ project_dir }},DJANGO_SECRET_KEY={{ django_secret_key }}
+

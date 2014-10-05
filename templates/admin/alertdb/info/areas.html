@@ -1,0 +1,5 @@
+
+<h3>Related Area Items</h3>
+{% for area_obj in areas %}
+<blockquote><a href="/admin/alertdb/area/{{ area_obj.id }}/">{{ area_obj.area_description|truncatewords_html:10 }}</a></blockquote>
+{% endfor %}

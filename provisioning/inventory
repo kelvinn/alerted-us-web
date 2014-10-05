@@ -1,0 +1,3 @@
+# file: inventory
+
+default              ansible_connection=local

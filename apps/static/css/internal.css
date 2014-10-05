@@ -1,0 +1,254 @@
+/* CSS used here will be applied after bootstrap.css */
+
+/*
+body {
+ background: url('/static/img/bg_brick.jpg') no-repeat center center fixed;
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+}
+*/
+
+@import url(//fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:400,600);
+
+body {
+    margin: 0;
+    background-color: #f4f4f4;
+    font-family: 'Open Sans', sans-serif;
+    /*background: url("/static/img/white_wall_hash.png") repeat;*/
+ }
+
+.breadcrumb {
+    margin: 0;
+
+}
+
+.panel-primary {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.panel-primary .panel-heading {
+    background-color: #008dca;
+    font-size: 1.4em;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+.panel-heading {
+    border-bottom: 0;
+    padding: 10px;
+
+}
+
+.panel-body {
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.panel-footer {
+    border-top: 0;
+}
+
+
+.form-group.last {
+ margin-bottom: 0;
+}
+
+#map-canvas {
+  	width: 100%;
+  	height: 300px;
+	margin: 0;
+	padding: 0;
+}
+
+
+.white, .white a {
+  color: #fff;
+}
+
+.red {
+    color: #942a25;
+}
+
+.splash {
+  display: none;
+}
+
+[ng-cloak].splash {
+  display: block !important;
+}
+
+.large-text {
+    font-size: 1.5em;
+    font-family: 'Open Sans', sans-serif;
+    /*font-family: Sans-Serif;*/
+}
+
+.huge-text {
+    font-size: 3.0em;
+    font-weight: bold;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: rgb(92, 92, 89);
+    /*font-family: Sans-Serif;*/
+}
+
+.tempborder {
+    border: 1px solid black;
+}
+
+.center {
+    text-align: center;
+}
+
+.extra-padding-top {
+    padding-top: 50px;
+}
+
+.extra-padding-bottom {
+    padding-bottom: 50px;
+}
+
+.panel-primary .close {
+  color: #555555;
+}
+
+.navbar-default {
+    background: transparent;
+    font-family: 'Open Sans', sans-serif;
+    border: 0;
+    font-size: 0.9em;
+}
+
+
+.navbar-header:hover {
+        background-color: #0099db;
+}
+
+.navbar-brand {
+    height: 100%;
+    background-color: #008dca;
+}
+
+.navbar-brand > span {
+    font-family: 'Open Sans', sans-serif;
+    color: #FFFFFF;
+    font-size: 1.3em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.navbar-brand > span > img {
+    vertical-align: middle;
+    height: 30px;
+    width: 30px;
+}
+
+.center {
+    text-align: center;
+}
+
+
+
+.gray-text {
+    color: #191919;
+}
+
+.navbar .nav > li > a {
+    /*color: #f4f3ef;*/
+    color: rgb(92, 92, 89);
+    /*font-weight: bold;*/
+    font-size: 1.3em;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color: #008dca;
+}
+
+.modal {
+    display: block;
+}
+
+.geocoder-service-example {
+  padding: 10px;
+}
+
+.result {
+    margin-top: 10px;
+}
+
+.map-panel {
+    height: 150px;
+}
+.angular-google-map-container { margin-top: 10px; height: 250px; border: 1px solid #ccc}
+
+.header-container {
+    height: 50px;
+    /*background-color: #0077b3;*/
+    /*border-bottom: 2px solid #008dca;*/
+    /*border-top: 2px solid #008dca;*/
+}
+
+.light-background{
+    background-color: #0077b3;
+}
+
+.white-background{
+    background-color: #fff;
+}
+
+.light-color {
+    color: #f4f3ef;
+}
+
+.dark-color {
+    color: #0077b3;
+}
+
+.dark-background {
+    background-color: #808fb7;
+}
+
+.light-blue-background {
+    background-color: #008dca;
+}
+
+.btn-inverse:active,
+.btn-inverse.active {
+  background-color: #080808 \9;
+}
+
+.btn-flat {
+    filter:progid:DXImageTransform.Microsoft.Gradient(enabled='false');
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-image:none;
+    border:0;
+}
+
+div[ng-app] { margin: 10px; }
+form[name="editableForm"] > div {
+  height: auto;
+  padding: 5px 0;
+}
+
+form[name="editableForm"] .title {
+  display: inline-block;
+  font-weight: bold;
+  padding-top: 5px;
+  vertical-align: top;
+  min-width: 90px;
+}
+
+form[name="editableForm"] .editable {
+  display: inline-block;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+form[name="editableForm"] select {
+  width: 120px;
+}

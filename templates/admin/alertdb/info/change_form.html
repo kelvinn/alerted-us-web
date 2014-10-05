@@ -1,0 +1,7 @@
+{% extends "admin/change_form.html" %}
+
+{% load api_area %}
+
+{% block after_field_sets %}
+  {% if object_id %}{% display_areas object_id %}{% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "account/base.html" %}
+
+{% load bootstrap %}
+{% load url from future %}
+{% load i18n %}
+{% load account %}
+
+{% block panel-heading %}Signup{% endblock %}
+
+{% block content %}
+
+    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <button type="submit" class="btn btn-primary">{% trans "Sign Up" %} &raquo;</button>
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+    </form>
+
+    <br />
+
+    <p>By creating an account you confirm that you have read and accept our <a href="https://alerted.us/pages/terms/">
+    Terms of Use</a> and <a href="https://alerted.us/pages/privacy/">Privacy Policy</a>.</p>
+
+{% endblock %}
+
+{% block panel-footer %}
+Already have an account? Then please <a href="{{ login_url }}">sign in</a>.
+{% endblock %}

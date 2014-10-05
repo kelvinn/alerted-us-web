@@ -1,0 +1,5 @@
+
+<h3>Related Info Items</h3>
+{% for info_obj in infos %}
+<blockquote><a href="/admin/alertdb/info/{{  info_obj.id }}/">{{ info_obj.cap_headline }}</a></blockquote>
+{% endfor %}

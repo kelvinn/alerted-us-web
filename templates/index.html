@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block head %}
+    <!-- CozySiren core CSS -->
+    <link href="/static/css/internal.css" rel="stylesheet">
+{% endblock %}
+
+{% block base-title %}
+    alerted.us | Real-Time Alerts
+{% endblock %}
+
+{% block base-content %}
+
+    <div class="container col-md-12">
+     <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6 center">
+                <span class="huge-text">Never not know again.</span>
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6 center">
+                <img src="/static/img/Nexus5Alerted.png" width=349 height=633 alt="Phone Image" />
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+        <div class="row extra-padding-bottom">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6 center">
+                <a href="https://plus.google.com/communities/101782671375886737523"><button type="button" class="btn btn-primary">Get Android Beta</button></a>
+                <a href="{% url 'account_signup' %}"><button type="button" class="btn btn-primary">Register Now</button></a>
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}

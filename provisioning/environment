@@ -1,0 +1,12 @@
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+
+REDIS_ENDPOINT=127.0.0.1
+REDIS_PORT=6379
+DB_NAME=cozysiren
+DB_USER=app_user
+DB_PASSWORD=djangouserspassword
+DB_HOST=127.0.0.1
+DB_PORT=5432
+RACK_ENV=development
+PROJECT_DIR=/vagrant
+DJANGO_SECRET_KEY=ABC123
