@@ -61,7 +61,7 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
 
-if ON_DO or ON_SNAP_CI:
+if ON_DO:
     REDIS_PASSWORD = ""
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
@@ -71,6 +71,17 @@ if ON_DO or ON_SNAP_CI:
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['DB_HOST']
     DB_PORT = os.environ['DB_PORT']
+
+elif ON_SNAP_CI:
+    REDIS_PASSWORD = ""
+    REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
+    REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = os.environ['DB_NAME']
+    DB_USER = os.environ['SNAP_DB_PG_USER']
+    DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
+    DB_HOST = os.environ['SNAP_DB_PG_HOST']
+    DB_PORT = os.environ['SNAP_DB_PG_PORT']
 
 
 elif ON_SHIPPABLE:
