@@ -38,16 +38,10 @@ if "MANDRILL_API_KEY" in os.environ:
     EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
     DEFAULT_FROM_EMAIL = 'no-reply@alerted.us'
 
-ON_SHIPPABLE = False
-ON_AWS = False
 ON_DOCKER = False
 ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
-
-if 'USER' in os.environ:
-    if os.environ['USER'] == "shippable":
-        ON_SHIPPABLE = True
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
@@ -82,18 +76,6 @@ elif ON_SNAP_CI:
     DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
     DB_HOST = os.environ['SNAP_DB_PG_HOST']
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
-
-
-elif ON_SHIPPABLE:
-    REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = "localhost"
-    REDIS_PORT = 6379
-    REDIS_URL = '%s:%d:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = 'cozysiren'
-    DB_USER = 'postgres'
-    DB_PASSWD = ''
-    DB_HOST = '127.0.0.1'
-    DB_PORT = '5432'
 
 else:  # Default catch all, probably for staging
     REDIS_PASSWORD = ""
@@ -231,7 +213,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-INTERNAL_IPS = ('127.0.0.1', '10.0.2.2', '123.243.19.133', '10.69.18.71')
+INTERNAL_IPS = ('127.0.0.1', '10.0.2.2', '10.69.18.71')
 
 STATSD_HOST = '127.0.0.1'
 STATSD_PORT = 8125
@@ -290,7 +272,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     # allauth specific context processors
     "allauth.account.context_processors.account",
-    #"allauth.socialaccount.context_processors.socialaccount",
 
 )
 
@@ -303,14 +284,6 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-SOCIALACCOUNT_PROVIDERS = \
-    {'google':
-        {'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
-         'AUTH_PARAMS': {'access_type': 'online'}}}
-
-SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_EMAIL_VERIFICATION = False
-SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
@@ -333,33 +306,32 @@ if DEBUG:
     CELERY_ALWAYS_EAGER = True
 
 
-if not ON_SHIPPABLE:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'filters': {
-            'require_debug_false': {
-                '()': 'django.utils.log.RequireDebugFalse'
-            }
-        },
-        'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'filters': ['require_debug_false'],
-                'class': 'django.utils.log.AdminEmailHandler'
-            },
-            'syslog': {
-                'level': 'INFO',
-                'class': 'logging.handlers.SysLogHandler',
-                'facility': SysLogHandler.LOG_LOCAL2,
-                'address': '/dev/log',
-            }
-        },
-        'loggers': {
-            'django.request': {
-                'handlers': ['syslog'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'syslog': {
+            'level': 'INFO',
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': SysLogHandler.LOG_LOCAL2,
+            'address': '/dev/log',
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['syslog'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
+}

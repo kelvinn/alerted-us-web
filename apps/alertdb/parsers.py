@@ -51,7 +51,8 @@ DATETIME_CAP_TYPE = [
 
 class CAPXMLParser(BaseParser):
     """
-    Plain text parser.
+    Django Rest Framework customer parser for Common Alerting Protocol feeds, to be used in conjuction with the
+    capparselib library, which standardises the different CAP versions into a normal python dictionary.
     """
 
     media_type = '*/xml'
@@ -110,9 +111,7 @@ class CAPXMLParser(BaseParser):
         return geom
 
     def process_item_obj(self, item_obj):
-        #info_obj = {'parameters': None, 'resources': None, 'areas': None}
         info_obj = dict()
-        #info_obj['cap_alert'] = alert_obj
 
         for info_key, info_value in item_obj.items():
             if info_key in SIMPLE_CAP_TYPES:

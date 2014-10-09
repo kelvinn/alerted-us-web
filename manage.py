@@ -6,7 +6,8 @@ import django
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
-    django.setup()  # For Wercker
+
+    #django.setup()  # For Wercker
 
     from django.core.management import execute_from_command_line
 

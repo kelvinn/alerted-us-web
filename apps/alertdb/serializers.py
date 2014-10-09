@@ -6,14 +6,12 @@ class ResourceSerializer(gis_serializers.GeoModelSerializer):
 
     class Meta:
         model = Resource
-        #fields = ('cap_slug', 'cap_sent', 'cap_status')
 
 
 class ParameterSerializer(gis_serializers.GeoModelSerializer):
 
     class Meta:
         model = Parameter
-        #fields = ('cap_slug', 'cap_sent', 'cap_status')
 
 
 class AreaSerializer(gis_serializers.GeoFeatureModelSerializer):
@@ -21,7 +19,6 @@ class AreaSerializer(gis_serializers.GeoFeatureModelSerializer):
     class Meta:
         model = Area
         geo_field = "geom"
-        #fields = ('area_description', 'geom')
 
 
 class InfoSerializer(gis_serializers.GeoModelSerializer):
@@ -31,7 +28,6 @@ class InfoSerializer(gis_serializers.GeoModelSerializer):
 
     class Meta:
         model = Info
-        #fields = ('cap_slug', 'cap_sent', 'cap_status')
 
 
 class AlertSerializer(gis_serializers.GeoModelSerializer):
@@ -39,4 +35,3 @@ class AlertSerializer(gis_serializers.GeoModelSerializer):
 
     class Meta:
         model = Alert
-        #fields = ('cap_slug', 'cap_sent', 'cap_status')
