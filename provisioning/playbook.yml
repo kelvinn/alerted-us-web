@@ -103,6 +103,15 @@
           - git
           - libxml2-dev
           - libxslt1-dev
+          - firefox
+          - xvfb
+
+    # Setup Environment variables
+    - name: create xvfb service
+      copy: src=xvfb dest=/etc/init.d/xvfb mode=755 backup=yes
+
+    # Start the xvfb service
+    - service: name=xvfb state=started
 
     - name: ensure web directory exists
       file: dest=/opt/python owner=www-data group=www-data state=directory
@@ -110,6 +119,7 @@
     - pip: name=virtualenv
     - pip: requirements="{{ project_dir}}/requirements.txt" virtualenv={{ venv_dir }} virtualenv_site_packages=yes
     - pip: name=django-debug-toolbar extra_args='--no-deps' virtualenv={{ venv_dir }}
+    - pip: name=selenium virtualenv={{ venv_dir }}
 
     # Install and configure Celery
     - name: be sure celery is configured

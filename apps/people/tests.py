@@ -2,6 +2,8 @@ from django.utils import unittest
 from django.contrib.gis.geos.collections import Point
 from django.contrib.auth.models import User
 from django.test.client import Client
+from django.test import LiveServerTestCase
+from selenium.webdriver.firefox.webdriver import WebDriver
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 from rest_framework import status
@@ -241,3 +243,29 @@ class UserAPITests(APITestCase):
         url = '/api/v1/users/gcmtoken/'
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+# Selenium Tests
+class BaseTestCase(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = WebDriver()
+        super(BaseTestCase, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(BaseTestCase, cls).tearDownClass()
+        cls.driver.quit()
+
+class SampleTestCase(BaseTestCase):
+
+    def test(self):
+        self.driver.get(self.live_server_url)
+
+    def test_login(self):
+        self.driver.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        username_input = self.driver.find_element_by_name("login")
+        username_input.send_keys('myuser')
+        password_input = self.driver.find_element_by_name("password")
+        password_input.send_keys('secret')
+        self.driver.find_element_by_xpath('//button[@type="submit"]').click()
