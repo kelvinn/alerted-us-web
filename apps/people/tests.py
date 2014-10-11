@@ -4,12 +4,15 @@ from django.contrib.auth.models import User
 from django.test.client import Client
 from django.test import LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.common.keys import Keys
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 from rest_framework import status
+from allauth.account.models import EmailAddress
 from apps.people.models import Location, Notification
-from apps.people.api import UserDetail
 from apps.people.tasks import *
+import re
+import time
 
 
 # Create your tests here.
@@ -244,8 +247,11 @@ class UserAPITests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 # Selenium Tests
 class BaseTestCase(LiveServerTestCase):
+
+    fixtures = ['user-data.json']
 
     @classmethod
     def setUpClass(cls):
@@ -257,15 +263,50 @@ class BaseTestCase(LiveServerTestCase):
         super(BaseTestCase, cls).tearDownClass()
         cls.driver.quit()
 
-class SampleTestCase(BaseTestCase):
+
+class AuthTests(BaseTestCase):
 
     def test(self):
         self.driver.get(self.live_server_url)
 
+    def test_register(self):
+        self.driver.get(self.live_server_url + '/accounts/signup/')
+        src = self.driver.page_source
+        print src
+        username = self.driver.find_element_by_id('id_email')
+        username.send_keys('test@alerted.us')
+
+        password1 = self.driver.find_element_by_id('id_password1')
+        password1.send_keys('password')
+        password2 = self.driver.find_element_by_id('id_password2')
+        password2.send_keys('password')
+        password2.submit()
+        time.sleep(2)
+        src = self.driver.page_source
+        text_found = re.search(r'Saved Locations', src)
+        self.assertTrue(text_found)
+        self.driver.get(self.live_server_url + '/accounts/logout/')
+
     def test_login(self):
-        self.driver.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        username_input = self.driver.find_element_by_name("login")
-        username_input.send_keys('myuser')
-        password_input = self.driver.find_element_by_name("password")
-        password_input.send_keys('secret')
-        self.driver.find_element_by_xpath('//button[@type="submit"]').click()
+        self.driver.get(self.live_server_url + '/accounts/login/')
+        username = self.driver.find_element_by_id('id_login')
+        username.send_keys('admin@alerted.us')
+        password = self.driver.find_element_by_id('id_password')
+        password.send_keys('password')
+        password.submit()
+        time.sleep(2)
+        src = self.driver.page_source
+        text_found = re.search(r'Saved Locations', src)
+        self.assertTrue(text_found)
+        autocomplete = self.driver.find_element_by_id('Autocomplete')
+        autocomplete.send_keys("1600 pennsyl")
+        autocomplete.send_keys(Keys.ARROW_DOWN )
+        autocomplete.click()
+        autocomplete.submit()
+        #TODO test for angular rows
+
+        self.driver.get(self.live_server_url + '/accounts/logout/')
+
+
+
+

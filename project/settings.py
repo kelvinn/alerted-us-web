@@ -37,6 +37,8 @@ if "MANDRILL_API_KEY" in os.environ:
     MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
     EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
     DEFAULT_FROM_EMAIL = 'no-reply@alerted.us'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 ON_DOCKER = False
 ON_FIG = False
