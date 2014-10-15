@@ -27,6 +27,16 @@ log into the alerted-us-web VM and start Django's development server:
 
 Browse to http://127.0.0.1:8000 and you should see the index page, or http://127.0.0.1:8000/admin for the admin UI.
 
+Tests can be run like so:
+
+    $ python manage.py test
+
+The virtual framebuffer might not start automatically (is usually does). If this is the case, simple start it:
+
+    $ sudo /etc/init.d/xvfb start
+
+Xvfb is needed for a limited number of Selenium tests.
+
 You will probably also need to load some geocodes to test geospatial queries.
 
     $ cd apps/alertdb
