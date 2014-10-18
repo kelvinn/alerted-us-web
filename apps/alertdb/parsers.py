@@ -2,7 +2,7 @@ import dateutil.parser as dparser
 from rest_framework.parsers import BaseParser
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.gis.db.models import Union
-from capparselib import CAPParser
+from capparselib.parsers import CAPParser
 import random
 import logging
 from apps.alertdb.models import Geocode
