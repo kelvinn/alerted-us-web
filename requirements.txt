@@ -31,4 +31,4 @@ statsd==3.0.1
 django-push-notifications==1.2.0
 djrill==1.1.1
 django-uuidfield==0.5.0
-capparselib
+capparselib==0.2

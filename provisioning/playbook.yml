@@ -110,9 +110,6 @@
     - name: create xvfb service
       copy: src=xvfb dest=/etc/init.d/xvfb mode=755 backup=yes
 
-    # Start the xvfb service
-    - service: name=xvfb state=started
-
     - name: ensure web directory exists
       file: dest=/opt/python owner=www-data group=www-data state=directory
 
@@ -124,3 +121,6 @@
     # Install and configure Celery
     - name: be sure celery is configured
       template: src=celeryd.conf.j2 dest=/etc/supervisor/conf.d/celeryd.conf
+
+    # Start the xvfb service
+    - service: name=xvfb state=started
