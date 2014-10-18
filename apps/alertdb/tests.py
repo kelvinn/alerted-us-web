@@ -38,6 +38,7 @@ class AlertdbAPITests(APITestCase):
         self.cap_11_atom = open('apps/alertdb/testdata/amber.atom', 'r').read()
         self.cap_11 = open('apps/alertdb/testdata/weather.cap', 'r').read()
         self.cap_12 = open('apps/alertdb/testdata/australia.cap', 'r').read()
+        self.cap_11b = open('apps/alertdb/testdata/weather_2.cap', 'r').read()
         self.signed_pelmorex = open('apps/alertdb/testdata/signed_pelmorex.cap', 'r').read()
         self.taiwan_cap_12 = open('apps/alertdb/testdata/taiwan.cap', 'r').read()
 
@@ -74,12 +75,12 @@ class AlertdbAPITests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_alert_api_put_cap11(self):
+    def test_alert_api_post_cap11(self):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/'
 
         view = AlertListAPI.as_view()
-        request = factory.post(url, self.cap_11, content_type='application/xml')
+        request = factory.post(url, self.cap_11b, content_type='application/xml')
         force_authenticate(request, user=user)
         response = view(request)
 
@@ -96,7 +97,7 @@ class AlertdbAPITests(APITestCase):
 
         self.assertIsNotNone(area_result.area_description)
 
-    def test_alert_api_put_cap11_atom(self):
+    def test_alert_api_post_cap11_atom(self):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/'
 
@@ -183,7 +184,6 @@ class AlertdbAPITests(APITestCase):
         self.assertEqual(loc.geom, p)
 
     def test_alert_area_api(self):
-
         alert = list(Alert.objects.all()[:1])[0]
         url = "/api/v1/alerts/%s/areas/" % alert.cap_slug
 
@@ -201,3 +201,19 @@ class AlertdbAPITests(APITestCase):
         url = "/alerts/%s/" % alert.cap_slug
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
+
+    def test_duplicate_alerts(self):
+        # After an alert is created, I can't think of it as needing to be updated again
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/'
+
+        view = AlertListAPI.as_view()
+        request = factory.post(url, self.cap_11, content_type='application/xml')
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        request2 = factory.post(url, self.cap_11, content_type='application/xml')
+        force_authenticate(request2, user=user)
+        response2 = view(request2)
+
+        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)  # verify object created
