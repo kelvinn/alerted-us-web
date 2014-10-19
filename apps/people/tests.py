@@ -8,7 +8,6 @@ from selenium.webdriver.common.keys import Keys
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 from rest_framework import status
-from allauth.account.models import EmailAddress
 from apps.people.models import Location, Notification
 from apps.people.tasks import *
 import re
@@ -85,8 +84,6 @@ class PeopleTests(APITestCase):
 
 class LocationAPITests(APITestCase):
     def test_add_location_api(self):
-        #user = User(username='apiuser')
-        #user.save()
 
         user, created = User.objects.get_or_create(username='apiuser')
 
@@ -172,7 +169,6 @@ class NotificationAPITests(APITestCase):
 
     def test_get_notification_detail_api(self):
 
-        #user, created = User.objects.get_or_create(username='admin')
         notif = Notification.objects.get()
         user = notif.user
         url = '/api/v1/users/notifications/%s/' % notif.pk
@@ -303,7 +299,7 @@ class AuthTests(BaseTestCase):
         autocomplete.send_keys(Keys.ARROW_DOWN )
         autocomplete.click()
         autocomplete.submit()
-        #TODO test for angular rows
+        # TODO test for Angular rows
 
         self.driver.get(self.live_server_url + '/accounts/logout/')
 

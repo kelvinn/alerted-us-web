@@ -2,18 +2,10 @@ from __future__ import absolute_import
 
 from celery import shared_task
 from django.core.serializers import json
-from apps.alertdb.models import Alert, Info, Area
-from apps.people.models import Notification, Location, LocationHistory
+from apps.alertdb.models import Info
+from apps.people.models import Notification, LocationHistory
 from apps.alertdb.tasks import publish_to_device
 from statsd.defaults.django import statsd
-#from statsd import StatsClient
-
-# For creating encrypted polygons
-#from polycomp import compress
-
-
-# For metrics
-#statsd = StatsClient()
 
 
 class CleanSerializer(json.Serializer):

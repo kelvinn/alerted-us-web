@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-# Import socket to read host name
-import socket
 from logging.handlers import SysLogHandler
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -123,7 +121,6 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS += (
         'debug_toolbar.apps.DebugToolbarConfig',
     )
-    #DEBUG_TOOLBAR_PATCH_SETTINGS = False
     DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False, }
 
 PUSH_NOTIFICATIONS_SETTINGS = {
@@ -251,7 +248,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        #'rest_framework.authentication.OAuth2Authentication',
     ),
     """
     'DEFAULT_THROTTLE_CLASSES': (

@@ -22,7 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
             # optional
             'first_name', 'last_name'
         )
-        #write_only_fields = ('password',)
 
     def restore_object(self, attrs, instance=None):
         # call set_password on user object. Without this

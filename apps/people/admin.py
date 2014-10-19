@@ -12,7 +12,6 @@ class LocationAdmin(admin.GeoModelAdmin):
     openlayers_url = '//cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js'
     wms_url = 'http://irs.gis-lab.info'
     wms_layer = 'osm'
-    #readonly_fields = ('geom',)
 admin.site.register(Location, LocationAdmin)
 
 
@@ -22,7 +21,6 @@ class LocationHistoryAdmin(admin.GeoModelAdmin):
     openlayers_url = '//cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js'
     wms_url = 'http://irs.gis-lab.info'
     wms_layer = 'osm'
-    #readonly_fields = ('geom',)
 admin.site.register(LocationHistory, LocationHistoryAdmin)
 
 

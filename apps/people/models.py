@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
-from apps.alertdb.models import Area, Info
+from apps.alertdb.models import Info
 
 
 class Location(models.Model):
@@ -35,6 +35,3 @@ class Notification(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, editable=True)
     cap_info = models.ForeignKey(Info, blank=True, null=True)
     message_id = models.CharField(max_length=300, blank=True, null=True)
-
-    #def __unicode__(self):
-    #    return str(self.date_created)

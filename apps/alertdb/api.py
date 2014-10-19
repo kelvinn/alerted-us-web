@@ -49,7 +49,7 @@ class AlertListAPI(APIView):
         else:
             raise Http404
 
-    #@statsd.timer('api.AlertListAPI.post')
+    # @statsd.timer('api.AlertListAPI.post')
     def post(self, request, format=None):
         """
         Create a new alert (POST). This endpoint accepts Common Alerting Protocal (CAP) 1.1 and 1.2, but does NOT accept
@@ -76,8 +76,6 @@ class AlertListAPI(APIView):
         timer.stop()
         return rsp
 
-    #permission_classes = (IsAuthenticated,)
-
 
 class AlertDetailAPI(APIView):
     """
@@ -95,9 +93,6 @@ class AlertDetailAPI(APIView):
 
     @statsd.timer('api.AlertDetailAPI.get')
     def get(self, request, cap_slug, format=None):
-
-        #format = request.QUERY_PARAMS['format']
-        #print format
         alert = self.get_object(cap_slug)
         serializer = AlertSerializer(alert)
         return Response(serializer.data)

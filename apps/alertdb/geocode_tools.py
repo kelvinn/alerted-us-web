@@ -100,7 +100,7 @@ def dlfile(shape_zip_file_name):
         with open("/tmp/%s" % shape_zip_file_name, "wb") as local_file:
             local_file.write(f.read())
 
-    #handle errors
+    # Handle possible errors
     except HTTPError, e:
         print "HTTP Error:", e.code, url
     except URLError, e:
@@ -114,8 +114,8 @@ class GeocodeLoader():
         self.value_name = None
 
     def start(self):
-    # This file is populated from here:
-    # http://www.nws.noaa.gov/geodata/catalog/county/html/county.htm
+        # This file is populated from here:
+        # http://www.nws.noaa.gov/geodata/catalog/county/html/county.htm
         if not os.path.isfile('/tmp/%s' % self.shape_zip_file_name):
             dlfile(self.shape_zip_file_name)
             with zipfile.ZipFile('/tmp/%s' % self.shape_zip_file_name, "r") as z:
@@ -144,9 +144,6 @@ class GeocodeLoader():
         else:
             lm.save(strict=True, verbose=False)
 
-        # This gets all the Geocode objects that were just inserted
-        #result = Geocode.objects.filter(value_name=None)
-
         print "Post-processing Geocodes"
 
         # We use this queryset_iterator function so not all objects are loaded in memory at the same time
@@ -163,7 +160,6 @@ class GeocodeLoader():
 
                 # this is to add just a little room between the lines
                 g = i.geom.buffer(-0.0000001)
-                #tolerance = float(get_tolerance(g.num_points))
 
                 # Simplify the polygons and convert to multipolygon
                 g = g.simplify(0.003, preserve_topology=True)

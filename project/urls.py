@@ -32,7 +32,6 @@ urlpatterns = [
     url(r'^api/v1/alerts/$', AlertListAPI.as_view()),
     url(r'^api/v1/alerts/(?P<cap_slug>\w+)/$', cache_page(60*60)(AlertDetailAPI.as_view())),
     url(r'^api/v1/alerts/(?P<cap_slug>\w+)/areas/$', AlertAreaAPI.as_view()),
-    #url(r'^api/v1/background/run_location_search/(?P<alert_id>\w+)/$', AlertLocationSearchAPI.as_view()),
 ]
 
 # The rest of stuff

@@ -16,8 +16,6 @@ try:
 except AttributeError:
     print django.VERSION
 
-#app = Celery('project', backend='amqp')
-
 app = Celery('project')
 
 # Using a string here means the worker will not have to
