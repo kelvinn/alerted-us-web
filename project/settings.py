@@ -150,6 +150,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.alertdb.middleware.ProfilerMiddleware',
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:

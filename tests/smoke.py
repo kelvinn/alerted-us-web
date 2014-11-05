@@ -7,7 +7,7 @@ if __name__ == '__main__':
         print "[ERROR] when selecting host address"
         sys.exit(2)
     else:
-        get_urls = ['/accounts/signup/', '/accounts/login/']
+        get_urls = ['/accounts/signup/', '/accounts/login/', '/']
         for url in get_urls:
             r = requests.get(host_address + url, verify=False)
             if r.status_code != 200:

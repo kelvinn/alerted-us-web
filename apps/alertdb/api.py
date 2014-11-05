@@ -9,7 +9,7 @@ from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from apps.alertdb.tasks import run_location_search
 from statsd.defaults.django import statsd
-
+import logging
 
 class AlertListAPI(APIView):
 
@@ -61,8 +61,10 @@ class AlertListAPI(APIView):
         timer = statsd.timer('api.AlertListAPI.post')
         timer.start()
         data = request.DATA
-        for row in data:
-            row['contributor'] = request.user.pk
+        try:
+            data[0]['contributor'] = request.user.pk
+        except:
+            logging.error("Invalid XML so unable to add contributor")
 
         serializer = AlertSerializer(data=data)
         if serializer.is_valid():
