@@ -8,6 +8,8 @@ This is the code for the web application side of things written using Python/Dja
 
 [![Build Status](https://snap-ci.com/nnEwcVUmv5bLOCY7LCABqQnAO-r01AAfNm7lO1lPMTc/build_image)](https://snap-ci.com/kelvinn/alerted-us-web/branch/master)
 
+[![Code Health](https://landscape.io/github/kelvinn/alerted-us-web/master/landscape.png)](https://landscape.io/github/kelvinn/alerted-us-web/master)
+
 The fastest way to get going is to use Vagrant.
 
 Download Vagrant and VirtualBox; install them. Then...
