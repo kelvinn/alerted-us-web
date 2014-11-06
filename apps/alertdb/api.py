@@ -67,7 +67,7 @@ class AlertListAPI(APIView):
             data[0]['contributor'] = request.user.pk
         except:
             logging.error("Invalid XML so unable to add contributor")
-        timer4.end()
+        timer4.stop()
         timer2 = statsd.timer('api.AlertListAPI.post.serializer')
         timer2.start()
         serializer = AlertSerializer(data=data)
