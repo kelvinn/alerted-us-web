@@ -61,10 +61,13 @@ class AlertListAPI(APIView):
         timer = statsd.timer('api.AlertListAPI.post')
         timer.start()
         data = request.DATA
+        timer4 = statsd.timer('api.AlertListAPI.contributor')
+        timer4.start()
         try:
             data[0]['contributor'] = request.user.pk
         except:
             logging.error("Invalid XML so unable to add contributor")
+        timer4.end()
         timer2 = statsd.timer('api.AlertListAPI.post.serializer')
         timer2.start()
         serializer = AlertSerializer(data=data)
@@ -76,8 +79,8 @@ class AlertListAPI(APIView):
             for s in serializer.data:
                 if s['cap_status'] == 'Actual':  # This prevents any test messages from going out
                     run_location_search.delay(s['id'])
-            timer3.stop()
             rsp = Response(status=status.HTTP_201_CREATED)
+            timer3.stop()
         else:
             rsp = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         timer.stop()
