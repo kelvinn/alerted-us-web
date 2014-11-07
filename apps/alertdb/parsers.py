@@ -1,5 +1,6 @@
 import dateutil.parser as dparser
 from rest_framework.parsers import BaseParser
+from rest_framework.exceptions import ParseError
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.gis.db.models import Union
 from capparselib.parsers import CAPParser
@@ -190,8 +191,10 @@ class CAPXMLParser(BaseParser):
         """
         body_text = stream.read()
         data = []
-
-        alerts = CAPParser(body_text).as_dict()
+        try:
+            alerts = CAPParser(body_text).as_dict()
+        except:
+            raise ParseError
         for alert in alerts:
             alert_obj = dict()
             alert_obj['cap_raw'] = body_text
