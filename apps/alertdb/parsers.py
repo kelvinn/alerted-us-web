@@ -4,6 +4,7 @@ from rest_framework.exceptions import ParseError
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.gis.db.models import Union
 from capparselib.parsers import CAPParser
+from statsd.defaults.django import statsd
 import random
 import logging
 from apps.alertdb.models import Geocode
@@ -185,6 +186,7 @@ class CAPXMLParser(BaseParser):
                 info_obj['area_set'] = area_obj_list
         return info_obj
 
+    @statsd.timer('api.CAPXMLParser.parse')
     def parse(self, stream, media_type=None, parser_context=None):
         """
         Simply return a string representing the body of the request.
@@ -194,6 +196,7 @@ class CAPXMLParser(BaseParser):
         try:
             alerts = CAPParser(body_text).as_dict()
         except:
+            statsd.incr('api.CAPXMLParser.parse')
             logging.error("CAPParser Invalid XML: %s" % body_text)
             raise ParseError
 

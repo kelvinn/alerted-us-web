@@ -85,7 +85,6 @@ class AlertListAPI(APIView):
             timer3.stop()
         else:
             statsd.incr('api.AlertListAPI.post.not_valid')
-            logging.info("Invalid XML detected: %s" % serializer.errors)
             timer6 = statsd.timer('api.AlertListAPI.post.respones')
             timer6.start()
             rsp = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
