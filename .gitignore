@@ -12,7 +12,7 @@ coverage.xml
 /static/admin/
 /static/gis/
 /static/
-
+*DS_Store
 
 .elasticbeanstalk/
 
