@@ -194,9 +194,9 @@ class CAPXMLParser(BaseParser):
         body_text = stream.read()
         data = []
         try:
-            alerts = CAPParser(body_text).as_dict()
+            alerts = CAPParser(body_text, recover=True).as_dict()
         except:
-            statsd.incr('api.CAPXMLParser.parse')
+            statsd.incr('api.CAPXMLParser.parse.error')
             logging.error("CAPParser Invalid XML")
             raise ParseError
 
