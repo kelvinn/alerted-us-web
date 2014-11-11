@@ -130,6 +130,7 @@ class CAPXMLParser(BaseParser):
             if info_key == 'cap_parameter':
                 parameter_list = []
                 for ptr_item in info_value:
+
                     parameter_obj = dict()
                     parameter_obj['value_name'] = ptr_item['valueName']
                     parameter_obj['value'] = ptr_item['value']
@@ -180,7 +181,7 @@ class CAPXMLParser(BaseParser):
                                 area_obj['geom'] = geom
                             area_obj['geocode_list'] = geocode_list
                         else:
-                            logging.error("No value_name")
+                            logging.error("geocode_list is empty")
 
                     area_obj_list.append(area_obj)
                 info_obj['area_set'] = area_obj_list
