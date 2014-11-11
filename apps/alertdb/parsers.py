@@ -197,7 +197,7 @@ class CAPXMLParser(BaseParser):
             alerts = CAPParser(body_text, recover=True).as_dict()
         except:
             statsd.incr('api.CAPXMLParser.parse.error')
-            logging.error("CAPParser Invalid XML")
+            logging.error(str(body_text))
             raise ParseError
 
         for alert in alerts:
