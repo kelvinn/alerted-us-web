@@ -11,6 +11,7 @@ from apps.alertdb.tasks import run_location_search
 from statsd.defaults.django import statsd
 import logging
 
+
 class AlertListAPI(APIView):
 
     renderer_classes = (JSONRenderer, YAMLRenderer, BrowsableAPIRenderer, XMLRenderer)
