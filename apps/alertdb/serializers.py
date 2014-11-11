@@ -50,7 +50,7 @@ class AlertSerializer(gis_serializers.GeoModelSerializer):
         active = conn.get(value)
         if not active:
             conn.setex(value, "saved", 14400)
-            #alert = Alert.objects.filter(cap_id=value)
+            alert = Alert.objects.filter(cap_id=value)
         else:
             alert = None
 
