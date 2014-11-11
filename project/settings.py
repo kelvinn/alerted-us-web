@@ -304,6 +304,7 @@ BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
 if DEBUG:
     CELERY_ALWAYS_EAGER = True
 
+ADMINS = (('Kelvin', 'kelvin@kelvinism.com'), )
 
 LOGGING = {
     'version': 1,
@@ -328,7 +329,7 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['syslog'],
+            'handlers': ['syslog', 'mail_admins'],
             'level': 'DEBUG',
             'propagate': True,
         },
