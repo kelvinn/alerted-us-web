@@ -55,7 +55,7 @@ class AlertSerializer(gis_serializers.GeoModelSerializer):
             alert = None
 
         if alert or active:
-                raise serializers.ValidationError("Alert already exists.")
+            raise serializers.ValidationError("Alert already exists.")
 
         return attrs
 

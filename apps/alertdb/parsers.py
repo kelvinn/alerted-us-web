@@ -202,7 +202,6 @@ class CAPXMLParser(BaseParser):
 
         for alert in alerts:
             alert_obj = dict()
-            alert_obj['cap_raw'] = body_text
 
             cap_slug = '%030x' % random.randrange(16**30)
             alert_obj['cap_slug'] = cap_slug
