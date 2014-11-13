@@ -20,9 +20,10 @@ for x in range(0, 300, 10):
     if result['status'] == 'ready': break
 
 if result:
-    if result['avg_response_time'] > 1000:
-        print "[ERROR] avg_response_time too higher"
+    avg_response_time = result['avg_response_time']
+    if avg_response_time > 1000:
+        print "[ERROR] avg_response_time (%s ms) too high" % avg_response_time
         sys.exit(1)
     else:
-        print "[SUCCESS] avg_response_time within acceptable margins"
+        print "[SUCCESS] avg_response_time (%s ms) within acceptable margins" % avg_response_time
 
