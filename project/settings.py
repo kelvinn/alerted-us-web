@@ -21,15 +21,13 @@ POSTGIS_VERSION = (2, 1, 1)
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if "DJANGO_SECRET_KEY" in os.environ:
-    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-else:
-    SECRET_KEY = 'ABCDEFG'
+#if "DJANGO_SECRET_KEY" in os.environ:
+#    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+#else:
+#    SECRET_KEY = 'ABCDEFG'
 
-if "GCM_API_KEY" in os.environ:
-    GCM_API_KEY = os.environ['GCM_API_KEY']
-else:
-    GCM_API_KEY = None
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', "ABC123")
+GCM_API_KEY = os.getenv('GCM_API_KEY', None)
 
 if "MANDRILL_API_KEY" in os.environ:
     MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']

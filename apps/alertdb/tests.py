@@ -32,7 +32,7 @@ class SimpleTest(unittest.TestCase):
 
 
 class AlertdbAPITests(APITestCase):
-    fixtures = ['alertdb']
+    fixtures = ['alertdb_people_users']
 
     def setUp(self):
         self.cap_11_atom = open('apps/alertdb/testdata/amber.atom', 'r').read()
@@ -214,6 +214,5 @@ class AlertdbAPITests(APITestCase):
 
         request2 = factory.post(url, self.cap_11, content_type='application/xml')
         force_authenticate(request2, user=user)
-        response2 = view(request2)
 
-        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)  # verify object created
+        self.assertRaises(Exception, view, request2)
