@@ -47,7 +47,7 @@ class Alert(models.Model):
         ('Private', 'Private'),
     )
 
-    cap_id = models.CharField(max_length=500, blank=True, null=True)
+    cap_id = models.CharField(max_length=500, unique=True)
     cap_slug = models.CharField(max_length=50, blank=True, null=True)  # just in case cap_id is not useable
     cap_sender = models.CharField(max_length=200, blank=True, null=True)
     cap_sent = models.DateTimeField(blank=True, null=True)
