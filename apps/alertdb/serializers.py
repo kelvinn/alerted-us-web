@@ -40,5 +40,24 @@ class InfoSerializer(gis_serializers.GeoModelSerializer):
 class AlertSerializer(gis_serializers.GeoModelSerializer):
     info_set = InfoSerializer(many=True)
 
+    @statsd.timer('api.AlertSerializer.validate_cap_id')
+    def validate_cap_id(self, attrs, source):
+        """
+        Check that the alert does not already exist.
+        """
+
+        value = attrs[source]
+        active = conn.get(value)
+        if not active:
+            conn.setex(value, "saved", 14400)
+            alert = Alert.objects.filter(cap_id=value)
+        else:
+            alert = None
+
+        if alert or active:
+            raise serializers.ValidationError("Alert already exists.")
+
+        return attrs
+
     class Meta:
         model = Alert
