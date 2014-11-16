@@ -50,8 +50,7 @@ class AlertListAPI(APIView):
         else:
             raise Http404
 
-    # @statsd.timer('api.AlertListAPI.post')
-    def post(self, request, format=None):
+    def post(self, request):
         """
         Create a new alert (POST). This endpoint accepts Common Alerting Protocal (CAP) 1.1 and 1.2, but does NOT accept
         ATOM/RSS feeds. In general, simply POST the entire XML message as the content of your request.
@@ -62,38 +61,23 @@ class AlertListAPI(APIView):
         timer = statsd.timer('api.AlertListAPI.post')
         timer.start()
         data = request.DATA
-        timer4 = statsd.timer('api.AlertListAPI.contributor')
-        timer4.start()
         try:
             for item in data:
                 item['contributor'] = request.user.pk
         except Exception, e:
             logging.error(e)
 
-        timer4.stop()
-        timer2 = statsd.timer('api.AlertListAPI.post.serializer')
-        timer2.start()
         serializer = AlertSerializer(data=data)
-        timer2.stop()
-        timer5 = statsd.timer('api.AlertListAPI.post.is_valid_outside')
-        timer5.start()
         if serializer.is_valid():
-            timer3 = statsd.timer('api.AlertListAPI.post.is_valid')
-            timer3.start()
             serializer.save()
             for s in serializer.data:
                 if s['cap_status'] == 'Actual':  # This prevents any test messages from going out
                     run_location_search.delay(s['id'])
             rsp = Response(status=status.HTTP_201_CREATED)
-            timer3.stop()
         else:
             statsd.incr('api.AlertListAPI.post.not_valid')
-            timer6 = statsd.timer('api.AlertListAPI.post.respones')
-            timer6.start()
             rsp = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            timer6.stop()
         timer.stop()
-        timer5.stop()
         return rsp
 
 
@@ -112,7 +96,7 @@ class AlertDetailAPI(APIView):
             raise Http404
 
     @statsd.timer('api.AlertDetailAPI.get')
-    def get(self, request, cap_slug, format=None):
+    def get(self, request, cap_slug):
         alert = self.get_object(cap_slug)
         serializer = AlertSerializer(alert)
         return Response(serializer.data)
@@ -131,7 +115,7 @@ class AlertAreaAPI(APIView):
             raise Http404
 
     @statsd.timer('api.AlertAreaAPI.get')
-    def get(self, request, cap_slug, format=None):
+    def get(self, request, cap_slug):
 
         alert = self.get_object(cap_slug)
         areas = Area.objects.filter(cap_info__cap_alert=alert)

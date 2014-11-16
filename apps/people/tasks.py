@@ -43,7 +43,7 @@ def run_alertdb_search(loc_instance):
     try:
 
         # Current problems with this include alerting to test alerts, and if a single alert has multiple info fields
-        # for the same alert, e.g. for language
+        # for the same alert, e.g. for language. This also isn't scalable and should probably be run on a schedule.
         info_list = Info.objects.filter(
             cap_expires__gte=loc_instance.date_received
         ).filter(
