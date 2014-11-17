@@ -169,7 +169,7 @@ class CAPXMLParser(BaseParser):
                         value_name_save = None
                         for geocode in area_item['geocodes']:
                             value_name = geocode['valueName']
-                            if value_name == 'FIPS6' or value_name == 'Taiwan_Geocode_100':
+                            if value_name == 'FIPS6' or value_name == 'Taiwan_Geocode_100' or value_name == 'SAME':
                                 geocode_list.append(str(geocode['value']))
                                 value_name_save = value_name
 

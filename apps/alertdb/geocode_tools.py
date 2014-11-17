@@ -50,6 +50,11 @@ TW_TOWNSHIP_MAPPING = {
     'geom': 'MULTIPOLYGON',
 }
 
+PH_MAPPING = {
+    'name': 'PROVINCE',
+    'code': 'PSGC',
+    'geom': 'MULTIPOLYGON',
+}
 
 def queryset_iterator(queryset, chunksize=250):
     """
@@ -199,6 +204,14 @@ class GeocodeLoader():
         self.sample = sample
         self.start()
 
+    def run_philippines(self, sample=True):
+        self.shape_mappings = PH_MAPPING
+        self.shape_file_name = "provinces.shp"
+        self.shape_zip_file_name = "ph_provinces.zip"
+        self.shape_encoding = 'utf-8'
+        self.value_name = 'SAME'
+        self.sample = sample
+        self.start()
 
 def main():
     if 'RACK_ENV' in os.environ:
@@ -206,6 +219,7 @@ def main():
             g = GeocodeLoader()
             g.run_taiwan()
             g.run_fips6()
+            g.run_philippines()
     else:
         raise Exception('Not allowed to load sample data outside DEV')
 

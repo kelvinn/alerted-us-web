@@ -10,6 +10,7 @@ class Geocode(models.Model):
     GEOCODE_CHOICES = (
         ('FIPS6', 'FIPS6'),
         ('Taiwan_Geocode_100', 'Taiwan Townships'),
+        ('SAME', 'SAME')
     )
 
     name = models.CharField(max_length=200, blank=True, null=True)  # corresponds to the 'str' field
