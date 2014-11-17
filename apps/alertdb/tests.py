@@ -41,6 +41,7 @@ class AlertdbAPITests(APITestCase):
         self.cap_11b = open('apps/alertdb/testdata/weather_2.cap', 'r').read()
         self.signed_pelmorex = open('apps/alertdb/testdata/signed_pelmorex.cap', 'r').read()
         self.taiwan_cap_12 = open('apps/alertdb/testdata/taiwan.cap', 'r').read()
+        self.ph_cap_12 = open('apps/alertdb/testdata/ph.cap', 'r').read()
 
     def test_subpub_hub_challenge_api(self):
         user, created = User.objects.get_or_create(username='apiuser')
@@ -147,6 +148,17 @@ class AlertdbAPITests(APITestCase):
 
         view = AlertListAPI.as_view()
         request = factory.post(url, self.taiwan_cap_12, content_type='application/xml')
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # verify object created
+
+    def test_alert_api_put_ph_cap12(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/'
+
+        view = AlertListAPI.as_view()
+        request = factory.post(url, self.ph_cap_12, content_type='application/xml')
         force_authenticate(request, user=user)
         response = view(request)
 
