@@ -1,5 +1,6 @@
 from django.contrib.gis.geos import Point
 from django.http import Http404, HttpResponse
+from django.contrib.gis.measure import D
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, YAMLRenderer, XMLRenderer, BrowsableAPIRenderer
@@ -40,7 +41,7 @@ class AlertListAPI(APIView):
             raise Http404
 
         pnt = Point(lng, lat)
-        info = Info.objects.filter(area__geom__intersects=pnt)
+        info = Info.objects.filter(area__geom__distance_lt=(pnt, D(mi=3)))
 
         if len(info) > 0:
             info = info[0]

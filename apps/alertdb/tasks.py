@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 
-import os
-import boto
 import logging
 from celery import shared_task
 from django.db.models import Q
 from django.core.serializers import json
+from django.contrib.gis.measure import D
 from apps.alertdb.models import Alert
 from apps.people.models import Notification, Location
 from statsd.defaults.django import statsd
@@ -69,8 +68,8 @@ def run_location_search(alert_id):
                 if area.geom:  # We do this to prevent tests from bombing out...
 
                     locations = Location.objects.filter(
-                        (Q(source__exact='static') & Q(geom__intersects=area.geom)) |
-                        (Q(source__exact='current') & Q(geom__intersects=area.geom))
+                        (Q(source__exact='static') & Q(geom__distance_lt=(area.geom, D(mi=3)))) |
+                        (Q(source__exact='current') & Q(geom__distance_lt=(area.geom, D(mi=3))))
                     )
 
                     for loc in locations:

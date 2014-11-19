@@ -1,14 +1,18 @@
 from django.utils import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
+from django.test import TestCase
 from django.contrib.gis.geos.collections import Point
+from django.contrib.admin.sites import AdminSite
+from django.contrib.gis.geos import Polygon, MultiPolygon
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from apps.alertdb.models import Alert, Geocode
 from apps.people.models import Location
-from apps.alertdb.api import AlertListAPI, AlertDetailAPI
+from apps.alertdb.api import AlertListAPI
 from apps.alertdb.tasks import run_location_search
 from apps.alertdb.geocode_tools import GeocodeLoader
+from apps.alertdb.admin import GeocodeAdmin
 
 # Create API request factory
 factory = APIRequestFactory()
@@ -179,6 +183,21 @@ class AlertdbAPITests(APITestCase):
         cap_sender = response.data['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
 
+
+    def test_alert_api_query_by_coord_within(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906'
+
+        view = AlertListAPI.as_view()
+        request = factory.get(url)
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
+
+        cap_sender = response.data['cap_sender']
+        self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
+
     def test_notification_via_alert(self):
 
         # First, create a test user and location
@@ -240,3 +259,43 @@ class AlertdbGeocodeTest(APITestCase):
         self.g.run_philippines()
         result = Geocode.objects.get(code=36900000)
         self.assertEqual(result.name, "Tarlac")
+
+
+class MockRequest(object):
+    pass
+
+
+class MockSuperUser(object):
+    def has_perm(self, perm):
+        return True
+
+request = MockRequest()
+request.user = MockSuperUser()
+
+
+class ModelAdminTests(TestCase):
+
+    def setUp(self):
+        self.mp = MultiPolygon([Polygon( ((0, 0), (0, 1), (1, 1), (0, 0)) ), Polygon( ((1, 1), (1, 2), (2, 2), (1, 1)) )])
+        self.geocode = Geocode.objects.create(
+            name='Test',
+            nativename='Tests',
+            code='1234',
+            value_name="test",
+            geom=self.mp
+        )
+        self.site = AdminSite()
+
+    # form/fields/fieldsets interaction ##############################
+
+    def test_default_fields(self):
+        ma = GeocodeAdmin(Geocode, self.site)
+
+        self.assertEqual(list(ma.get_form(request).base_fields),
+            ['name', 'nativename', 'code', 'value_name', 'geom'])
+
+        self.assertEqual(list(ma.get_fields(request)),
+            ['name', 'nativename', 'code', 'value_name', 'geom'])
+
+        self.assertEqual(list(ma.get_fields(request, self.geocode)),
+            ['name', 'nativename', 'code', 'value_name', 'geom'])

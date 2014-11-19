@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from celery import shared_task
 from django.core.serializers import json
 from apps.alertdb.models import Info
+from django.contrib.gis.measure import D
 from apps.people.models import Notification, LocationHistory
 from apps.alertdb.tasks import publish_to_device
 from statsd.defaults.django import statsd
@@ -47,10 +48,12 @@ def run_alertdb_search(loc_instance):
         info_list = Info.objects.filter(
             cap_expires__gte=loc_instance.date_received
         ).filter(
-            area__geom__intersects=loc_instance.geom
+            area__geom__distance_lt=(loc_instance.geom, D(mi=3))
         ).exclude(
             notification__user=loc_instance.user
         )
+
+
 
         for info in info_list:
             notif = Notification(cap_info=info, user=loc_instance.user)
