@@ -3,3 +3,9 @@ uses:
     - django
     - celery
 autodetect: yes
+ignore-paths:
+  - apps/alertdb/tests.py
+  - apps/people/tests.py
+  - apps/people/__init__.py
+  - apps/alertdb/__init__.py
+  - project/__init__.py
