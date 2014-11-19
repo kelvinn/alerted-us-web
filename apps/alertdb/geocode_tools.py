@@ -76,24 +76,6 @@ def queryset_iterator(queryset, chunksize=250):
             yield row
         gc.collect()
 
-
-# Not currently in use
-def get_tolerance(num_points):
-    """figure out a good tolerance"""
-    tolerance = 0
-    if num_points <= 500:
-        tolerance = .00001
-    elif num_points <= 1000:
-        tolerance = .0001
-    elif num_points <= 5000:
-        tolerance = .0003
-    elif num_points <= 10000:
-        tolerance = .0005
-    elif num_points > 10000:
-        tolerance = .002
-    return tolerance
-
-
 def dlfile(shape_zip_file_name):
     # Open the url
     url = "http://cdn.kelvinism.com/cozysiren/%s" % shape_zip_file_name
@@ -194,6 +176,7 @@ class GeocodeLoader():
         self.value_name = 'FIPS6'
         self.sample = sample
         self.start()
+        return True
 
     def run_taiwan(self, sample=True):
         self.shape_mappings = TW_TOWNSHIP_MAPPING
@@ -203,6 +186,7 @@ class GeocodeLoader():
         self.value_name = 'Taiwan_Geocode_100'
         self.sample = sample
         self.start()
+        return True
 
     def run_philippines(self, sample=True):
         self.shape_mappings = PH_MAPPING
@@ -220,6 +204,7 @@ def main():
             g.run_taiwan()
             g.run_fips6()
             g.run_philippines()
+            return True
     else:
         raise Exception('Not allowed to load sample data outside DEV')
 

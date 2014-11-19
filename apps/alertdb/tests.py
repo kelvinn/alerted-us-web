@@ -4,10 +4,11 @@ from django.test.client import Client
 from django.contrib.gis.geos.collections import Point
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
-from apps.alertdb.models import Alert
+from apps.alertdb.models import Alert, Geocode
 from apps.people.models import Location
 from apps.alertdb.api import AlertListAPI, AlertDetailAPI
 from apps.alertdb.tasks import run_location_search
+from apps.alertdb.geocode_tools import GeocodeLoader
 
 # Create API request factory
 factory = APIRequestFactory()
@@ -228,3 +229,14 @@ class AlertdbAPITests(APITestCase):
         force_authenticate(request2, user=user)
 
         self.assertRaises(Exception, view, request2)
+
+
+class AlertdbGeocodeTest(APITestCase):
+
+    def setUp(self):
+        self.g = GeocodeLoader()
+
+    def test_run_philippines(self):
+        self.g.run_philippines()
+        result = Geocode.objects.get(code=36900000)
+        self.assertEqual(result.name, "Tarlac")
