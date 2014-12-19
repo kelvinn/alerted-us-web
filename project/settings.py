@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-from logging.handlers import SysLogHandler
+#from logging.handlers import SysLogHandler
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -50,6 +50,7 @@ DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "development":
         DEBUG = True
+        ON_DOCKER = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
@@ -77,9 +78,20 @@ elif ON_SNAP_CI:
     DB_HOST = os.environ['SNAP_DB_PG_HOST']
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
 
-else:  # Default catch all, probably for staging
+elif ON_DOCKER:  # Default catch all
     REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = "localhost"
+    REDIS_ENDPOINT = "redis"
+    REDIS_PORT = 6379
+    REDIS_URL = '%s:%d:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = 'cozysiren'
+    DB_USER = 'app_user'
+    DB_PASSWD = 'djangouserspassword'
+    DB_HOST = 'db'
+    DB_PORT = '5432'
+
+else:
+    REDIS_PASSWORD = ""
+    REDIS_ENDPOINT = "127.0.0.1"
     REDIS_PORT = 6379
     REDIS_URL = '%s:%d:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = 'cozysiren'
@@ -319,17 +331,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'syslog': {
-            'level': 'INFO',
-            'class': 'logging.handlers.SysLogHandler',
-            'facility': SysLogHandler.LOG_LOCAL2,
-            'address': '/dev/log',
         }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['syslog', 'mail_admins'],
+            'handlers': ['mail_admins'],
             'level': 'DEBUG',
             'propagate': True,
         },

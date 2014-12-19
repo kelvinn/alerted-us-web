@@ -85,6 +85,7 @@ def run_location_search(alert_id):
                         publish_to_device.delay(just_object_result, loc.user)
         statsd.incr('task.run_location_search')
         timer.stop()
+        return True
     except Exception:
         pass  # log some exception here...
 

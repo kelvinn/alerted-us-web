@@ -215,6 +215,11 @@ class AlertdbAPITests(APITestCase):
         self.assertEqual(loc.user.username, user.username)
         self.assertEqual(loc.geom, p)
 
+    def test_run_location_search(self):
+        result = run_location_search(1)
+
+        self.assertEqual(result, 1)
+
     def test_alert_area_api(self):
         alert = list(Alert.objects.all()[:1])[0]
         url = "/api/v1/alerts/%s/areas/" % alert.cap_slug
@@ -246,8 +251,11 @@ class AlertdbAPITests(APITestCase):
 
         request2 = factory.post(url, self.cap_11, content_type='application/xml')
         force_authenticate(request2, user=user)
+        response2 = view(request2)
 
-        self.assertRaises(Exception, view, request2)
+        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)  # verify we got back a response OK
+
+        #self.assertRaises(Exception, view, request2)
 
 
 class AlertdbGeocodeTest(APITestCase):

@@ -1,0 +1,23 @@
+web:
+  build: contrib/web
+  command: python manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  links:
+    - redis
+    - db
+  environment:
+    - RACK_ENV=development
+
+redis:
+  image: redis
+
+db:
+  image: jamesbrink/postgresql
+  environment:
+    - USER=app_user
+    - PASSWORD=djangouserspassword
+    - SCHEMA=cozysiren
+    - POSTGIS=true
