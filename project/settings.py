@@ -55,6 +55,8 @@ if 'RACK_ENV' in os.environ:
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
+    elif os.environ['RACK_ENV'] == "production_docker":
+        ON_DOCKER_PROD = True
 
 if ON_DO:
     REDIS_PASSWORD = ""
@@ -77,6 +79,17 @@ elif ON_SNAP_CI:
     DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
     DB_HOST = os.environ['SNAP_DB_PG_HOST']
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
+
+elif ON_DOCKER_PROD:
+    REDIS_PASSWORD = ""
+    REDIS_ENDPOINT = os.environ["REDIS_1_PORT_6379_TCP_ADDR"]
+    REDIS_PORT = os.environ["REDIS_1_PORT_6379_TCP_PORT"]
+    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = os.environ['DB_NAME']
+    DB_USER = os.environ['DB_USER']
+    DB_PASSWD = os.environ['DB_PASSWORD']
+    DB_HOST = os.environ['DB_HOST']
+    DB_PORT = os.environ['DB_PORT']
 
 elif ON_DOCKER:  # Default catch all
     REDIS_PASSWORD = ""
