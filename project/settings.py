@@ -83,8 +83,8 @@ elif ON_SNAP_CI:
 
 elif ON_DOCKER_PROD:
     REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = os.environ["REDIS_1_PORT_6379_TCP_ADDR"]
-    REDIS_PORT = os.environ["REDIS_1_PORT_6379_TCP_PORT"]
+    REDIS_ENDPOINT = os.environ["REDIS_PORT_6379_TCP_ADDR"]
+    REDIS_PORT = os.environ["REDIS_PORT_6379_TCP_PORT"]
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['DB_USER']
