@@ -22,6 +22,4 @@ EXPOSE 80 8000
 # Set the default directory where CMD will execute
 WORKDIR /app
 
-VOLUME [/app]
-
 CMD ["sh", "/app/run.sh"]
