@@ -9,6 +9,3 @@ RUN apt-get update
 RUN apt-get install -y libpq-dev python-dev python-lxml python-psycopg2 python-pip binutils libproj-dev gdal-bin libxml2-dev libxslt1-dev
 RUN pip install -r requirements.txt
 ADD . /code/
-ADD run.sh /usr/local/bin/run
-EXPOSE 8000
-CMD ["/bin/sh", "-e", "/usr/local/bin/run"]
