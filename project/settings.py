@@ -39,6 +39,7 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 ON_DOCKER = False
+ON_DOCKER_PROD = False
 ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
