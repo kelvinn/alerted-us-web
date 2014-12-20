@@ -116,7 +116,7 @@ else:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", "do.qa.alerted.us", "trusty64", "172.17.8.101", ".amazonaws.com", "localhost"]
+ALLOWED_HOSTS = [".alerted.us", ".tutum.io", "trusty64", "172.17.8.101", ".amazonaws.com", "localhost"]
 
 # Application definition
 
