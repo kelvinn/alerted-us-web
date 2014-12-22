@@ -23,10 +23,10 @@ RUN pip install -r /app/requirements.txt
 ADD . /app
 
 # Setup config files
-run echo "daemon off;" >> /etc/nginx/nginx.conf
-run rm /etc/nginx/sites-enabled/default
-run ln -s /app/contrib/web/django.conf /etc/nginx/sites-enabled/
-run ln -s /app/contrib/web/supervisor.conf /etc/supervisor/conf.d/
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
+RUN ln -s /app/contrib/web/django.conf /etc/nginx/sites-enabled/
+RUN ln -s /app/contrib/web/supervisor.conf /etc/supervisor/conf.d/
 
 # Expose ports
 EXPOSE 80 8000 8080
