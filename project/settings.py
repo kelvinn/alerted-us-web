@@ -58,6 +58,7 @@ if 'RACK_ENV' in os.environ:
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == "production_docker":
         ON_DOCKER_PROD = True
+        DEBUG = True
 
 if ON_DO:
     REDIS_PASSWORD = ""
