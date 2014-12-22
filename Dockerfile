@@ -34,4 +34,4 @@ EXPOSE 80 8000 8080
 # Set the default directory where CMD will execute
 WORKDIR /app
 
-CMD ["supervisord", "-n"]
+CMD ["/bin/sh", "-e", "run.sh"]
