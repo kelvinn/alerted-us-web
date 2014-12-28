@@ -48,7 +48,7 @@ The geocode_tools.py script will download 100MB of data, so don't do it over 3G 
 
 # Development (next...)
 
-I'm slowly moving things to Docker, and it mostly seems to be working. Start three containers:
+I'm slowly contemplating Docker, so here are some notes. Start three containers:
 
 #### Postgresql
 docker run -e USER=app_user -e PASSWORD=djangouserspassword -e SCHEMA=cozysiren -e POSTGIS=true -p 5432:5432 --rm --name db jamesbrink/postgresql
@@ -58,7 +58,7 @@ docker run --rm -p 6379:6379 --name redis redis
 
 #### Alerted web (non-interactive)
 
-docker run --rm -p 8080:8080 --link redis:redis --link db:db -e RACK_ENV=development -v ~/Workspace/alerted-us-web/:/app kn_test
+docker run --rm -p 80:80 --link redis:redis --link db:db -e RACK_ENV=development -v ~/Workspace/alerted-us-web/:/app kn_test
 
 #### Or Alerted web (interactive)
 

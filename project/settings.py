@@ -51,7 +51,6 @@ DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "development":
         DEBUG = True
-        ON_DOCKER = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
