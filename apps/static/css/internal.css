@@ -125,6 +125,7 @@ body {
 }
 
 .navbar-header {
+  background-color: #008dca;
   padding-left: 15px; /* This is a bit of an alignment hack */
 }
 
