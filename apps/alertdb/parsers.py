@@ -1,6 +1,7 @@
 import dateutil.parser as dparser
 from rest_framework.parsers import BaseParser
 from rest_framework.exceptions import ParseError
+from django.contrib.gis.geos import GEOSException
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.gis.db.models import Union
 from capparselib.parsers import CAPParser
@@ -108,8 +109,12 @@ class CAPXMLParser(BaseParser):
             pnt = Point(float(poly_pnts[1]), float(poly_pnts[0]))
             point_list.append(pnt)
 
-        p = Polygon(point_list)  # Can't convert directly from points to MultiPolygon
-        geom = MultiPolygon(p)
+        try:
+            p = Polygon(point_list)  # Can't convert directly from points to MultiPolygon
+            geom = MultiPolygon(p)
+        except GEOSException:
+            logging.error("Unable to format points into MultiPoligon")
+            geom = None
         return geom
 
     def process_item_obj(self, item_obj):

@@ -149,6 +149,10 @@ body {
     width: 30px;
 }
 
+.navbar-toggle {
+  background-color: #f4f4f4;
+}
+
 .center {
     text-align: center;
 }

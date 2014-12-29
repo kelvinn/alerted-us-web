@@ -44,6 +44,7 @@ class AlertdbAPITests(APITestCase):
         self.cap_11 = open('apps/alertdb/testdata/weather.cap', 'r').read()
         self.cap_12 = open('apps/alertdb/testdata/australia.cap', 'r').read()
         self.cap_11b = open('apps/alertdb/testdata/weather_2.cap', 'r').read()
+        self.cap_12b = open('apps/alertdb/testdata/mexico.cap', 'r').read()
         self.signed_pelmorex = open('apps/alertdb/testdata/signed_pelmorex.cap', 'r').read()
         self.taiwan_cap_12 = open('apps/alertdb/testdata/taiwan.cap', 'r').read()
         self.ph_cap_12 = open('apps/alertdb/testdata/ph.cap', 'r').read()
@@ -146,6 +147,21 @@ class AlertdbAPITests(APITestCase):
         area_result = list(info_result.area_set.all()[:1])[0]  # Get just one.
 
         self.assertIsNotNone(area_result.geom)
+
+    def test_alert_api_put_cap12b(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/'
+
+        view = AlertListAPI.as_view()
+        request = factory.post(url, self.cap_12b, content_type='application/xml')
+        force_authenticate(request, user=user)
+
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # verify object created
+
+        entry_result = list(Alert.objects.filter(cap_id__contains='avisossmn-frentefrio-28')[:1])[0]
+
+        self.assertEqual(entry_result.cap_scope, 'Public')
 
     def test_alert_api_put_taiwan_cap12(self):
         user, created = User.objects.get_or_create(username='apiuser')
