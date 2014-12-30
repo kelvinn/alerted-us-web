@@ -16,7 +16,6 @@ body {
     margin: 0;
     background-color: #f4f4f4;
     font-family: 'Open Sans', sans-serif;
-    padding-top: 70px;
     /*background: url("/static/img/white_wall_hash.png") repeat;*/
 
  }
@@ -197,7 +196,7 @@ body {
 
 .header-container {
     height: 50px;
-    /*background-color: #0077b3;*/
+    background-color: #f4f4f4;
     /*border-bottom: 2px solid #008dca;*/
     /*border-top: 2px solid #008dca;*/
 }
