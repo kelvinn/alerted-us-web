@@ -6,6 +6,7 @@ from django.test.client import Client
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 from rest_framework import status
+from push_notifications.models import GCMDevice
 from apps.people.models import Location, Notification
 from apps.people.tasks import *
 import re
@@ -234,6 +235,10 @@ class UserAPITests(APITestCase):
         url = '/api/v1/users/gcmtoken/'
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Test that it was only created once
+        gcm_count = len(GCMDevice.objects.filter(user=user))
+        self.assertEqual(gcm_count, 1)
 
         # Test creating an invalid gcm token
         data = {u'registration_123': u'1234'}
