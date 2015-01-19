@@ -241,8 +241,15 @@ class UserAPITests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_get_token(self):
+        #user, created = User.objects.get_or_create(username='admin', password='password')
+
+        user = User.objects.create_user(username='admin', password='password')
 
 
+        data = {u'username': u'admin', u'password':u'password'}
 
-
-
+        # Test getting auth token
+        url = '/api-token-auth/'
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
