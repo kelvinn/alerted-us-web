@@ -82,7 +82,7 @@ class PeopleTests(APITestCase):
 
 
 class LocationAPITests(APITestCase):
-    def test_add_location_api(self):
+    def test_add_static_location_api(self):
 
         user, created = User.objects.get_or_create(username='apiuser')
 
@@ -100,6 +100,21 @@ class LocationAPITests(APITestCase):
         # Now test just listing locations
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_add_dynamic_location_api(self):
+
+        user, created = User.objects.get_or_create(username='apiuser')
+
+        url = '/api/v1/users/locations/'
+        data = {u'geom': {u'type': u'Point', u'coordinates': [-67.188634, 18.381713]},
+                u'name': u'Current Location',
+                u'source': u'current'}
+
+        self.client.force_authenticate(user=user)
+
+        # Test creating a list
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_location_detail_api(self):
         user, created = User.objects.get_or_create(username='apiuser')
@@ -193,6 +208,7 @@ class UserAPITests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+
     def test_patch_user_api(self):
         user = User.objects.create_user(username='testuser', password='testpassword')
         url = '/api/v1/users/%s/' % user.pk
@@ -253,6 +269,17 @@ class UserAPITests(APITestCase):
 
 
         data = {u'username': u'admin', u'password':u'password'}
+
+        # Test getting auth token
+        url = '/api-token-auth/'
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_token_by_email(self):
+        user = User.objects.create_user(username='admin@alerted.us', email='admin@alerted.us', password='password')
+
+
+        data = {u'username': u'admin@alerted.us', u'password':u'password'}
 
         # Test getting auth token
         url = '/api-token-auth/'

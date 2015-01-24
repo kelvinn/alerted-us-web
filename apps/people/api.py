@@ -79,7 +79,7 @@ class UserList(APIView):
     Creates new user proviles.
     """
 
-    @statsd.timer('api.UserList.get')
+    @statsd.timer('api.UserList.post')
     def post(self, request, format=None):
 
         data = request.DATA
