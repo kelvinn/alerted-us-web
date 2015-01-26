@@ -47,8 +47,10 @@ class AlertListAPI(APIView):
             info = info[0]
             alert = Alert.objects.get(info=info)
             serializer = AlertSerializer(alert)
+            statsd.incr('api.AlertListAPI.get.success')
             return Response(serializer.data)
         else:
+            statsd.incr('api.AlertListAPI.get.failure')
             raise Http404
 
     def post(self, request):
@@ -74,9 +76,10 @@ class AlertListAPI(APIView):
             for s in serializer.data:
                 if s['cap_status'] == 'Actual':  # This prevents any test messages from going out
                     run_location_search.delay(s['id'])
+            statsd.incr('api.AlertListAPI.post.success')
             rsp = Response(status=status.HTTP_201_CREATED)
         else:
-            statsd.incr('api.AlertListAPI.post.not_valid')
+            statsd.incr('api.AlertListAPI.post.failure')
             rsp = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         timer.stop()
         return rsp
