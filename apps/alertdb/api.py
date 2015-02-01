@@ -10,6 +10,7 @@ from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from apps.alertdb.tasks import run_location_search
 from statsd.defaults.django import statsd
+from datetime import datetime
 import logging
 
 
@@ -41,7 +42,12 @@ class AlertListAPI(APIView):
             raise Http404
 
         pnt = Point(lng, lat)
-        info = Info.objects.filter(area__geom__distance_lt=(pnt, D(mi=3)))
+        info = Info.objects.filter(
+            cap_expires__gte=datetime.now()
+        ).filter(
+            area__geom__distance_lt=(pnt, D(mi=3))
+        )
+
 
         if len(info) > 0:
             info = info[0]

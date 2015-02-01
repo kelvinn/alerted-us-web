@@ -13,6 +13,8 @@ from apps.alertdb.api import AlertListAPI
 from apps.alertdb.tasks import run_location_search
 from apps.alertdb.geocode_tools import GeocodeLoader
 from apps.alertdb.admin import GeocodeAdmin
+from apps.alertdb.models import Info
+import datetime
 
 # Create API request factory
 factory = APIRequestFactory()
@@ -174,6 +176,12 @@ class AlertdbAPITests(APITestCase):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/?lng=-66.67249&lat=18.42207'
 
+        # Swap expired date so alert is active
+        info_set = Info.objects.all()
+        for info in info_set:
+            info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.save()
+
         view = AlertListAPI.as_view()
         request = factory.get(url)
         force_authenticate(request, user=user)
@@ -188,6 +196,12 @@ class AlertdbAPITests(APITestCase):
     def test_alert_api_query_by_coord_within(self):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906'
+
+        # Swap expired date so alert is active
+        info_set = Info.objects.all()
+        for info in info_set:
+            info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.save()
 
         view = AlertListAPI.as_view()
         request = factory.get(url)
