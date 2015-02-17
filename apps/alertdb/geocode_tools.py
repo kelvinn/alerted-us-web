@@ -199,7 +199,7 @@ class GeocodeLoader():
 
 def main():
     if 'RACK_ENV' in os.environ:
-        if os.environ['RACK_ENV'] == "development":
+        if os.environ['RACK_ENV'] == "development" or os.environ['RACK_ENV'] == "staging":
             g = GeocodeLoader()
             g.run_taiwan()
             g.run_fips6()
