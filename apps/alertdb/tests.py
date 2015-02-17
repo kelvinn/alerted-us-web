@@ -189,7 +189,7 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-        cap_sender = response.data['cap_sender']
+        cap_sender = response.data[0]['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
 
 
@@ -210,8 +210,46 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-        cap_sender = response.data['cap_sender']
+        cap_sender = response.data[0]['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
+
+    def test_alert_api_query_by_coord_within_filterby_date(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906&cap_date_received=2010-01-17T08:03:21.156421'
+
+        # Swap expired date so alert is active
+        info_set = Info.objects.all()
+        for info in info_set:
+            info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.save()
+
+        view = AlertListAPI.as_view()
+        request = factory.get(url)
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
+
+        cap_sender = response.data[0]['cap_sender']
+        self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
+
+    def test_alert_api_query_by_coord_within_filterby_date_invalid(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906&cap_date_received=2015-02-17T08:03:21.156421'
+
+        # Swap expired date so alert is active
+        info_set = Info.objects.all()
+        for info in info_set:
+            info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.save()
+
+        view = AlertListAPI.as_view()
+        request = factory.get(url)
+        force_authenticate(request, user=user)
+        response = view(request)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # verify we got back a response OK
+
 
     def test_notification_via_alert(self):
 

@@ -10,12 +10,11 @@ from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from apps.alertdb.tasks import run_location_search
 from statsd.defaults.django import statsd
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import logging
 
 
 class AlertListAPI(APIView):
-
     renderer_classes = (JSONRenderer, YAMLRenderer, BrowsableAPIRenderer, XMLRenderer)
     parser_classes = (CAPXMLParser,)
 
@@ -41,17 +40,27 @@ class AlertListAPI(APIView):
         except:
             raise Http404
 
+        if 'cap_date_received' in request.QUERY_PARAMS:
+            cap_date_received = str(request.QUERY_PARAMS['cap_date_received'])
+        else:
+            cap_date_received = None
+
         pnt = Point(lng, lat)
-        info = Info.objects.filter(
-            cap_expires__gte=datetime.now()
+
+        if cap_date_received is not None:
+            alert = Alert.objects.select_related('info').filter(
+                cap_date_received__gte=cap_date_received
+            )
+        else:
+            alert = Alert.objects.select_related('info').all()
+
+        alert = alert.filter(
+            info__cap_expires__gte=datetime.now()
         ).filter(
-            area__geom__distance_lt=(pnt, D(mi=3))
+            info__area__geom__distance_lt=(pnt, D(mi=3))
         )
 
-
-        if len(info) > 0:
-            info = info[0]
-            alert = Alert.objects.get(info=info)
+        if len(alert) > 0:
             serializer = AlertSerializer(alert)
             statsd.incr('api.AlertListAPI.get.success')
             return Response(serializer.data)
