@@ -6,34 +6,31 @@ from time import sleep
 
 api_key = getenv('LOADER_IO_KEY', None)
 
-test_id = getenv('TEST_ID', None)
-test_id_2 = getenv('TEST_ID_2', None)
-
 loader = Loaderio(api_key)
 
-result = None
-result_id = loader.tests.run(test_id)['result_id']
-for x in range(0, 300, 10):
-    sleep(10)
-    result = loader.results.get(test_id,result_id)
-    if result['status'] == 'ready': break
 
-# result_id_2 needs to after the first run, since they can't run at the same time
-result_2 = None
-result_id_2 = loader.tests.run(test_id_2)['result_id']
-for x in range(0, 300, 10):
-    sleep(10)
-    result_2 = loader.results.get(test_id,result_id_2)
-    if result_2 == 'ready': break
+def run_tests(test_id, test_name):
+    result = None
+    pending_result_id = loader.tests.run(test_id)
+    if pending_result_id['message'] == 'success':
+        sleep(60) # The tests are 60 seconds, so we know to sleep at least this long
+        for x in range(0, 300, 10): # TODO This should be refactored to be more reliable, I think the APi has issues
+            sleep(10)
+            result = loader.results.get(test_id, pending_result_id['result_id'])
+            if result['status'] == 'ready': break
 
-if result and result_2:
-    avg_response_time_1 = result['avg_response_time']
-    avg_response_time_2 = result_2['avg_response_time']
-    print "POST average response time: %s" % avg_response_time_1
-    print "GET average response time: %s" % avg_response_time_2
-    if avg_response_time_1 > 1000 < avg_response_time_2:
-        print "[ERROR] Average test time from Loader too high"
-        sys.exit(1)
+        try:
+            avg_response_time = result['avg_response_time']
+            if 1000 < avg_response_time:
+                print "[ERROR] Average too high (%s: %sms)" % (test_name, avg_response_time)
+                sys.exit(1)
+            else:
+                print "[SUCCESS] Average test time within acceptable margins (%s: %sms)" % (test_name, avg_response_time)
+        except:
+            print "[ERROR] Average response time not provided from Loader.io (%s)" % test_name
     else:
-        print "[SUCCESS] Average test time from Loader within acceptable margins"
+        print "[ERROR] Loader.io says for test %s: %s" % (test_name, pending_result_id['errors'])
 
+if __name__ == '__main__':
+    for loader_test in loader.tests.list():
+        run_tests(loader_test['test_id'], loader_test['name'])
