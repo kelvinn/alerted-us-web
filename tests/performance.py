@@ -27,7 +27,11 @@ for x in range(0, 300, 10):
     if result_2 == 'ready': break
 
 if result and result_2:
-    if result['avg_response_time'] > 1000 < result_2['avg_response_time']:
+    avg_response_time_1 = result['avg_response_time']
+    avg_response_time_2 = result_2['avg_response_time']
+    print "POST average response time: %s" % avg_response_time_1
+    print "GET average response time: %s" % avg_response_time_2
+    if avg_response_time_1 > 1000 < avg_response_time_2:
         print "[ERROR] Average test time from Loader too high"
         sys.exit(1)
     else:
