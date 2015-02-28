@@ -11,6 +11,7 @@ import os
 import sys
 import logging
 from django.conf import settings
+from dj_static import Cling
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -25,4 +26,4 @@ except:
     logging.error("No RACK_ENV or New Relic file")
 
 from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+application = Cling(get_wsgi_application())
