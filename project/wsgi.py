@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 import os
 import sys
 import logging
-from django.conf import settings
 from dj_static import Cling
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))

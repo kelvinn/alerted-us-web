@@ -43,6 +43,7 @@ ON_DOCKER_PROD = False
 ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
+ON_OPENSHIFT = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
@@ -50,11 +51,14 @@ ENABLE_DEBUG_TOOLBAR = False
 DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "development":
+        ON_DOCKER = True
         DEBUG = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
+    elif os.environ['RACK_ENV'] == 'openshift':
+        ON_OPENSHIFT = True
     elif os.environ['RACK_ENV'] == "production_docker":
         ON_DOCKER_PROD = True
         DEBUG = True
@@ -80,6 +84,18 @@ elif ON_SNAP_CI:
     DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
     DB_HOST = os.environ['SNAP_DB_PG_HOST']
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
+
+elif ON_OPENSHIFT:
+    REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
+    REDIS_ENDPOINT = os.environ["REDIS_ADDR"]
+    REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_DATABASE_ID = os.environ["REDIS_DATABASE_ID"]
+    REDIS_URL = '%s:%s:%s' % (REDIS_ENDPOINT, REDIS_PORT, REDIS_DATABASE_ID)
+    DB_NAME = os.environ['DB_NAME']
+    DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+    DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
+    DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
+    DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
 
 elif ON_DOCKER_PROD:
     REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
@@ -121,6 +137,7 @@ ALLOWED_HOSTS = [".alerted.us", ".tutum.io", "trusty64", "172.17.8.101", ".amazo
 # Application definition
 
 INSTALLED_APPS = (
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -141,6 +158,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'django_nose',
     "push_notifications",
+
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
