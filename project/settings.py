@@ -46,12 +46,11 @@ ON_SNAP_CI = False
 ON_OPENSHIFT = False
 
 # Enable this to view the toolbar
-ENABLE_DEBUG_TOOLBAR = False
+ENABLE_DEBUG_TOOLBAR = True
 
 DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "development":
-        ON_DOCKER = True
         DEBUG = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
@@ -96,28 +95,6 @@ elif ON_OPENSHIFT:
     DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
     DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
     DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
-
-elif ON_DOCKER_PROD:
-    REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
-    REDIS_ENDPOINT = os.environ["REDIS_PORT_6379_TCP_ADDR"]
-    REDIS_PORT = os.environ["REDIS_PORT_6379_TCP_PORT"]
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['DB_USER']
-    DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['DB_HOST']
-    DB_PORT = os.environ['DB_PORT']
-
-elif ON_DOCKER:  # Default catch all
-    REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = "redis"
-    REDIS_PORT = 6379
-    REDIS_URL = '%s:%d:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = 'cozysiren'
-    DB_USER = 'app_user'
-    DB_PASSWD = 'djangouserspassword'
-    DB_HOST = 'db'
-    DB_PORT = '5432'
 
 else:
     REDIS_PASSWORD = ""

@@ -50,8 +50,8 @@ class Alert(models.Model):
 
     cap_id = models.CharField(max_length=500, unique=True, blank=True, null=True)
     cap_slug = models.CharField(max_length=50, blank=True, null=True)  # just in case cap_id is not useable
-    cap_sender = models.CharField(max_length=200, blank=True, null=True)
-    cap_sent = models.DateTimeField(blank=True, null=True)
+    cap_sender = models.CharField(db_index=True, max_length=200, blank=True, null=True)
+    cap_sent = models.DateTimeField(db_index=True, blank=True, null=True)
     cap_status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=True, null=True)
     cap_message_type = models.CharField(max_length=10, choices=MESSAGE_TYPE_CHOICES, blank=True, null=True)
     cap_source = models.CharField(max_length=500, blank=True, null=True)
@@ -62,7 +62,7 @@ class Alert(models.Model):
     cap_note = models.TextField(blank=True, null=True)
     cap_references = models.TextField(blank=True, null=True)
     cap_incidents = models.CharField(max_length=500, blank=True, null=True)
-    cap_date_received = models.DateTimeField(auto_now_add=True)
+    cap_date_received = models.DateTimeField(db_index=True, auto_now_add=True)
     cap_raw = models.TextField(blank=True, null=True)
     contributor = models.ForeignKey(User, editable=True, blank=True, null=True)
 
@@ -133,7 +133,7 @@ class Info(models.Model):
     cap_event_code = models.CharField(max_length=500, blank=True, null=True)
     cap_effective = models.DateTimeField(blank=True, null=True)
     cap_onset = models.DateTimeField(blank=True, null=True)
-    cap_expires = models.DateTimeField(blank=True, null=True)
+    cap_expires = models.DateTimeField(db_index=True, blank=True, null=True)
     cap_sender_name = models.CharField(max_length=200, blank=True, null=True)
     cap_headline = models.CharField(max_length=500)
     cap_description = models.TextField()
