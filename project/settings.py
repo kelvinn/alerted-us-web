@@ -46,11 +46,12 @@ ON_SNAP_CI = False
 ON_OPENSHIFT = False
 
 # Enable this to view the toolbar
-ENABLE_DEBUG_TOOLBAR = True
+ENABLE_DEBUG_TOOLBAR = False
 
 DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "development":
+        ENABLE_DEBUG_TOOLBAR = True
         DEBUG = True
     elif os.environ['RACK_ENV'] == "production":
         ON_DO = True
