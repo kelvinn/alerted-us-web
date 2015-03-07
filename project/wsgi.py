@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 import os
 import sys
 import logging
-from dj_static import Cling
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -25,4 +24,4 @@ except:
     logging.error("No RACK_ENV or New Relic file")
 
 from django.core.wsgi import get_wsgi_application
-application = Cling(get_wsgi_application())
+application = get_wsgi_application()
