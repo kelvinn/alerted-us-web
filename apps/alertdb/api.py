@@ -52,12 +52,12 @@ class AlertListAPI(APIView):
                 cap_date_received__gte=cap_date_received
             )
         else:
-            alert = Alert.objects.select_related('info').all()
+            alert = Alert.objects.select_related('info')
 
         alert = alert.filter(
             info__cap_expires__gte=datetime.now()
         ).filter(
-            info__area__geom__distance_lt=(pnt, D(mi=3))
+            info__area__geom__dwithin=(pnt, 0.02)
         )
 
         if len(alert) > 0:
