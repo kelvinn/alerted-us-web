@@ -58,7 +58,6 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'openshift':
-        DEBUG = True
         ON_OPENSHIFT = True
 
 # Force debug to be on
