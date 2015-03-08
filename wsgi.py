@@ -1,27 +1,17 @@
-"""
-WSGI config for cozysiren project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
-"""
+#!/usr/bin/env python
 
 import os
 import sys
-import logging
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
-sys.path.append(BASE_DIR)
-
+os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
+sys.path.append(os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'project'))
+virtenv = os.environ['APPDIR'] + '/virtenv/'
+os.environ['PYTHON_EGG_CACHE'] = os.path.join(virtenv, 'lib/python2.7/site-packages')
+virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
 try:
-    if os.environ['RACK_ENV'] == 'production':
-        import newrelic.agent
-        newrelic.agent.initialize('/usr/local/etc/newrelic.ini')
+    execfile(virtualenv, dict(__file__=virtualenv))
 except:
-    logging.error("No RACK_ENV or New Relic file")
+    pass
 
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
