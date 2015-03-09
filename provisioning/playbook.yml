@@ -105,6 +105,7 @@
           - libxslt1-dev
           - firefox
           - xvfb
+          - memcached
 
     # Setup Environment variables
     - name: create xvfb service

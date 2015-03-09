@@ -50,10 +50,7 @@ ENABLE_DEBUG_TOOLBAR = False
 
 DEBUG = False
 if 'RACK_ENV' in os.environ:
-    if os.environ['RACK_ENV'] == "development":
-        ENABLE_DEBUG_TOOLBAR = True
-        DEBUG = True
-    elif os.environ['RACK_ENV'] == "production":
+    if os.environ['RACK_ENV'] == "production":
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
@@ -98,8 +95,11 @@ elif ON_OPENSHIFT:
     DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
     DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
     DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
+    MEMCACHE_URL = os.environ['MEMCACHED_URL']
 
 else:
+    ENABLE_DEBUG_TOOLBAR = True
+    DEBUG = True
     REDIS_PASSWORD = ""
     REDIS_ENDPOINT = "127.0.0.1"
     REDIS_PORT = 6379
@@ -109,6 +109,7 @@ else:
     DB_PASSWD = 'djangouserspassword'
     DB_HOST = '127.0.0.1'
     DB_PORT = '5432'
+    MEMCACHE_URL = '127.0.0.1:11211'
 
 TEMPLATE_DEBUG = True
 
@@ -164,10 +165,22 @@ CACHES = {
     }
 }
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': MEMCACHE_URL,
+    }
+}
+
+CACHE_MIDDLEWARE_SECONDS = 60
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
