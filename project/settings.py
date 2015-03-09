@@ -58,7 +58,6 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'openshift':
-        DEBUG = True
         ON_OPENSHIFT = True
 
 # Force debug to be on
@@ -113,7 +112,7 @@ else:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", ".tutum.io", "trusty64", "172.17.8.101", ".amazonaws.com", "localhost"]
+ALLOWED_HOSTS = [".alerted.us", ".tutum.io", "trusty64", "172.17.8.101", ".amazonaws.com", "localhost", ".rhcloud.com"]
 
 # Application definition
 
