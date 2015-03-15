@@ -86,10 +86,6 @@ elif ON_SNAP_CI:
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
 
 elif ON_OPENSHIFT:
-    REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
-    REDIS_ENDPOINT = os.environ["REDIS_ADDR"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
-    REDIS_URL = '%s:%s:0' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
     DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
@@ -153,25 +149,28 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 }
 
 # When using TCP connections
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
-            'PASSWORD': REDIS_PASSWORD,  # Optional
-            'CONNECTION_POOL_KWARGS': {'max_connections': 1000}
+if ON_OPENSHIFT:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': MEMCACHE_URL,
         }
     }
-}
-
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': MEMCACHE_URL,
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.cache.RedisCache',
+            'LOCATION': REDIS_URL,
+            'OPTIONS': {
+                'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
+                'PASSWORD': REDIS_PASSWORD,  # Optional
+                'CONNECTION_POOL_KWARGS': {'max_connections': 1000}
+            }
+        }
     }
-}
+
+
+
 
 CACHE_MIDDLEWARE_SECONDS = 60
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
@@ -332,8 +331,9 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 # Stuff for celery
 
-BROKER_URL = 'redis://%s:%s/0' % (REDIS_ENDPOINT, REDIS_PORT)
-CELERY_RESULT_BACKEND = BROKER_URL
+if not ON_OPENSHIFT:
+    BROKER_URL = 'redis://%s:%s/0' % (REDIS_ENDPOINT, REDIS_PORT)
+    CELERY_RESULT_BACKEND = BROKER_URL
 
 BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
 BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
