@@ -58,10 +58,10 @@ if 'RACK_ENV' in os.environ:
         ON_OPENSHIFT = True
 
 # Force debug to be on
-#if 'DEBUG' in os.environ:
-#    if os.environ['DEBUG'] == 'True':
-#        ENABLE_DEBUG_TOOLBAR = True
-#        DEBUG = True
+if 'DEBUG' in os.environ:
+    if os.environ['DEBUG'] == 'True':
+        ENABLE_DEBUG_TOOLBAR = True
+        DEBUG = True
 
 if ON_DO:
     REDIS_PASSWORD = ""
