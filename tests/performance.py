@@ -6,6 +6,7 @@ from time import sleep
 
 API_KEY = getenv('LOADER_IO_KEY', None)
 TEST_ID = getenv('TEST_ID', None)
+TEST_ID_2 = getenv('TEST_ID_2', None)
 
 loader = Loaderio(API_KEY)
 
@@ -35,3 +36,4 @@ def run_tests(test_id):
 
 if __name__ == '__main__':
     run_tests(TEST_ID)
+    run_tests(TEST_ID_2)
