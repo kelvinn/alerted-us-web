@@ -251,23 +251,6 @@ class AlertdbAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # verify we got back a response OK
 
 
-    def test_notification_via_alert(self):
-
-        # First, create a test user and location
-        p = Point(-67.188634, 18.381713)  # This point matches the alertdb fixture
-        user, created = User.objects.get_or_create(username='test', email="dummy@kelvinism.com")
-        loc = Location(user=user, geom=p)
-        loc.save()
-
-        # Next, get alerts and compare to locations
-        alerts = Alert.objects.all()
-        for alert in alerts:
-            run_location_search.delay(alert.id)
-
-        # Now run the tests
-        self.assertEqual(loc.user.username, user.username)
-        self.assertEqual(loc.geom, p)
-
     def test_run_location_search(self):
         result = run_location_search(1)
 

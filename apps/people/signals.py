@@ -15,10 +15,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-@receiver(post_save, sender=Location)
-def archive_location(sender, instance=None, created=False, **kwargs):
-    # Probably worthwhile making this as a background task at some point
-    if instance.source == "current":
-        save_location_history.delay(instance)
-        run_alertdb_search.delay(instance)  # TODO make this work?
-
