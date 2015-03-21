@@ -8,7 +8,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from apps.people.models import Location, Notification
 from apps.people.serializers import LocationSerializer, UserSerializer, NotificationSerializer, GCMTokenSerializer
-from apps.people.tasks import run_alertdb_search, save_location_history
 from statsd.defaults.django import statsd
 from push_notifications.models import GCMDevice
 

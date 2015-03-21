@@ -8,9 +8,8 @@ from rest_framework import status
 from apps.alertdb.models import Alert, Info, Area
 from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
-from apps.alertdb.tasks import run_location_search
 from statsd.defaults.django import statsd
-from datetime import datetime, date, timedelta
+from datetime import datetime
 import logging
 
 
