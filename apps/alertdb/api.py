@@ -88,9 +88,6 @@ class AlertListAPI(APIView):
         serializer = AlertSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            for s in serializer.data:
-                if s['cap_status'] == 'Actual':  # This prevents any test messages from going out
-                    run_location_search.delay(s['id'])
             statsd.incr('api.AlertListAPI.post.success')
             rsp = Response(status=status.HTTP_201_CREATED)
         else:
