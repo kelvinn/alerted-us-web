@@ -18,11 +18,11 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 sys.path.append(BASE_DIR)
 
 try:
-    if os.environ['RACK_ENV'] == 'production':
+    if os.environ['RACK_ENV'] == 'openshift':
         import newrelic.agent
-        newrelic.agent.initialize('/usr/local/etc/newrelic.ini')
+        newrelic.agent.initialize()
 except:
-    logging.error("No RACK_ENV or New Relic file")
+    logging.error("Error starting NewRelic agent")
 
 from django.core.wsgi import get_wsgi_application
 application = Cling(get_wsgi_application())
