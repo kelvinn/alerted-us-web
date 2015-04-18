@@ -148,10 +148,6 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
     )
     DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False, }
 
-PUSH_NOTIFICATIONS_SETTINGS = {
-    "GCM_API_KEY": GCM_API_KEY,
-}
-
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.cache.RedisCache',
