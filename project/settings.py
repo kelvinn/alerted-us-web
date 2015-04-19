@@ -60,7 +60,7 @@ if 'RACK_ENV' in os.environ:
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
-    if (sys.argv[1] == 'runserver'):
+    if sys.argv[1] == 'runserver':
         ENABLE_DEBUG_TOOLBAR = True
         DEBUG = True
 elif os.getenv('DEBUG', 'False') == 'True':
@@ -118,7 +118,7 @@ else:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", ".oo.kelvinism.com", "trusty64", "172.17.8.101", ".amazonaws.com", "localhost", ".rhcloud.com"]
+ALLOWED_HOSTS = [".alerted.us", ".oo.kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 
@@ -163,8 +163,6 @@ CACHES = {
         }
     }
 }
-
-
 
 
 CACHE_MIDDLEWARE_SECONDS = 60
