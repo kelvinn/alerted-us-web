@@ -58,14 +58,10 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == 'openshift':
         ON_OPENSHIFT = True
 
-# This will force debug to be on if using the development server
-DEBUG = (sys.argv[1] == 'runserver')
-
-# Force debug to be on
-if 'DEBUG' in os.environ:
-    if os.environ['DEBUG'] == 'True':
-        ENABLE_DEBUG_TOOLBAR = True
-        DEBUG = True
+# This will force debug to be on if using the development server or if set in an env variable
+if (sys.argv[1] == 'runserver') or (os.getenv('DEBUG', 'False') == 'True'):
+    ENABLE_DEBUG_TOOLBAR = True
+    DEBUG = True
 
 if ON_DO:
     REDIS_PASSWORD = ""
