@@ -8,8 +8,7 @@ from selenium.webdriver.common.keys import Keys
 # Selenium Tests
 class BaseTestCase(LiveServerTestCase):
 
-    #fixtures = ['user-data.json']
-    fixtures = ['alertdb_people_users']
+    fixtures = ['alertdb_people_auth']
 
     @classmethod
     def setUpClass(cls):
