@@ -54,9 +54,9 @@ class AlertListAPI(APIView):
             alert = Alert.objects.select_related('info')
 
         alert = alert.filter(
-            info__cap_expires__gte=datetime.now()
-        ).filter(
             info__area__geom__dwithin=(pnt, 0.02)
+        ).filter(
+            info__cap_expires__gt=datetime.now()
         )
 
         if len(alert) > 0:
