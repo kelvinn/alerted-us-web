@@ -47,17 +47,25 @@ class AlertListAPI(APIView):
         pnt = Point(lng, lat)
 
         if cap_date_received is not None:
-            alert = Alert.objects.select_related('info').filter(
+            alert = Alert.objects.filter(
                 cap_date_received__gte=cap_date_received
             )
         else:
-            alert = Alert.objects.select_related('info')
+            alert = Alert.objects.all()
 
         alert = alert.filter(
             info__area__geom__dwithin=(pnt, 0.02)
         ).filter(
-            info__cap_expires__gt=datetime.now()
+            info__cap_expires__gte=datetime.now()
+        ).select_related('info')
+
+        """
+        alert = alert.filter(
+            info__area__geom__dwithin=(pnt, 0.02)
+        ).filter(
+            info__cap_expires__gte=datetime.now()
         )
+        """
 
         if len(alert) > 0:
             serializer = AlertSerializer(alert)
