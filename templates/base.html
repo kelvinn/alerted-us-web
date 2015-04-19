@@ -44,7 +44,6 @@
           {% if user.is_authenticated %}
           <li><a href="/dashboard/locations/">Locations</a></li>
           <li><a href="/dashboard/settings/">Settings</a></li>
-          <li><a href="/dashboard/past-alerts/">Past Alerts</a></li>
           <li><a href="{% url 'account_logout' %}">Logout</a></li>
           {% else %}
           <li><a href="{% url 'account_signup' %}">Register</a></li>

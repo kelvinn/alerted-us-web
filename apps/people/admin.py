@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 from django.conf import settings
-from apps.people.models import Location, Notification, LocationHistory
+from apps.people.models import Location, LocationHistory
 
 
 # Register your models here.
@@ -22,11 +22,4 @@ class LocationHistoryAdmin(admin.GeoModelAdmin):
     wms_url = 'http://irs.gis-lab.info'
     wms_layer = 'osm'
 admin.site.register(LocationHistory, LocationHistoryAdmin)
-
-
-class NotificationAdmin(admin.GeoModelAdmin):
-    list_display = ('date_created', 'user')
-    if not settings.DEBUG:  # This prevents the admin from crashing with so many infos
-        readonly_fields = ('cap_info', )
-admin.site.register(Notification, NotificationAdmin)
 

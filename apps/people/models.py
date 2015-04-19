@@ -29,9 +29,3 @@ class LocationHistory(models.Model):
     def __unicode__(self):
         return str(self.name)
 
-
-class Notification(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, blank=True, null=True, editable=True)
-    cap_info = models.ForeignKey(Info, blank=True, null=True)
-    message_id = models.CharField(max_length=300, blank=True, null=True)

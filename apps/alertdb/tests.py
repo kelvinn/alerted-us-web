@@ -10,7 +10,6 @@ from rest_framework.test import APITestCase, APIRequestFactory, force_authentica
 from apps.alertdb.models import Alert, Geocode
 from apps.people.models import Location
 from apps.alertdb.api import AlertListAPI
-from apps.alertdb.tasks import run_location_search
 from apps.alertdb.geocode_tools import GeocodeLoader
 from apps.alertdb.admin import GeocodeAdmin
 from apps.alertdb.models import Info
@@ -19,6 +18,16 @@ import datetime
 # Create API request factory
 factory = APIRequestFactory()
 
+"""
+Fixtures can be re-created like so (really for my own record):
+1) Destroy vagrant
+2) python manage.py migrate
+3) python manage.py createsuperuser (then 'admin'/'password')
+4) python geocode_tools.py (in order to create geocode objects)
+5) Create a new alert (via API) using weather.cap as the body, and the new token from the create user step above
+6) python manage.py dumpdata alertdb people auth
+
+"""
 
 class SimpleTest(unittest.TestCase):
     def setUp(self):
@@ -39,7 +48,7 @@ class SimpleTest(unittest.TestCase):
 
 
 class AlertdbAPITests(APITestCase):
-    fixtures = ['alertdb_people_users']
+    fixtures = ['alertdb_people_auth']
 
     def setUp(self):
         self.cap_11_atom = open('apps/alertdb/testdata/amber.atom', 'r').read()
@@ -235,12 +244,12 @@ class AlertdbAPITests(APITestCase):
 
     def test_alert_api_query_by_coord_within_filterby_date_invalid(self):
         user, created = User.objects.get_or_create(username='apiuser')
-        url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906&cap_date_received=2015-02-17T08:03:21.156421'
+        url = '/api/v1/alerts/?lng=-66.64760&lat=18.42070&cap_date_received=2015-02-17T08:03:21.156421'
 
-        # Swap expired date so alert is active
+        # Swap expired date so alert is inactive
         info_set = Info.objects.all()
         for info in info_set:
-            info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.cap_expires = datetime.datetime(2015, 2, 14, 12, 30)
             info.save()
 
         view = AlertListAPI.as_view()
@@ -250,11 +259,6 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # verify we got back a response OK
 
-
-    def test_run_location_search(self):
-        result = run_location_search(1)
-
-        self.assertEqual(result, 1)
 
     def test_alert_area_api(self):
         alert = list(Alert.objects.all()[:1])[0]

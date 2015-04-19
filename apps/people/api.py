@@ -6,10 +6,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
-from apps.people.models import Location, Notification
-from apps.people.serializers import LocationSerializer, UserSerializer, NotificationSerializer, GCMTokenSerializer
+from apps.people.models import Location
+from apps.people.serializers import LocationSerializer, UserSerializer
 from statsd.defaults.django import statsd
-from push_notifications.models import GCMDevice
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -36,43 +35,6 @@ class IsOwner(permissions.BasePermission):
         return obj is None or obj.user == request.user
 
 
-class NotificationList(APIView):
-    """
-    List all notifications for authenticated user.
-    """
-    def get(self, request, format=None):
-
-        notifs = Notification.objects.filter(user=request.user)
-        serializer = NotificationSerializer(notifs, many=True)
-        return Response(serializer.data)
-
-    permission_classes = (IsAuthenticated,)
-
-
-class NotificationDetail(APIView):
-    """
-    List notification details for authenticated user.
-    """
-    def get_object(self, pk):
-
-        try:
-            notif = Notification.objects.get(pk=pk)
-            if notif.user == self.request.user:
-                return notif
-            else:
-                raise PermissionDenied
-        except Notification.DoesNotExist:
-            raise Http404
-
-    @statsd.timer('api.NotificationDertail.get')
-    def get(self, request, pk, format=None):
-        notif = self.get_object(pk)
-        serializer = NotificationSerializer(notif)
-        return Response(serializer.data)
-
-    permission_classes = (IsAuthenticated,)
-
-
 class UserList(APIView):
     """
     Creates new user proviles.
@@ -89,33 +51,6 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     permission_classes = (AllowAny,)
-
-
-class GCMTokenList(APIView):
-    """
-    Creates and lists gcm proviles.
-    """
-    @statsd.timer('api.GCMTokenList.post')
-    def post(self, request, format=None):
-
-        data = request.DATA
-        data['user'] = request.user.pk
-
-        gcm_device = None
-        if 'registration_id' in data:
-            gcm_device = GCMDevice.objects.filter(registration_id=data['registration_id'], user=request.user)
-
-        if gcm_device:
-            serializer = GCMTokenSerializer(gcm_device[0], data=data)
-        else:
-            serializer = GCMTokenSerializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    permission_classes = (IsAuthenticated,)
 
 
 class UserDetail(APIView):

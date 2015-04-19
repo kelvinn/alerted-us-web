@@ -6,11 +6,7 @@ from django.test.client import Client
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 from rest_framework import status
-from push_notifications.models import GCMDevice
-from apps.people.models import Location, Notification
-from apps.people.tasks import *
-import re
-import time
+from apps.people.models import Location
 
 
 # Create your tests here.
@@ -34,33 +30,11 @@ class SimpleTest(unittest.TestCase):
         self.assertEqual(loc.geom, p)
 
 
-class SimpleTest(unittest.TestCase):
-    def test_save_location_history(self):
-        user, created = User.objects.get_or_create(username='apiuser')
-        loc = Location.objects.create(user=user, name="Test", source="static")
-        result = save_location_history(loc)
-        self.assertTrue(result)
-
-    def test_run_alertdb_search(self):
-        user, created = User.objects.get_or_create(username='apiuser')
-        loc = Location.objects.create(user=user, name="Test", source="static")
-        result = run_alertdb_search(loc)
-        self.assertTrue(result)
-
-
 class PeopleTests(APITestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
 
-    def test_past_alerts_view(self):
-        User.objects.create_user(username='testuser', password='testpassword')
-        self.client.login(username='testuser', password='testpassword')
-
-        url = '/dashboard/past-alerts/'
-
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_settings_view(self):
         User.objects.create_user(username='testuser', password='testpassword')
@@ -165,39 +139,6 @@ class LocationAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class NotificationAPITests(APITestCase):
-    # python manage.py dumpdata auth.user alertdb people > alertdb_people_users.json
-    fixtures = ['alertdb_people_users']
-
-    def test_get_notification_api(self):
-
-        user, created = User.objects.get_or_create(username='apiuser')
-
-        url = '/api/v1/users/notifications/'
-
-        self.client.force_authenticate(user=user)
-
-        # Test creating a list
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_notification_detail_api(self):
-
-        notif = Notification.objects.get()
-        user = notif.user
-        url = '/api/v1/users/notifications/%s/' % notif.pk
-
-        self.client.force_authenticate(user=user)
-
-        # Test creating a list
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        url = '/api/v1/users/notifications/99/'
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-
 class UserAPITests(APITestCase):
 
     def test_create_user_api(self):
@@ -234,33 +175,6 @@ class UserAPITests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_gcm_token(self):
-
-        user, created = User.objects.get_or_create(username='apiuser')
-
-        data = {u'registration_id': u'1234'}
-
-        self.client.force_authenticate(user=user)
-
-        # Test creating a gcm token
-        url = '/api/v1/users/gcmtoken/'
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # Test re-updating the gcm token
-        url = '/api/v1/users/gcmtoken/'
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        # Test that it was only created once
-        gcm_count = len(GCMDevice.objects.filter(user=user))
-        self.assertEqual(gcm_count, 1)
-
-        # Test creating an invalid gcm token
-        data = {u'registration_123': u'1234'}
-        url = '/api/v1/users/gcmtoken/'
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_token(self):
         #user, created = User.objects.get_or_create(username='admin', password='password')

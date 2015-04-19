@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'rest_framework.authtoken',
     'django_nose',
-    "push_notifications",
 
 )
 

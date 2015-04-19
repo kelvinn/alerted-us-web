@@ -22,7 +22,7 @@ class ProfilerMiddleware(object):
             stats = pstats.Stats(self.profiler_file, stream=out)
             stats.strip_dirs()          # Must happen prior to sort_stats
             if request.GET['prof']:
-                stats.sort_stats(request.GET['prof'])
+                stats.sort_stats(request.GET['prof']) # Call this like &prof=cumtime
             stats.print_stats()
             os.unlink(self.profiler_file)
             response.content = '<pre>%s</pre>' % out.getvalue()

@@ -1,7 +1,7 @@
 # pylint: disable=E1120
 from django.shortcuts import render
 from django.views.generic.base import View
-from apps.people.models import Location, Notification
+from apps.people.models import Location
 
 
 # Create your views here.
@@ -24,11 +24,4 @@ class SettingsView(View):
     def get(self, request, *args, **kwargs):
         user = request.user
         return render(request, 'people/settings.html', {'user': user})
-
-
-class PastAlertsView(View):
-
-    def get(self, request, *args, **kwargs):
-        notif_list = Notification.objects.filter(user=request.user)
-        return render(request, 'people/past-alerts.html', {'notif_list': notif_list})
 

@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_gis import serializers as gis_serializers
-from apps.people.models import Location, Notification
+from apps.people.models import Location
 from apps.alertdb.serializers import InfoSerializer
-from push_notifications.models import GCMDevice
 
 PASSWORD_MAX_LENGTH = User._meta.get_field('password').max_length
 
@@ -32,24 +31,9 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class GCMTokenSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = GCMDevice
-        fields = ('user', 'registration_id')
-
 
 class LocationSerializer(gis_serializers.GeoModelSerializer):
 
     class Meta:
         model = Location
         fields = ('id', 'geom', 'name', 'user', 'source', 'date_received')
-
-
-class NotificationSerializer(gis_serializers.GeoModelSerializer):
-    user = UserSerializer()
-    cap_info = InfoSerializer()
-
-    class Meta:
-        model = Notification
-        fields = ('user', 'cap_info',)
