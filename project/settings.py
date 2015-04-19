@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 
 #from logging.handlers import SysLogHandler
 
@@ -56,6 +57,9 @@ if 'RACK_ENV' in os.environ:
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'openshift':
         ON_OPENSHIFT = True
+
+# This will force debug to be on if using the development server
+DEBUG = (sys.argv[1] == 'runserver')
 
 # Force debug to be on
 if 'DEBUG' in os.environ:
