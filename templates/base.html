@@ -42,7 +42,6 @@
 
         <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
-          <li><a href="/dashboard/locations/">Locations</a></li>
           <li><a href="/dashboard/settings/">Settings</a></li>
           <li><a href="{% url 'account_logout' %}">Logout</a></li>
           {% else %}
