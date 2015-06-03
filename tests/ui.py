@@ -40,7 +40,7 @@ class AuthTests(BaseTestCase):
         password2.submit()
         time.sleep(2)
         src = self.driver.page_source
-        text_found = re.search(r'Saved Locations', src)
+        text_found = re.search(r'Settings', src)
         self.assertTrue(text_found)
         self.driver.get(self.live_server_url + '/accounts/logout/')
 
@@ -53,13 +53,6 @@ class AuthTests(BaseTestCase):
         password.submit()
         time.sleep(2)
         src = self.driver.page_source
-        text_found = re.search(r'Saved Locations', src)
+        text_found = re.search(r'Settings', src)
         self.assertTrue(text_found)
-        autocomplete = self.driver.find_element_by_id('Autocomplete')
-        autocomplete.send_keys("1600 pennsyl")
-        autocomplete.send_keys(Keys.ARROW_DOWN )
-        autocomplete.click()
-        autocomplete.submit()
-        # TODO test for Angular rows
-
         self.driver.get(self.live_server_url + '/accounts/logout/')
