@@ -3,9 +3,11 @@ db:
 
 redis:
   restart: always
-  image: redis:latest
+  image: tutum/redis
   ports:
     - "6379:6379"
+  environment:
+    REDIS_PASS: password
 
 web:
   build: .
@@ -17,6 +19,7 @@ web:
   environment:
     RACK_ENV: docker
     REDIS_ENDPOINT: redis
+    REDIS_PASSWORD: password
     REDIS_PORT: 6379
     DB_PASSWORD: ""
     DB_NAME: postgres

@@ -69,11 +69,11 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-
 if ON_DO or ON_DOCKER:
     REDIS_PASSWORD = ""
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['DB_USER']
