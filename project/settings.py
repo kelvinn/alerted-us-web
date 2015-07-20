@@ -45,6 +45,7 @@ ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
 ON_OPENSHIFT = False
+ON_TUTUM = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
