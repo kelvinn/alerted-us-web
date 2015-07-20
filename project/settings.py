@@ -59,6 +59,8 @@ if 'RACK_ENV' in os.environ:
         ON_OPENSHIFT = True
     elif os.environ['RACK_ENV'] == 'docker':
         ON_DOCKER = True
+    elif os.environ['RACK_ENV'] == 'tutum':
+        ON_TUTUM = True # just for testing, fo rnow
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -70,7 +72,6 @@ elif os.getenv('DEBUG', 'False') == 'True':
     DEBUG = True
 
 if ON_DO or ON_DOCKER:
-    REDIS_PASSWORD = ""
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
@@ -80,6 +81,17 @@ if ON_DO or ON_DOCKER:
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['DB_HOST']
     DB_PORT = os.environ['DB_PORT']
+
+elif ON_TUTUM:
+    REDIS_ENDPOINT = os.environ["REDIS_B5CEC34B_PORT_6379_TCP_ADDR"]
+    REDIS_PORT = os.environ["REDIS_B5CEC34B_PORT_6379_TCP_PORT"]
+    REDIS_PASSWORD = os.getenv('REDIS_B5CEC34B_ENV_REDIS_PASS', '')
+    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = os.environ['DB_NAME']
+    DB_USER = os.environ['DB_USER']
+    DB_PASSWD = os.environ['DB_PASSWORD']
+    DB_HOST = os.environ['POSTGRES_C6E33E71_PORT_5432_TCP_ADDR']
+    DB_PORT = os.environ['POSTGRES_C6E33E71_PORT_5432_TCP_PORT']
 
 elif ON_SNAP_CI:
     REDIS_PASSWORD = ""
