@@ -221,7 +221,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': DB_NAME,
-        'DB_PASSWD': DB_PASSWD,
+        'PASSWORD': DB_PASSWD,
         'USER': DB_USER,
         'HOST': DB_HOST,
         'PORT': DB_PORT,
