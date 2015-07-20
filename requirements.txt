@@ -32,3 +32,5 @@ djrill==1.1.1
 django-uuidfield==0.5.0
 capparselib==0.5.2
 dj-static==0.0.6
+django-debug-toolbar
+uwsgi

@@ -1,0 +1,29 @@
+db:
+  image: mdillon/postgis
+
+redis:
+  restart: always
+  image: redis:latest
+  ports:
+    - "6379:6379"
+
+web:
+  build: .
+  command: uwsgi --http :8000 --module project.wsgi
+  volumes:
+    - .:/code
+  ports:
+    - "8000:8000"
+  environment:
+    RACK_ENV: docker
+    REDIS_ENDPOINT: redis
+    REDIS_PORT: 6379
+    DB_PASSWORD: ""
+    DB_NAME: postgres
+    DB_USER: postgres
+    DB_HOST: db
+    DB_PORT: 5432
+    DEBUG: True
+  links:
+    - db
+    - redis

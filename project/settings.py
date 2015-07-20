@@ -57,6 +57,8 @@ if 'RACK_ENV' in os.environ:
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'openshift':
         ON_OPENSHIFT = True
+    elif os.environ['RACK_ENV'] == 'docker':
+        ON_DOCKER = True
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -68,7 +70,7 @@ elif os.getenv('DEBUG', 'False') == 'True':
     DEBUG = True
 
 
-if ON_DO:
+if ON_DO or ON_DOCKER:
     REDIS_PASSWORD = ""
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
@@ -114,7 +116,6 @@ else:
     DB_PASSWD = 'djangouserspassword'
     DB_HOST = '127.0.0.1'
     DB_PORT = '5432'
-    MEMCACHE_URL = '127.0.0.1:11211'
 
 TEMPLATE_DEBUG = True
 
@@ -187,7 +188,6 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
-
 ROOT_URLCONF = 'project.urls'
 
 WSGI_APPLICATION = 'project.wsgi.application'
@@ -222,7 +222,6 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': DB_NAME,
         'USER': DB_USER,
-        'PASSWORD': DB_PASSWD,
         'HOST': DB_HOST,
         'PORT': DB_PORT,
     }
