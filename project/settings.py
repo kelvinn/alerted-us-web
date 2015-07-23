@@ -91,8 +91,8 @@ elif ON_TUTUM:
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['DB_USER']
     DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['POSTGRES_C6E33E71_PORT_5432_TCP_ADDR']
-    DB_PORT = os.environ['POSTGRES_C6E33E71_PORT_5432_TCP_PORT']
+    DB_HOST = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_ADDR']
+    DB_PORT = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_PORT']
 
 elif ON_SNAP_CI:
     REDIS_PASSWORD = ""
