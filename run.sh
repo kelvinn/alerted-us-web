@@ -1,3 +1,3 @@
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
-supervisord -n
+uwsgi --http :8000 --module project.wsgi
