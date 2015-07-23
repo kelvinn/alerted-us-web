@@ -132,7 +132,7 @@ else:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", ".oo.kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
+ALLOWED_HOSTS = [".alerted.us", ".cont.tutum.io", ".oo.kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 
