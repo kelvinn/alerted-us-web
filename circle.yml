@@ -9,7 +9,7 @@ dependencies:
 
 test:
   override:
-    - docker run -d -p 5432 --name db -v /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data --rm mdillon/postgis
-    - docker run -d -p 6379 --env REDIS_PASS=password --name redis --rm tutum/redis
+    - docker run -p 5432 --name db -v /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data --rm mdillon/postgis
+    - docker run -p 6379 --env REDIS_PASS=password --name redis --rm tutum/redis
     - docker run -p 8000:8000 --name web --link db:db --link redis:redis --env RACK_ENV=docker --env REDIS_ENDPOINT=redis --env REDIS_PASSWORD=password --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=postgres --env DB_USER=postgres --env DB_HOST=db --env DB_PORT=5432 --env DEBUG=True --rm web
     - curl --retry 10 --retry-delay 5 -v http://localhost:8000
