@@ -1,5 +1,7 @@
 db:
   image: mdillon/postgis
+  volumes:
+    - /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data
 
 redis:
   restart: always
@@ -11,7 +13,6 @@ redis:
 
 web:
   build: .
-  command: uwsgi --http :8000 --module project.wsgi
   volumes:
     - .:/code
   ports:
