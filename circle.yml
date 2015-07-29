@@ -9,5 +9,5 @@ dependencies:
 
 test:
   override:
-    - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=redis --env REDIS_PASSWORD=password --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=postgres --env DB_USER=postgres --env DB_HOST=db --env DB_PORT=5432 --env DEBUG=True kelvinn/alerted-us-web
+    - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=127.0.0.1 --env REDIS_PASSWORD="" --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=circle_test --env DB_USER=ubuntu --env DB_HOST=127.0.0.1 --env DB_PORT=5432 --env DEBUG=True kelvinn/alerted-us-web
     - curl --retry 10 --retry-delay 5 -v http://localhost:8000
