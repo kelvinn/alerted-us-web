@@ -4,11 +4,10 @@ machine:
 
 dependencies:
   override:
-    - pip install docker-compose
     - docker info
-    - docker-compose build
+    - docker build -t kelvinn/alerted-us-web .
 
 test:
   override:
-    - docker-compose run -d --no-deps web
+    - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=redis --env REDIS_PASSWORD=password --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=postgres --env DB_USER=postgres --env DB_HOST=db --env DB_PORT=5432 --env DEBUG=True kelvinn/alerted-us-web
     - curl --retry 10 --retry-delay 5 -v http://localhost:8000
