@@ -1,6 +1,8 @@
 machine:
   services:
     - docker
+    - postgresql
+    - redis
 
 dependencies:
   override:
