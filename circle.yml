@@ -18,4 +18,5 @@ test:
   override:
     - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=172.17.42.1 --env REDIS_PASSWORD="" --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=circle_test --env DB_USER=ubuntu --env DB_HOST=172.17.42.1 --env DB_PORT=5432 --env DEBUG=True -v /reports:/reports kelvinn/alerted-us-web ./run_ci_tests.sh
   post:
-    - cp reports/* $CIRCLE_TEST_REPORTS/
+    - ls
+    - cp /reports/* $CIRCLE_TEST_REPORTS/
