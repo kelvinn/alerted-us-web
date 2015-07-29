@@ -24,5 +24,5 @@ deployment:
   hub:
     branch: master
     commands:
-      - docker login -e $TUTUM_EMAIL -u $TUTUM_USER -p $TUTUM_PASS
+      - docker login -e $TUTUM_EMAIL -u $TUTUM_USER -p $TUTUM_PASS tutum.co 
       - docker push kelvinn/alerted-us-web
