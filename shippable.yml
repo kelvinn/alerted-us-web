@@ -1,4 +1,0 @@
-script:
-  - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=redis --env REDIS_PASSWORD=password --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=postgres --env DB_USER=postgres --env DB_HOST=db --env DB_PORT=5432 --env DEBUG=True kelvinn/alerted-us-web
-  
-
