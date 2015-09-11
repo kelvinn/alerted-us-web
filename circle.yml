@@ -25,5 +25,5 @@ deployment:
     branch: master
     commands:
       - docker login -e $TUTUM_EMAIL -u $TUTUM_USER -p $TUTUM_PASS tutum.co 
-      - docker tag web tutum.co/zephell/alerted-us-web tutum.co/zephell/alerted-us-web:v$CIRCLE_BUILD_NUM
-      - docker push tutum.co/zephell/alerted-us-web
+      - docker tag web tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
+      - docker push tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
