@@ -46,7 +46,7 @@ ON_DO = False
 ON_SNAP_CI = False
 ON_OPENSHIFT = False
 ON_TUTUM = False
-ON_TUTUM_STAGING = False
+ON_STAGING = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
@@ -63,8 +63,8 @@ if 'RACK_ENV' in os.environ:
         ON_DOCKER = True
     elif os.environ['RACK_ENV'] == 'tutum':
         ON_TUTUM = True
-    elif os.environ['RACK_ENV'] == 'tutum_staging':
-        ON_TUTUM_STAGING = True
+    elif os.environ['RACK_ENV'] == 'staging':
+        ON_STAGING = True
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -97,7 +97,7 @@ elif ON_TUTUM:
     DB_HOST = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_PORT']
 
-elif ON_TUTUM_STAGING:
+elif ON_STAGING:
     REDIS_ENDPOINT = os.environ["ALERTED_US_REDIS_STAGING_AF92E177_PORT_6379_TCP_ADDR"]
     REDIS_PORT = os.environ["ALERTED_US_REDIS_STAGING_AF92E177_PORT_6379_TCP_PORT"]
     REDIS_PASSWORD = os.getenv("REDIS_PASSWORD",  '')
@@ -361,7 +361,7 @@ BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
 if DEBUG:
     CELERY_ALWAYS_EAGER = True
 
-ADMINS = (('Kelvin', 'kelvin@kelvinism.com'), )
+ADMINS = (('Admin', 'admin@alerted.us'), )
 
 LOGGING = {
     'version': 1,
