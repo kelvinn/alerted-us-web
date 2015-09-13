@@ -46,6 +46,7 @@ ON_DO = False
 ON_SNAP_CI = False
 ON_OPENSHIFT = False
 ON_TUTUM = False
+ON_TUTUM_STAGING = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
@@ -61,7 +62,9 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == 'docker':
         ON_DOCKER = True
     elif os.environ['RACK_ENV'] == 'tutum':
-        ON_TUTUM = True # just for testing, fo rnow
+        ON_TUTUM = True
+    elif os.environ['RACK_ENV'] == 'tutum_staging':
+        ON_TUTUM_STAGING = True
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -93,6 +96,17 @@ elif ON_TUTUM:
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_PORT']
+
+elif ON_TUTUM_STAGING:
+    REDIS_ENDPOINT = os.environ["ALERTED-US-REDIS-STAGING-AF92E177_PORT_6379_TCP_ADDR"]
+    REDIS_PORT = os.environ["ALERTED-US-REDIS-STAGING-AF92E177_PORT_6379_TCP_PORT"]
+    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD",  '')
+    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = os.environ['DB_NAME']
+    DB_USER = os.environ['DB_USER']
+    DB_PASSWD = os.environ['DB_PASSWORD']
+    DB_HOST = os.environ['ALERTED-US-STAGING-POSTGIS-116603D9_PORT_5432_TCP_ADDR']
+    DB_PORT = os.environ['ALERTED-US-STAGING-POSTGIS-116603D9_PORT_5432_TCP_PORT']
 
 elif ON_SNAP_CI:
     REDIS_PASSWORD = ""
