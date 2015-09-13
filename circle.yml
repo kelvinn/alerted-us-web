@@ -3,9 +3,14 @@ machine:
     - docker
 
 dependencies:
+  cache_directories:
+    - "~/docker"
   override:
+    - pip install tutum requests loaderio
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - docker info
     - docker build -t web .
+    - mkdir -p ~/docker; docker save circleci/elasticsearch > ~/docker/image.tar
 
 test:
   pre:
@@ -21,9 +26,15 @@ test:
     - cp $HOME/*.xml $CIRCLE_TEST_REPORTS
 
 deployment:
-  hub:
+  tutum:
     branch: master
     commands:
       - docker login -e $TUTUM_EMAIL -u $TUTUM_USER -p $TUTUM_PASS tutum.co 
       - docker tag web tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
       - docker push tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
+      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_STAGING_NAME --sync
+      - tutum service redeploy $TUTUM_STAGING_NAME --sync
+      - python tests/smoke.py $STAGING_HOST
+      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_PROD_NAME --sync
+      - tutum service redeploy $TUTUM_PROD_NAME --sync
+      - python tests/smoke.py $PROD_HOST
