@@ -7,10 +7,8 @@ dependencies:
     - "~/docker"
   override:
     - pip install tutum requests loaderio
-    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - docker info
     - docker build -t web .
-    - mkdir -p ~/docker; docker save web > ~/docker/image.tar
 
 test:
   pre:
