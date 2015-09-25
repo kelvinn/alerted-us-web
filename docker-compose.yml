@@ -6,8 +6,6 @@ db:
 redis:
   restart: always
   image: tutum/redis
-  ports:
-    - "6379:6379"
   environment:
     REDIS_PASS: password
 
