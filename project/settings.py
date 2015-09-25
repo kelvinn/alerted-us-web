@@ -44,7 +44,6 @@ ON_DOCKER_PROD = False
 ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
-ON_OPENSHIFT = False
 ON_TUTUM = False
 ON_STAGING = False
 
@@ -57,8 +56,6 @@ if 'RACK_ENV' in os.environ:
         ON_DO = True
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
-    elif os.environ['RACK_ENV'] == 'openshift':
-        ON_OPENSHIFT = True
     elif os.environ['RACK_ENV'] == 'docker':
         ON_DOCKER = True
     elif os.environ['RACK_ENV'] == 'tutum':
@@ -94,8 +91,8 @@ elif ON_TUTUM:
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['DB_USER']
     DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_ADDR']
-    DB_PORT = os.environ['POSTGIS_5BE5757D_PORT_5432_TCP_PORT']
+    DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_ADDR']
+    DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_PORT']
 
 elif ON_STAGING:
     REDIS_ENDPOINT = os.environ["ALERTED_US_REDIS_STAGING_AF92E177_PORT_6379_TCP_ADDR"]
@@ -118,18 +115,6 @@ elif ON_SNAP_CI:
     DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
     DB_HOST = os.environ['SNAP_DB_PG_HOST']
     DB_PORT = os.environ['SNAP_DB_PG_PORT']
-
-elif ON_OPENSHIFT:
-    REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
-    REDIS_ENDPOINT = os.environ["REDIS_ADDR"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
-    REDIS_URL = '%s:%s:0' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
-    DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
-    DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
-    DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
-    MEMCACHE_URL = os.environ['MEMCACHED_URL']
 
 else:
     ENABLE_DEBUG_TOOLBAR = True
@@ -349,11 +334,7 @@ LOGIN_REDIRECT_URL = '/dashboard/settings/'
 
 ACCOUNT_LOGOUT_ON_GET = True
 
-# Stuff for celery
 
-if not ON_OPENSHIFT:
-    BROKER_URL = 'redis://%s:%s/0' % (REDIS_ENDPOINT, REDIS_PORT)
-    CELERY_RESULT_BACKEND = BROKER_URL
 
 BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
 BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
