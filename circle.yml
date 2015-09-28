@@ -12,14 +12,10 @@ dependencies:
 
 test:
   pre:
-    - psql -d circle_test -c "CREATE EXTENSION postgis;" -U ubuntu
-    - sudo bash -c "echo \"listen_addresses = '*'\" >>
-      /etc/postgresql/9.4/main/postgresql.conf"
-    - sudo bash -c "echo \"host all all 0.0.0.0/0 trust\" >>
-      /etc/postgresql/9.4/main/pg_hba.conf"
-    - sudo /etc/init.d/postgresql restart
+    - sudo docker-compose up -d
+    - docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_5432_TCP_PORT" -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
   override:
-    - docker run -p 8000:8000 --name web --env RACK_ENV=docker --env REDIS_ENDPOINT=172.17.42.1 --env REDIS_PASSWORD="" --env REDIS_PORT=6379 --env DB_PASSWORD="" --env DB_NAME=circle_test --env DB_USER=ubuntu --env DB_HOST=172.17.42.1 --env DB_PORT=5432 --env DEBUG=True -v $HOME:/code/reports web ./run_ci_tests.sh
+    - docker-compose run web ./run_ci_tests.sh
   post:
     - cp $HOME/*.xml $CIRCLE_TEST_REPORTS
 
@@ -33,6 +29,3 @@ deployment:
       - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_STAGING_NAME --sync
       - tutum service redeploy $TUTUM_STAGING_NAME --sync
       - python tests/smoke.py $STAGING_HOST
-      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_PROD_NAME --sync
-      - tutum service redeploy $TUTUM_PROD_NAME --sync
-      - python tests/smoke.py $PROD_HOST
