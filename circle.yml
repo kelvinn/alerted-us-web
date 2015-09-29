@@ -18,7 +18,7 @@ test:
   override:
     - docker-compose run web ./run_ci_tests.sh
   post:
-    - ls $HOME
+    - cp *.xml $CIRCLE_TEST_REPORTS
 
 deployment:
   tutum:
@@ -30,3 +30,6 @@ deployment:
       - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_STAGING_NAME --sync
       - tutum service redeploy $TUTUM_STAGING_NAME --sync
       - python tests/smoke.py $STAGING_HOST
+      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_PROD_NAME --sync
+      - tutum service redeploy $TUTUM_PROD_NAME --sync
+      - python tests/smoke.py $PROD_HOST
