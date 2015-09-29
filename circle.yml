@@ -6,7 +6,7 @@ dependencies:
   cache_directories:
     - "~/docker"
   override:
-    - pip install -U tutum requests loaderio docker-compose
+    - pip install -U tutum requests loaderio docker-compose==1.4.2
     - docker info
     - docker build -t web .
 
