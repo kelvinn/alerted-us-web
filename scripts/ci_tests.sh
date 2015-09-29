@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pip install -U docker-compose
+pip install -U docker-compose==1.4.0
 sudo docker-compose up -d
 sudo docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_5432_TCP_PORT" -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
 sudo docker-compose run web ./run_ci_tests.sh
