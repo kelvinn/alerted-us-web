@@ -6,12 +6,13 @@ dependencies:
   cache_directories:
     - "~/docker"
   override:
-    - pip install -U tutum requests loaderio docker-compose==1.4.2
+    - pip install -U tutum requests loaderio docker-compose==1.2.0
     - docker info
     - docker build -t web .
 
 test:
   pre:
+    - docker --version
     - docker-compose up -d
     - docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_5432_TCP_PORT" -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
   override:
