@@ -7,8 +7,6 @@ dependencies:
     - "~/docker"
   override:
     - pip install -U tutum requests loaderio docker-compose==1.2.0
-    - docker info
-    - docker build -t web .
 
 test:
   pre:
