@@ -26,8 +26,8 @@ deployment:
       - docker tag alertedusweb_web tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
       - docker push tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
       - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_STAGING_NAME --sync
-      - tutum service redeploy $TUTUM_STAGING_NAME --sync
+      - tutum service redeploy $TUTUM_STAGING_NAME --sync && sleep 10
       - python tests/smoke.py $STAGING_HOST
       - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_PROD_NAME --sync
-      - tutum service redeploy $TUTUM_PROD_NAME --sync
+      - tutum service redeploy $TUTUM_PROD_NAME --sync && sleep 10
       - python tests/smoke.py $PROD_HOST
