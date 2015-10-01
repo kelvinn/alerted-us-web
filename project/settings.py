@@ -44,7 +44,7 @@ ON_DOCKER_PROD = False
 ON_FIG = False
 ON_DO = False
 ON_SNAP_CI = False
-ON_TUTUM = False
+ON_PRODUCTION = False
 ON_STAGING = False
 
 # Enable this to view the toolbar
@@ -53,13 +53,13 @@ ENABLE_DEBUG_TOOLBAR = False
 DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "production":
-        ON_DO = True
+        ON_PRODUCTION = True
     elif os.environ['RACK_ENV'] == "testing":
         ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'docker':
         ON_DOCKER = True
     elif os.environ['RACK_ENV'] == 'tutum':
-        ON_TUTUM = True
+        ON_PRODUCTION = True
     elif os.environ['RACK_ENV'] == 'staging':
         ON_STAGING = True
 
@@ -83,7 +83,7 @@ if ON_DO or ON_DOCKER:
     DB_HOST = os.environ['DB_HOST']
     DB_PORT = os.environ['DB_PORT']
 
-elif ON_TUTUM:
+elif ON_PRODUCTION:
     REDIS_ENDPOINT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_ADDR"]
     REDIS_PORT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_PORT"]
     REDIS_PASSWORD = os.getenv("REDIS_PASSWORD",  '')
