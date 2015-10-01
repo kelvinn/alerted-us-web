@@ -14,7 +14,7 @@ test:
     - docker-compose up -d
     - docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_5432_TCP_PORT" -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
   override:
-    - docker-compose run web ./run_ci_tests.sh
+    - docker-compose run web ./scripts/run_ci_tests.sh
   post:
     - ls
 
