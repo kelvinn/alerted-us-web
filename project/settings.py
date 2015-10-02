@@ -40,10 +40,6 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 ON_DOCKER = False
-ON_DOCKER_PROD = False
-ON_FIG = False
-ON_DO = False
-ON_SNAP_CI = False
 ON_PRODUCTION = False
 ON_STAGING = False
 
@@ -54,12 +50,8 @@ DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "production":
         ON_PRODUCTION = True
-    elif os.environ['RACK_ENV'] == "testing":
-        ON_SNAP_CI = True
     elif os.environ['RACK_ENV'] == 'docker':
         ON_DOCKER = True
-    elif os.environ['RACK_ENV'] == 'tutum':
-        ON_PRODUCTION = True
     elif os.environ['RACK_ENV'] == 'staging':
         ON_STAGING = True
 
@@ -72,7 +64,7 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-if ON_DO or ON_DOCKER:
+if ON_DOCKER:
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
@@ -105,30 +97,6 @@ elif ON_STAGING:
     DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_PORT']
 
-elif ON_SNAP_CI:
-    REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['SNAP_DB_PG_USER']
-    DB_PASSWD = os.environ['SNAP_DB_PG_PASSWORD']
-    DB_HOST = os.environ['SNAP_DB_PG_HOST']
-    DB_PORT = os.environ['SNAP_DB_PG_PORT']
-
-else:
-    ENABLE_DEBUG_TOOLBAR = True
-    DEBUG = True
-    REDIS_PASSWORD = ""
-    REDIS_ENDPOINT = "127.0.0.1"
-    REDIS_PORT = 6379
-    REDIS_URL = '%s:%d:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = 'cozysiren'
-    DB_USER = 'app_user'
-    DB_PASSWD = 'djangouserspassword'
-    DB_HOST = '127.0.0.1'
-    DB_PORT = '5432'
-
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [".alerted.us", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
@@ -136,7 +104,6 @@ ALLOWED_HOSTS = [".alerted.us", ".tutum.io", ".kelvinism.com", "trusty64", "172.
 # Application definition
 
 INSTALLED_APPS = (
-
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -156,7 +123,6 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'rest_framework.authtoken',
     'django_nose',
-
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:

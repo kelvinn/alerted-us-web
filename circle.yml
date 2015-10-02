@@ -16,7 +16,7 @@ test:
   override:
     - docker-compose run web ./scripts/run_ci_tests.sh
   post:
-    - ls
+    - cp reports/*.xml $CIRCLE_TEST_REPORTS
 
 deployment:
   tutum:
