@@ -2,13 +2,7 @@ __author__ = 'kelvin'
 
 from os import getenv
 import base64
-import logging
 import requests
-from datetime import datetime, timedelta
-from dateutil.tz import tzoffset
-from capparselib import serializer_1_2
-from StringIO import StringIO
-from capparselib.parsers import CAPParser
 import random
 
 
@@ -16,7 +10,7 @@ if getenv('ALERTED_USERPASS'):
     ALERTED_API = str(getenv('ALERTED_API'))
     ALERTED_USERPASS = str(getenv('ALERTED_USERPASS'))
 else:
-    ALERTED_API = 'http://localhost:8000/api/v1/alerts/'
+    ALERTED_API = 'http://192.168.59.103:8000/api/v1/alerts/'
     ALERTED_USERPASS = 'admin:password'  # This is the same default password used in the dev alerted website
 
 HEADERS = {'Content-Type': 'application/xml', 'Accept': 'application/xml',

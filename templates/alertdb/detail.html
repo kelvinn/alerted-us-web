@@ -64,7 +64,7 @@
 
 
         //map.data.loadGeoJson('/alerts/{{ alert.cap_slug }}/geojson/');
-        map.data.loadGeoJson('/api/v1/alerts/{{ alert.cap_slug }}/areas/');
+        map.data.loadGeoJson('/api/v1/alerts/{{ alert.cap_slug }}/areas/?format=json');
 
         // Set the stroke width, and fill color for each polygon
         var featureStyle = {

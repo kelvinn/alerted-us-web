@@ -39,7 +39,7 @@ if "MANDRILL_API_KEY" in os.environ:
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
-ON_DOCKER = False
+ON_DEVELOPMENT = False
 ON_PRODUCTION = False
 ON_STAGING = False
 
@@ -50,10 +50,10 @@ DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "production":
         ON_PRODUCTION = True
-    elif os.environ['RACK_ENV'] == 'docker':
-        ON_DOCKER = True
     elif os.environ['RACK_ENV'] == 'staging':
         ON_STAGING = True
+    elif os.environ['RACK_ENV'] == 'development':
+        ON_DEVELOPMENT = True
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -64,7 +64,7 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-if ON_DOCKER:
+if ON_DEVELOPMENT:
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
     REDIS_PORT = os.environ["REDIS_PORT"]
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')

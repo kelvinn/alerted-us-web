@@ -16,7 +16,7 @@ web:
   ports:
     - "8000:8000"
   environment:
-    RACK_ENV: docker
+    RACK_ENV: development
     REDIS_ENDPOINT: redis
     REDIS_PASSWORD: password
     REDIS_PORT: 6379
