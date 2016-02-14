@@ -6,28 +6,18 @@ dependencies:
   cache_directories:
     - "~/docker"
   override:
-    - pip install -U tutum requests loaderio docker-compose==1.2.0
+    - pip install -U tutum requests==1.7.0 docker-compose==1.4.2
 
 test:
   pre:
-    - docker --version
     - docker-compose up -d
     - docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_5432_TCP_PORT" -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
+    
   override:
     - docker-compose run web ./scripts/run_ci_tests.sh
-  post:
-    - cp reports/*.xml $CIRCLE_TEST_REPORTS
 
-deployment:
-  tutum:
-    branch: master
-    commands:
-      - docker login -e $TUTUM_EMAIL -u $TUTUM_USER -p $TUTUM_PASS tutum.co 
-      - docker tag alertedusweb_web tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
-      - docker push tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM
-      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_STAGING_NAME --sync
-      - tutum service redeploy $TUTUM_STAGING_NAME --sync && sleep 10
-      - python tests/smoke.py $STAGING_HOST
-      - tutum service set --image tutum.co/zephell/alerted-us-web:$CIRCLE_BUILD_NUM $TUTUM_PROD_NAME --sync
-      - tutum service redeploy $TUTUM_PROD_NAME --sync && sleep 10
-      - python tests/smoke.py $PROD_HOST
+  post:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - docker tag repo_web zephell/alerted-us-web:$CIRCLE_BUILD_NUM-$CIRCLE_SHA1
+    - docker push zephell/alerted-us-web:$CIRCLE_BUILD_NUM-$CIRCLE_SHA1
+    - cp reports/*.xml $CIRCLE_TEST_REPORTS
