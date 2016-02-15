@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
-uwsgi --enable-threads --single-interpreter --http :8000 --module project.wsgi
+uwsgi_python27 --enable-threads --single-interpreter --http-socket :8000 --module project.wsgi
