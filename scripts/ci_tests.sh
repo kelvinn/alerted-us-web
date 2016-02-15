@@ -1,5 +1,7 @@
 #!/bin/sh
 
+virtualenv ~/venv
+source ~/venv/bin/activate
 pip install -U docker-compose==1.4.2
 
 docker-compose up -d
