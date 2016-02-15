@@ -12,3 +12,5 @@ docker-compose run db sh -c 'exec psql -h "$DB_PORT_5432_TCP_ADDR" -p "$DB_PORT_
 docker-compose run web /bin/bash -c "python manage.py migrate --noinput"
 docker-compose run web /bin/bash -c "python manage.py collectstatic --noinput"
 docker-compose run web /bin/bash -c "python manage.py test"
+docker-compose stop
+docker-compose rm -f
