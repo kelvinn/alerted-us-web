@@ -1,5 +1,5 @@
 db:
-  restart: always
+  restart: unless-stopped
   image: mdillon/postgis
   volumes:
     - /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data
