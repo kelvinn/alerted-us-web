@@ -7,7 +7,7 @@ pep8==1.5.7
 psycopg2==2.5.3
 coverage==3.7.1
 pylint==1.2.1
-redis==2.10.1
+redis==2.10.5
 celery==3.1.13
 djangorestframework==2.3.14
 djangorestframework-gis==0.7
@@ -20,7 +20,7 @@ simplejson==3.5.2  # required for vectorformats
 django_nose==1.2
 newrelic==2.60.0.46
 GPolyEncode==0.1.1
-django-redis==3.7.1
+django-redis==4.3.0
 honcho==0.5.0
 kombu==3.0.22
 boto==2.32.1

@@ -151,7 +151,6 @@ SESSION_CACHE_ALIAS = 'default'
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -159,6 +158,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.alertdb.middleware.ProfilerMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
