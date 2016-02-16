@@ -133,10 +133,10 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
 
 CACHES = {
     'default': {
-        'BACKEND': 'redis_cache.cache.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': REDIS_URL,
         'OPTIONS': {
-            'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'PASSWORD': REDIS_PASSWORD,  # Optional
             'CONNECTION_POOL_KWARGS': {'max_connections': 1000}
         }
@@ -147,6 +147,7 @@ CACHES = {
 CACHE_MIDDLEWARE_SECONDS = 60
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
