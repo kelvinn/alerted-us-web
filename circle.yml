@@ -6,7 +6,7 @@ dependencies:
   cache_directories:
     - "~/docker"
   override:
-    - pip install -U tutum requests==1.7.0 docker-compose==1.4.2
+    - pip install -U tutum requests==2.7.0 docker-compose==1.4.2
 
 test:
   pre:
