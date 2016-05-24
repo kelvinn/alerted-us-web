@@ -4,5 +4,5 @@
 set -e
 
 docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-docker tag alertedusweb_web zephell/alerted-us-web:$SEMAPHORE_BUILD_NUMBER-$SEMAPHORE_BRANCH_ID
-docker push zephell/alerted-us-web:$SEMAPHORE_BUILD_NUMBER-$SEMAPHORE_BRANCH_ID
+docker tag alertedusweb_web zephell/alerted-us-web:$SNAP_COMMIT_SHORT-$SNAP_PIPELINE_COUNTER
+docker push zephell/alerted-us-web:$SNAP_COMMIT_SHORT-$SNAP_PIPELINE_COUNTER
