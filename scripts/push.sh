@@ -4,5 +4,5 @@
 set -e
 
 docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-docker tag repo_web zephell/alerted-us-web:$SNAP_PIPELINE_COUNTER-$SNAP_COMMIT_SHORT
-docker push zephell/alerted-us-web:$SNAP_PIPELINE_COUNTER-$SNAP_COMMIT_SHORT
+docker tag repo_web zephell/alerted-us-web:1.0.$SNAP_PIPELINE_COUNTER
+docker push zephell/alerted-us-web:1.0.$SNAP_PIPELINE_COUNTER
