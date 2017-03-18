@@ -54,6 +54,9 @@ if 'RACK_ENV' in os.environ:
         ON_STAGING = True
     elif os.environ['RACK_ENV'] == 'development':
         ON_DEVELOPMENT = True
+    elif os.environ['RACK_ENV'] == 'flynn-staging':
+        ON_FLYNN_STAGING = True
+
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -63,6 +66,17 @@ if not len(sys.argv) < 2:
 elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
+
+if ON_FLYNN_STAGING:
+    REDIS_ENDPOINT = os.environ["REDIS_HOST"]
+    REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
+    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
+    DB_NAME = os.environ['PGDATABASE']
+    DB_USER = os.environ['PGUSER']
+    DB_PASSWD = os.environ['PGPASSWORD']
+    DB_HOST = os.environ['PGHOST']
+    DB_PORT = 5432
 
 if ON_DEVELOPMENT:
     REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
