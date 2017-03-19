@@ -11,6 +11,6 @@ before_install:
 script:
 - bash ./scripts/ci_tests.sh
 
-#after_success:
-#- bash ./scripts/push.sh
+after_success:
+- bash ./scripts/push.sh
 
