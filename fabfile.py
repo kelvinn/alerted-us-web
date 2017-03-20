@@ -1,8 +1,5 @@
 from fabric.api import run
 from fabric.api import env
-from dockerfabric.apiclient import docker_fabric
-
-env.docker_tunnel_local_port = 22024
 
 IMAGE = "zephell/alerted-us-web"
 SERVICE = "alerted-us-web-staging"
