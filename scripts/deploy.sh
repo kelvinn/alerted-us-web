@@ -5,15 +5,13 @@ set -e
 
 # Call this like deploy.sh some-name-on-docker-cloud https://some-name.com
 
-TARGET_ENVNAME=$1
-TARGET_HOSTNAME=$2
+TARGET_HOST=$1
 
 virtualenv ~/venv
 source ~/venv/bin/activate
 
-pip install -U docker-cloud requests==2.7.0
+dig +short myip.opendns.com @resolver1.opendns.com
 
-docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-docker-cloud service set --image zephell/alerted-us-web:1.0.$SNAP_PIPELINE_COUNTER $TARGET_ENVNAME --sync
-docker-cloud service redeploy $TARGET_ENVNAME --sync && sleep 10
-python tests/smoke.py $TARGET_HOSTNAME
+pip install fabric
+
+fab -H root@$TARGET_HOST deploy:1.1.$SEMAPHORE_BUILD_NUMBER
