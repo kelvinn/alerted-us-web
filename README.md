@@ -6,7 +6,7 @@ This is the code for the web application side of things written using Python/Dja
 
 # Development
 
-[![Build Status](https://snap-ci.com/kelvinn/alerted-us-web/branch/master/build_image)](https://snap-ci.com/kelvinn/alerted-us-web/branch/master)
+[![Build Status](https://semaphoreci.com/api/v1/kelvinism/alerted-us-web/branches/master/badge.svg)](https://semaphoreci.com/kelvinism/alerted-us-web)
 
 [![Code Health](https://landscape.io/github/kelvinn/alerted-us-web/master/landscape.png)](https://landscape.io/github/kelvinn/alerted-us-web/master)
 
