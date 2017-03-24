@@ -46,12 +46,7 @@ ON_FLYNN_STAGING = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
-
-def show_toolbar(request):
-    return True
     
-
-
 DEBUG = False
 if 'RACK_ENV' in os.environ:
     if os.environ['RACK_ENV'] == "production":
@@ -63,7 +58,6 @@ if 'RACK_ENV' in os.environ:
     elif os.environ['RACK_ENV'] == 'flynn-staging':
         ON_FLYNN_STAGING = True
 
-
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
     if sys.argv[1] == 'runserver':
@@ -72,9 +66,7 @@ if not len(sys.argv) < 2:
 elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
-    DEBUG_TOOLBAR_CONFIG = {
-        "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
-    }
+
 
 if ON_FLYNN_STAGING:
     REDIS_ENDPOINT = os.environ["REDIS_HOST"]
@@ -148,11 +140,19 @@ INSTALLED_APPS = (
     'django_nose',
 )
 
+# Show toolbar to anybody when enabled
+def show_toolbar(request):
+    return True
+
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS += (
         'debug_toolbar.apps.DebugToolbarConfig',
     )
-    DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False, }
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False,
+        'SHOW_TOOLBAR_CALLBACK' : show_toolbar,
+    }
 
 CACHES = {
     'default': {
