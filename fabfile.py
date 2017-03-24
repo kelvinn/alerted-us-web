@@ -2,12 +2,11 @@ from fabric.api import run
 from fabric.api import env
 
 IMAGE = "zephell/alerted-us-web"
-SERVICE = "alerted-us-web-staging"
 
-def deploy(version):
+def deploy(version, service_name):
     """ deploy specified version of image to cluster """
-    run('docker service update --image %s:%s %s' % (IMAGE, version, SERVICE))
-    print "Deployed %s:%s to %s" % (IMAGE, version, SERVICE)
+    run('docker service update --image %s:%s %s' % (IMAGE, version, service_name))
+    print "Deployed %s:%s to %s" % (IMAGE, version, service_name)
 
 def docker_clean():
     """ remove containers that have exited """
