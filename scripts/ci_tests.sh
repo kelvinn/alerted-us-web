@@ -5,7 +5,7 @@ set -e
 
 virtualenv ~/venv
 source ~/venv/bin/activate
-pip install -U docker-compose==1.5.2
+pip install -U docker-compose
 
 docker-compose up -d
 sleep 10 # Wait for DB to come up before proceeding. Can be better...
