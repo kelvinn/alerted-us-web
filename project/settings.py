@@ -68,8 +68,8 @@ elif os.getenv('DEBUG', 'False') == 'True':
     DEBUG = True
 
 if ON_OPENSHIFT_STAGING:
-    REDIS_ENDPOINT = os.environ["REDIS_HOST"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_ENDPOINT = os.environ["OPENSHIFT_REDIS_HOST"]
+    REDIS_PORT = os.environ["OPENSHIFT_REDIS_PORT"]
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
