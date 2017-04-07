@@ -67,7 +67,6 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-
 if ON_FLYNN_STAGING:
     REDIS_ENDPOINT = os.environ["REDIS_HOST"]
     REDIS_PORT = os.environ["REDIS_PORT"]
