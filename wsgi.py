@@ -18,7 +18,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 sys.path.append(BASE_DIR)
 
 try:
-    if os.environ['RACK_ENV'] in ['staging', 'production']:
+    if os.environ['RACK_ENV'] in ['staging', 'production', 'openshift']:
         import newrelic.agent
         newrelic.agent.initialize()
 except:
