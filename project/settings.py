@@ -42,7 +42,7 @@ else:
 ON_DEVELOPMENT = False
 ON_PRODUCTION = False
 ON_STAGING = False
-ON_FLYNN_STAGING = False
+ON_OPENSHIFT = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
