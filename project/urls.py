@@ -3,7 +3,7 @@ from django.contrib.gis import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
-from apps.people.views import LocationView, SettingsView
+from apps.people.views import LocationView, SettingsView, https_confirmation
 from apps.people.api import LocationDetail, LocationList, UserDetail, UserList
 from apps.alertdb.views import AlertDetailView
 from apps.alertdb.api import AlertListAPI, AlertDetailAPI, AlertAreaAPI
@@ -40,6 +40,7 @@ urlpatterns = urlpatterns + [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^.well-known/acme-challenge/.*', https_confirmation, name="https_confirmation"),
 ]
 
 # Flatpages
