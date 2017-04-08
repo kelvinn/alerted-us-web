@@ -1,6 +1,8 @@
 # pylint: disable=E1120
+import os
 from django.shortcuts import render
 from django.views.generic.base import View
+from django.http import HttpResponse
 from apps.people.models import Location
 
 
@@ -25,3 +27,8 @@ class SettingsView(View):
         user = request.user
         return render(request, 'people/settings.html', {'user': user})
 
+
+def https_confirmation(request):
+    if request.META['HTTP_HOST'] == 'alerted.us':
+        letsencrypt_key = os.getenv('LETSENCRYPT_KEY', '')
+        return HttpResponse(letsencrypt_key, content_type="text/plain")
