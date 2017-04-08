@@ -68,13 +68,13 @@ elif os.getenv('DEBUG', 'False') == 'True':
     DEBUG = True
 
 if ON_OPENSHIFT_STAGING:
-    REDIS_ENDPOINT = os.environ["OPENSHIFT_REDIS_HOST"]
-    REDIS_PORT = os.environ["OPENSHIFT_REDIS_PORT"]
-    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
+    REDIS_ENDPOINT = os.environ["OPENSHIFT_REDIS_DB_HOST"]
+    REDIS_PORT = os.environ["OPENSHIFT_REDIS_DB_PORT"]
+    REDIS_PASSWORD = os.getenv('OPENSHIFT_REDIS_DB_PASSWORD', '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['DB_USER']
-    DB_PASSWD = os.environ['DB_PASSWORD']
+    DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+    DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
     DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
     DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
 
