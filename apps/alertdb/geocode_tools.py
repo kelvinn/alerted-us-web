@@ -7,7 +7,7 @@ g = GeocodeLoader()
 g.run_taiwan()  # Sample dataset only (100 entries). Will download 100MB file.
 g.run_taiwan(sample=False)  # This loads the entire shapefile
 g.run_fips6(sample=False)
-
+g.run_philippines(sample=False)
 """
 
 import os
