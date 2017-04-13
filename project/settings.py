@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import sys
 
-#from logging.handlers import SysLogHandler
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 POSTGIS_VERSION = (2, 1, 1)
@@ -22,7 +20,7 @@ POSTGIS_VERSION = (2, 1, 1)
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if "DJANGO_SECRET_KEY" in os.environ:
+if "SECRET_KEY" in os.environ:
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 else:
     SECRET_KEY = 'ABCDEFG'
@@ -83,8 +81,8 @@ if ON_DEVELOPMENT:
     REDIS_PORT = os.environ["REDIS_PORT"]
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['DB_USER']
+    DB_NAME = os.getenv('DB_NAME', 'cozysiren')
+    DB_USER = os.getenv('DB_USER', 'postgres')
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['DB_HOST']
     DB_PORT = os.environ['DB_PORT']
@@ -114,7 +112,7 @@ elif ON_STAGING:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
+ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 
@@ -300,7 +298,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     'django.contrib.auth.context_processors.auth',
     # allauth specific context processors
-    "allauth.account.context_processors.account",
+    #"allauth.account.context_processors.account",
 
 )
 

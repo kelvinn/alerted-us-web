@@ -19,6 +19,7 @@ class AreaAdmin(admin.GeoModelAdmin):
         super(AreaAdmin, self).__init__(*args, **kwargs)
         self.list_display_links = (None, )
 
+
     search_fields = ['area_description']
     readonly_fields = ['cap_info']
     list_display = ('area_link',)

@@ -1,5 +1,5 @@
-Django==1.7.10
-six==1.6.1  # import before WebTest
+Django==1.9.13
+six
 WebTest==2.0.15
 python-dateutil==2.2
 fabric==1.9.0
@@ -8,16 +8,15 @@ psycopg2==2.5.3
 coverage==3.7.1
 pylint==1.2.1
 redis==2.10.5
-celery==3.1.13
-djangorestframework==3.1.1
-djangorestframework-gis==0.8.2
+djangorestframework==3.3.3
+djangorestframework-gis==0.10.0
 markdown==2.4.1
 django-bootstrap-form==3.1
 django-filter==0.7
-django-allauth==0.17.0
+django-allauth
 requests==2.4.0  # Manually added for djrill, do not remove
 simplejson==3.5.2  # required for vectorformats
-django_nose==1.2
+django_nose
 newrelic==2.60.0.46
 GPolyEncode==0.1.1
 django-redis==4.3.0

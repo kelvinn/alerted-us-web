@@ -1,39 +1,39 @@
-version: '2'
+version: '2.1'
 services:
   db:
-    restart: unless-stopped
     image: mdillon/postgis
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432"
     environment:
       POSTGRES_PASSWORD: password
-    volumes:
-      - /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data
+      PGPASSWORD: password
 
   redis:
     restart: always
     image: redis
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379"
 
   web:
     build: .
     volumes:
       - .:/code
     ports:
-      - "127.0.0.1:8000:8000"
+      - "8000"
     environment:
       RACK_ENV: development
       REDIS_ENDPOINT: redis
-      REDIS_PASSWORD: password
       REDIS_PORT: 6379
-      DB_PASSWORD: ""
+      DB_PASSWORD: "password"
       DB_NAME: postgres
       DB_USER: postgres
       DB_HOST: db
       DB_PORT: 5432
       DEBUG: 'True'
     links:
+      - db
+      - redis
+    depends_on:
       - db
       - redis
     command: ./run.sh

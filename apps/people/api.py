@@ -43,7 +43,7 @@ class UserList(APIView):
     @statsd.timer('api.UserList.post')
     def post(self, request, format=None):
 
-        data = request.DATA
+        data = request.data
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -75,7 +75,7 @@ class UserDetail(APIView):
 
     def patch(self, request, pk, format=None):
         user = self.get_object(pk)
-        serializer = UserSerializer(user, data=request.DATA, partial=True)
+        serializer = UserSerializer(user, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
@@ -98,13 +98,13 @@ class LocationList(APIView):
     @statsd.timer('api.LocationList.post')
     def post(self, request, format=None):
         statsd.incr('api.LocationList.post')
-        data = request.DATA
+        data = request.data
 
         data['user'] = request.user.pk
 
         if data['source'] == "current":
             loc, created = Location.objects.get_or_create(source='current', user=request.user)
-            serializer = LocationSerializer(loc, data=request.DATA)
+            serializer = LocationSerializer(loc, data=request.data)
         else:
             serializer = LocationSerializer(data=data)
 
@@ -137,7 +137,7 @@ class LocationDetail(APIView):
 
     def put(self, request, pk, format=None):
         location = self.get_object(pk)
-        serializer = LocationSerializer(location, data=request.DATA)
+        serializer = LocationSerializer(location, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
@@ -145,7 +145,7 @@ class LocationDetail(APIView):
 
     def patch(self, request, pk, format=None):
         location = self.get_object(pk)
-        serializer = LocationSerializer(location, data=request.DATA)
+        serializer = LocationSerializer(location, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)

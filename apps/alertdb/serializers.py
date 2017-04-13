@@ -1,27 +1,29 @@
-from os import getenv
-from rest_framework_gis import serializers as gis_serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from rest_framework import serializers
 from apps.alertdb.models import Alert, Info, Area, Parameter, Resource
 from statsd.defaults.django import statsd
 
 
-class ResourceSerializer(gis_serializers.GeoModelSerializer):
+class ResourceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Resource
+        fields = '__all__'
 
 
-class ParameterSerializer(gis_serializers.GeoModelSerializer):
+class ParameterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Parameter
+        fields = '__all__'
 
 
-class AreaSerializer(gis_serializers.GeoFeatureModelSerializer):
+class AreaSerializer(GeoFeatureModelSerializer):
 
     class Meta:
         model = Area
-        geo_field = "geom"
+        geo_field = 'geom'
+        fields = ('area_description', 'geocode_list', 'geom')
 
     def create(self, validated_data):
         info_data_set = validated_data.pop('info_set')
@@ -34,21 +36,22 @@ class AreaSerializer(gis_serializers.GeoFeatureModelSerializer):
         return cap_alert
 
 
-class InfoSerializer(gis_serializers.GeoModelSerializer):
+class InfoSerializer(serializers.ModelSerializer):
     parameter_set = ParameterSerializer(many=True, required=False)
     resource_set = ResourceSerializer(many=True, required=False)
     area_set = AreaSerializer(many=True, required=False)
 
     class Meta:
         model = Info
+        fields = '__all__'
 
 
-
-class AlertSerializer(gis_serializers.GeoModelSerializer):
+class AlertSerializer(serializers.ModelSerializer):
     info_set = InfoSerializer(many=True)
 
     class Meta:
         model = Alert
+        fields = '__all__'
         depth = 1
 
     def create(self, validated_data):

@@ -4,6 +4,8 @@ Vagrant.configure("2") do |config|
   #config.vm.box = "precise64"
   config.vm.box = "ubuntu/trusty64"
 
+  config.vm.network "forwarded_port", guest: 5432, host: 5432
+  config.vm.network "forwarded_port", guest: 6379, host: 6379
   config.vm.network "forwarded_port", guest: 8000, host: 8000
 
 

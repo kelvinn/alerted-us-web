@@ -1,8 +1,8 @@
 ---
 - hosts: all
   vars:
-    db_user: app_user  # Hardcoded in settings.py
-    db_password: djangouserspassword  # Hardcoded in settings.py
+    db_user: postgres  # Hardcoded in settings.py
+    db_password: password # Hardcoded in settings.py
     db_name: cozysiren # Hardcoded in settings.py
     db_port: 5432
     test_db_name: test_cozysiren

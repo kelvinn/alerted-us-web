@@ -29,18 +29,18 @@ class AlertListAPI(APIView):
         """
 
         # This is to allow PubSubHubbub
-        if 'hub.challenge' in request.QUERY_PARAMS:
+        if 'hub.challenge' in request.query_params:
             # This is just normal HttpResponse so it doesn't have quotes
-            return HttpResponse(str(request.QUERY_PARAMS['hub.challenge']))
+            return HttpResponse(str(request.query_params['hub.challenge']))
 
         try:
-            lat = float(request.QUERY_PARAMS['lat'])
-            lng = float(request.QUERY_PARAMS['lng'])
+            lat = float(request.query_params['lat'])
+            lng = float(request.query_params['lng'])
         except:
             raise Http404
 
-        if 'cap_date_received' in request.QUERY_PARAMS:
-            cap_date_received = str(request.QUERY_PARAMS['cap_date_received'])
+        if 'cap_date_received' in request.query_params:
+            cap_date_received = str(request.query_params['cap_date_received'])
         else:
             cap_date_received = None
 
@@ -84,19 +84,18 @@ class AlertListAPI(APIView):
         statsd.incr('api.AlertListAPI.post')
         timer = statsd.timer('api.AlertListAPI.post')
         timer.start()
-        data = request.DATA
+        data = request.data
         try:
             for item in data:
                 item['contributor'] = request.user.pk
         except Exception, e:
             logging.error(e)
 
-        serializer = AlertSerializer(data=data[0])
+        serializer = AlertSerializer(data=data, many=True)
         if serializer.is_valid():
             serializer.save()
             rsp = Response(status=status.HTTP_201_CREATED)
         else:
-            statsd.incr('api.AlertListAPI.post.failure')
             rsp = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         timer.stop()
         return rsp

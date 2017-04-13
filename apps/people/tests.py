@@ -1,4 +1,4 @@
-from django.utils import unittest
+from django.test import TestCase
 from django.contrib.gis.geos.collections import Point
 from django.contrib.auth.models import User
 from django.test.client import Client
@@ -13,7 +13,7 @@ from apps.people.models import Location
 factory = APIRequestFactory()
 
 
-class SimpleTest(unittest.TestCase):
+class SimpleTest(TestCase):
 
     def setUp(self):
         # Every test needs a client.

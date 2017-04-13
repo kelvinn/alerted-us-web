@@ -1,4 +1,4 @@
-from django.utils import unittest
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.test import TestCase
@@ -28,7 +28,7 @@ Fixtures can be re-created like so (really for my own record):
 """
 
 
-class SimpleTest(unittest.TestCase):
+class SimpleTest(TestCase):
     def setUp(self):
         # Every test needs a client.
         self.client = Client()
