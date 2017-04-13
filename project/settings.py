@@ -114,7 +114,7 @@ elif ON_STAGING:
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
+ALLOWED_HOSTS = [".alerted.us", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 
@@ -266,7 +266,6 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_RENDERER_CLASSES': (
         'rest_framework.renderers.MultiPartRenderer',
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.XMLRenderer',
         'apps.alertdb.api.CAPXMLParser'
     ),
     'DEFAULT_FILTER_BACKENDS': (

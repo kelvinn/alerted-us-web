@@ -100,6 +100,8 @@
           - binutils
           - libproj-dev
           - gdal-bin
+          - libffi-dev
+          - libssl-dev
           - git
           - libxml2-dev
           - libxslt1-dev
@@ -124,4 +126,4 @@
       template: src=celeryd.conf.j2 dest=/etc/supervisor/conf.d/celeryd.conf
 
     # Start the xvfb service
-    - service: name=xvfb state=started
+    #- service: name=xvfb state=started

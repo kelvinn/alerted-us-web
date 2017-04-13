@@ -1,33 +1,39 @@
-db:
-  restart: unless-stopped
-  image: mdillon/postgis
-  volumes:
-    - /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data
+version: '2'
+services:
+  db:
+    restart: unless-stopped
+    image: mdillon/postgis
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - /data/postgresql/9.4/var/lib/postgresql:/var/lib/postgresql/data
 
-redis:
-  restart: always
-  image: tutum/redis
-  environment:
-    REDIS_PASS: password
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - "127.0.0.1:6379:6379"
 
-web:
-  build: .
-  volumes:
-    - .:/code
-  ports:
-    - "8000:8000"
-  environment:
-    RACK_ENV: development
-    REDIS_ENDPOINT: redis
-    REDIS_PASSWORD: password
-    REDIS_PORT: 6379
-    DB_PASSWORD: ""
-    DB_NAME: postgres
-    DB_USER: postgres
-    DB_HOST: db
-    DB_PORT: 5432
-    DEBUG: 1
-  links:
-    - db
-    - redis
-  command: python manage.py runserver 0.0.0.0:8000
+  web:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      RACK_ENV: development
+      REDIS_ENDPOINT: redis
+      REDIS_PASSWORD: password
+      REDIS_PORT: 6379
+      DB_PASSWORD: ""
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DEBUG: 'True'
+    links:
+      - db
+      - redis
+    command: ./run.sh

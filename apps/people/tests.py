@@ -151,7 +151,11 @@ class UserAPITests(APITestCase):
 
 
     def test_patch_user_api(self):
-        user = User.objects.create_user(username='testuser', password='testpassword')
+        user, created = User.objects.get_or_create(username='testuser')
+        user.set_password('testpassword')
+
+        user.save()
+        #user = User.objects.create_user(username='testuser', password='testpassword')
         url = '/api/v1/users/%s/' % user.pk
         data = {u'username': user.username, u'email': u'test@alerted.us'}
 

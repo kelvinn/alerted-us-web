@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.gis.measure import D
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, YAMLRenderer, XMLRenderer, BrowsableAPIRenderer
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import status
 from apps.alertdb.models import Alert, Info, Area
 from apps.alertdb.serializers import AlertSerializer, AreaSerializer
@@ -14,7 +14,7 @@ import logging
 
 
 class AlertListAPI(APIView):
-    renderer_classes = (JSONRenderer, YAMLRenderer, BrowsableAPIRenderer, XMLRenderer)
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
     parser_classes = (CAPXMLParser,)
 
     @statsd.timer('api.AlertListAPI.get')
@@ -58,7 +58,7 @@ class AlertListAPI(APIView):
             #info__area__geom__dwithin=(pnt, D(m=5))
         ).filter(
             info__cap_expires__gte=datetime.now()
-        ).select_related('info')
+        ).prefetch_related('info_set')
 
         """
         alert = alert.filter(
@@ -69,11 +69,9 @@ class AlertListAPI(APIView):
         """
 
         if len(alert) > 0:
-            serializer = AlertSerializer(alert)
-            statsd.incr('api.AlertListAPI.get.success')
+            serializer = AlertSerializer(alert, many=True)
             return Response(serializer.data)
         else:
-            statsd.incr('api.AlertListAPI.get.failure')
             raise Http404
 
     def post(self, request):
@@ -93,10 +91,9 @@ class AlertListAPI(APIView):
         except Exception, e:
             logging.error(e)
 
-        serializer = AlertSerializer(data=data)
+        serializer = AlertSerializer(data=data[0])
         if serializer.is_valid():
             serializer.save()
-            statsd.incr('api.AlertListAPI.post.success')
             rsp = Response(status=status.HTTP_201_CREATED)
         else:
             statsd.incr('api.AlertListAPI.post.failure')
@@ -143,5 +140,5 @@ class AlertAreaAPI(APIView):
 
         alert = self.get_object(cap_slug)
         areas = Area.objects.filter(cap_info__cap_alert=alert)
-        serializer = AreaSerializer(areas)
+        serializer = AreaSerializer(areas, many=True)
         return Response(serializer.data)

@@ -2,13 +2,11 @@ from django.utils import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.test import TestCase
-from django.contrib.gis.geos.collections import Point
 from django.contrib.admin.sites import AdminSite
 from django.contrib.gis.geos import Polygon, MultiPolygon
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 from apps.alertdb.models import Alert, Geocode
-from apps.people.models import Location
 from apps.alertdb.api import AlertListAPI
 from apps.alertdb.geocode_tools import GeocodeLoader
 from apps.alertdb.admin import GeocodeAdmin
@@ -28,6 +26,7 @@ Fixtures can be re-created like so (really for my own record):
 6) python manage.py dumpdata alertdb people auth.Users > alertdb_people_auth.json
 
 """
+
 
 class SimpleTest(unittest.TestCase):
     def setUp(self):

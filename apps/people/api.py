@@ -75,7 +75,8 @@ class UserDetail(APIView):
 
     def patch(self, request, pk, format=None):
         user = self.get_object(pk)
-        serializer = UserSerializer(user, data=request.DATA)
+        serializer = UserSerializer(user, data=request.DATA, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)

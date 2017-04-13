@@ -9,8 +9,7 @@ PASSWORD_MAX_LENGTH = User._meta.get_field('password').max_length
 
 class UserSerializer(serializers.ModelSerializer):
 
-    password_confirmation = serializers.CharField(max_length=PASSWORD_MAX_LENGTH)
-    email = serializers.CharField(source='email', required='email' in User.REQUIRED_FIELDS)
+    email = serializers.CharField(required='email' in User.REQUIRED_FIELDS)
     password = serializers.CharField(max_length=200, required=False, write_only=True)
 
     class Meta:
@@ -22,14 +21,35 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name', 'last_name'
         )
 
-    def restore_object(self, attrs, instance=None):
-        # call set_password on user object. Without this
-        # the password will be stored in plain text.
-        user = super(UserSerializer, self).restore_object(attrs, instance)
-        if 'password' in attrs:
-            user.set_password(attrs['password'])
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+        if 'password' in validated_data:
+            user.set_password(validated_data['password'])
         return user
 
+
+
+    """
+    def create(self, validated_data):
+        # call set_password on user object. Without this
+        # the password will be stored in plain text.
+        user = super(UserSerializer, self).restore_object(validated_data)
+        if 'password' in validated_data:
+            user.set_password(validated_data['password'])
+        return user
+        
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile')
+        user = User.objects.create(**validated_data)
+        Profile.objects.create(user=user, **profile_data)
+        return user
+        
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+        if 'password' in validated_data:
+            user.set_password(validated_data['password'])
+        return user
+    """
 
 
 class LocationSerializer(gis_serializers.GeoModelSerializer):
