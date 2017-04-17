@@ -4,7 +4,6 @@ from django.views.generic.base import View
 from django.contrib.gis.geos import GeometryCollection
 from apps.alertdb.models import Alert, Area
 
-
 class AlertDetailView(View):
 
     def get(self, request, *args, **kwargs):

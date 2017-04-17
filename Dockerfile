@@ -6,6 +6,6 @@ RUN mkdir /code
 WORKDIR /code
 ENV PYTHONPATH $PYTHONPATH:/usr/lib/python2.7/dist-packages
 ADD requirements.txt /code/
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --upgrade
 ADD . /code/
 CMD ["./run.sh"]
