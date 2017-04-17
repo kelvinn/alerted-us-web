@@ -33,6 +33,7 @@ deployment:
     branch: master
     commands:
       - ssh-keyscan -H -p 22 production-alerted.rhcloud.com >> ~/.ssh/known_hosts
-      - git remote add production "ssh://$OPENSHIFT_USERNAME@production-alerted.rhcloud.com/~/git/production.git/" || true git push --force production master
+      - git remote add production "ssh://$OPENSHIFT_USERNAME@production-alerted.rhcloud.com/~/git/production.git/"
+      - git push --force production master
       - pip install requests
       - python tests/smoke.py https://alerted.us
