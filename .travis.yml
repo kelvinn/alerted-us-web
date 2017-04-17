@@ -14,3 +14,13 @@ script:
 after_success:
 - bash ./scripts/push.sh
 
+deploy:
+  provider: openshift
+  user: $OPENSHIFT_USERNAME
+  password: $OPENSHIFT_PASSWORD
+  domain: $OPENSHIFT_DOMAIN
+  app: $OPENSHIFT_DOMAIN
+
+after_deploy:
+  - pip install requests
+  - python tests/smoke.py https://alerted.us
