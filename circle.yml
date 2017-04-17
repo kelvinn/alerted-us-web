@@ -1,0 +1,26 @@
+---
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - sudo pip install --upgrade docker-compose
+
+test:
+  pre:
+    - docker-compose up -d --build
+    - sleep 10 # Wait for DB to come up before proceeding. Can be better...
+    - docker-compose run db sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
+    - docker-compose run web /bin/bash -c "python manage.py migrate --noinput"
+    - docker-compose run web /bin/bash -c "python manage.py collectstatic --noinput"
+
+  override:
+    # grunt runs our karma tests
+    - docker-compose run web /bin/bash -c "python manage.py test --parallel"
+
+  post:
+    - docker-compose stop && docker-compose rm -f
+    
