@@ -8,7 +8,7 @@ dependencies:
   override:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
     - sudo apt-get install python-dev
-    - sudo pip install docker-compose==1.12.0
+    - sudo pip install docker-compose==1.8.1
 
 test:
   pre:
