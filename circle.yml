@@ -12,7 +12,8 @@ dependencies:
 
 test:
   pre:
-    - docker-compose up -d --build
+    - docker version
+    - docker-compose up -d
     - sleep 10 # Wait for DB to come up before proceeding. Can be better...
     - docker-compose run db sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
     - docker-compose run web /bin/bash -c "python manage.py migrate --noinput"
