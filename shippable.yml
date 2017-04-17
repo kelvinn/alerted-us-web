@@ -1,0 +1,33 @@
+language: python
+
+python:
+  - 2.7
+
+env:
+  global:
+    - secure: e05B/5EMmfWR1RcxUokNNvI8OOk7hviUsFS7uM12Mp062ey5Zt9vum3I4K5V3McaKQyHwDUFzOq5q7jiCTyqL2NzXKf73B5uIfX4r+fMbjoPriPK5CYZ58XaQ0OmpYSSr6lTaR2WFE4K6LmhjZYcM7zzThbRjKKySrP/VE1gCg1Mp0ofkeLIWLBEYSzooCU5bu7AvxieVRxekuTlP1SlOFXQKep2DYn0ZpFlEcsZPZCrkaJoTGlhd8DuGiEWw4nytWPMfB1afDl07s+WYEoUQ8OUMA9kwUtUVn5Zb8CQwoYpR2GhUhfBfxiluqw/ABPfWBPjcylQbR+lml9C4kRGhg==
+    - secure: TOIm2SHQA2y4s9aLMDACOR0+iivhp1K2DZ/DkreCBW3MgYVw+sTb1ylqCTOulWZO1m3H+kIA2s/S+HtPKTEYq9NH/fFE6W0itvInm6XW0kxWqiMdpKMUXFvfO8oMVhITm2XnEEes7YUYSplB/hHNgz5ce/zOw84b3bC+EYUKjqIZ2pSk1BTrXK5AMS3Gn42Jj0Ca1xL2Xw9p7h0O29QDebP13CgemXUwEsaHu8RYMMjZNwgcnqwkmvVqvaIgXwij95AioAiF+OCIfPWGEvhE5FJIr67zkav63CIf/er6ecS/UvhHDw9ofu5hwzKjQhe8LsdPSg80tYowvg+fhuiqYg==
+    - secure: Ky4pHc00q7RmUc9LwN98YNkALXLEuOych3lPpi7mc2olO0dkxE+33tfNy254UwjOgRCxIKZVWogNh7XErc2EvLU6vNUIfG9mtF2/aOfb/nIb4k7uginjceE3DdCbXj7z/uMX6KtJg9OwVuTJ0UDBo+fbq8CgMYYe/5hnn7EEBbbVnIZHyS0uMtQqCwP1H46x1z7n05cw7igjuQKn+DfCvQjnDoWbuto4P9/5nUP6GvxGppyjbvry/yS9Pxq8SN2qg8Tzhx8M6xIYetZVd8WCi8lwW3O82xPRAFCpllD8HnHbbebBF16r3wXs4Wh71DyHbVm88HXGWzXtQB3XapS8fQ==
+    - secure: KtZMLO8tk1XyuzLGrnj3OagVtOOXPAHdIrY2pQ+MYCzJNcnbZ9GNAYw/5NT9EYQVtzcpmaB8NY/6mslU70RD/RVJ2DC471Fc/K8KSXA1YR4RGcPF7fGNxkZBYNQBY3oCNbbyBy+R9ewlXPz78ex+wVmsZBx9nih2xH+7UDVf+K/IpMR60OV0KUfEfW36t/dHP5M4B01KCqUBbl1xSjP3efwtZErt/EZK9CILZd52wDZrUbuQFyCEXcUoBAMg/ZuKeiLXXJIlLih2k04IzyeU6i53HKmWeKnJV+DoY/3wxBBFlRfbV0d3f7luJ7P6sREvQAlzV7jJSqsnf2Ovhsaq1Q==
+
+before_install:
+  - pip install virtualenv
+
+install:
+  - virtualenv ~/venv
+  - source ~/venv/bin/activate
+  - pip install -U docker-compose
+  - pip install -r requirements.txt
+
+before_script:
+  - mkdir -p shippable/testresults
+  - mkdir -p shippable/codecoverage
+  - docker-compose up -d --build
+  - sleep 10 # Wait for DB to come up before proceeding. Can be better...
+  - docker-compose run db sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
+  - docker-compose run web /bin/bash -c "python manage.py migrate --noinput"
+  - docker-compose run web /bin/bash -c "python manage.py collectstatic --noinput"
+
+script:
+  - docker-compose run web /bin/bash -c "python manage.py test --parallel"
+  - docker-compose stop && docker-compose rm -f
