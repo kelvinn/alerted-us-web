@@ -8,7 +8,6 @@
     test_db_name: test_cozysiren
     venv_dir: /opt/python/venv
     project_dir: /vagrant
-    celery_cmd: "{{ venv_dir }}/bin/celery worker -A project --concurrency=1 --loglevel=INFO"
     redis_endpoint: 127.0.0.1
     redis_port: 6379
     rack_env: "development"
@@ -120,10 +119,6 @@
     - pip: requirements="{{ project_dir}}/requirements.txt" virtualenv={{ venv_dir }} virtualenv_site_packages=yes
     - pip: name=django-debug-toolbar extra_args='--no-deps' virtualenv={{ venv_dir }}
     - pip: name=selenium virtualenv={{ venv_dir }}
-
-    # Install and configure Celery
-    - name: be sure celery is configured
-      template: src=celeryd.conf.j2 dest=/etc/supervisor/conf.d/celeryd.conf
 
     # Start the xvfb service
     #- service: name=xvfb state=started
