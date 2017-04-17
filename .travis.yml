@@ -1,7 +1,5 @@
 sudo: required
 
-language: python
-
 services:
   - docker
 
@@ -19,7 +17,7 @@ deploy:
   user: $OPENSHIFT_USERNAME
   password: $OPENSHIFT_PASSWORD
   domain: $OPENSHIFT_DOMAIN
-  app: $OPENSHIFT_DOMAIN
+  app: $OPENSHIFT_APP
 
 after_deploy:
   - pip install requests
