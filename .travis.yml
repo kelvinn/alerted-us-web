@@ -4,13 +4,11 @@ services:
   - docker
 
 before_install:
-- pip install virtualenv
+  - pip install virtualenv
+  - docker version
 
 script:
-- bash ./scripts/ci_tests.sh
-
-after_success:
-- bash ./scripts/push.sh
+  - bash ./scripts/ci_tests.sh
 
 deploy:
   provider: openshift
