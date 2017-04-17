@@ -11,6 +11,7 @@ dependencies:
 
 test:
   pre:
+    - sudo apt-get install python-dev
     - docker-compose up -d --build
     - sleep 10 # Wait for DB to come up before proceeding. Can be better...
     - docker-compose run db sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
@@ -23,4 +24,3 @@ test:
 
   post:
     - docker-compose stop && docker-compose rm -f
-    
