@@ -1,34 +1,39 @@
-db:
-  image: mdillon/postgis
-  ports:
-    - "5432"
-  environment:
-    POSTGRES_PASSWORD: password
-    PGPASSWORD: password
+version: '2.0'
+services:
+  db:
+    image: mdillon/postgis
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      PGPASSWORD: password
 
-redis:
-  restart: always
-  image: redis
-  ports:
-    - "6379"
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - "6379"
 
-web:
-  build: .
-  volumes:
-    - .:/code
-  ports:
-    - "8000"
-  environment:
-    RACK_ENV: development
-    REDIS_ENDPOINT: redis
-    REDIS_PORT: 6379
-    DB_PASSWORD: "password"
-    DB_NAME: postgres
-    DB_USER: postgres
-    DB_HOST: db
-    DB_PORT: 5432
-    DEBUG: 'True'
-  links:
-    - db
-    - redis
-  command: ./run.sh
+  web:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "8000"
+    environment:
+      RACK_ENV: development
+      REDIS_ENDPOINT: redis
+      REDIS_PORT: 6379
+      DB_PASSWORD: "password"
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DEBUG: 'True'
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+      - redis
+    command: ./run.sh
