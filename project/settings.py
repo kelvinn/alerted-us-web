@@ -135,7 +135,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_gis',
     'rest_framework.authtoken',
-    'django_nose',
 )
 
 # Show toolbar to anybody when enabled
