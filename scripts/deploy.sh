@@ -5,14 +5,10 @@ set -e
 
 # Call this like deploy.sh some-name-on-docker-cloud https://some-name.com
 
-TARGET_HOST=$1
-SERVICE_NAME=$2
+OS_USER=$1
 
-virtualenv ~/venv
-source ~/venv/bin/activate
-
-dig +short myip.opendns.com @resolver1.opendns.com
-
-pip install fabric
-
-fab -H root@$TARGET_HOST deploy:version=1.1.$SEMAPHORE_BUILD_NUMBER,service_name=$SERVICE_NAME
+ssh-keyscan -H -p 22 production-alerted.rhcloud.com >> ~/.ssh/known_hosts
+git remote add production "ssh://$OS_USER@production-alerted.rhcloud.com/~/git/production.git/"
+git push --force production master
+pip install requests
+python tests/smoke.py https://alerted.us
