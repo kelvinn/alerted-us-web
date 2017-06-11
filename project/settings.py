@@ -135,7 +135,6 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'apps.alertdb',
     'apps.people',
-    'raven.contrib.django.raven_compat',
     'django.contrib.admin',
     'bootstrapform',
     'djrill',
