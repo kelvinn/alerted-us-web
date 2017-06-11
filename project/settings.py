@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import raven
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -110,6 +111,13 @@ elif ON_STAGING:
     DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_PORT']
 
 
+RAVEN_CONFIG = {
+    'dsn': os.getenv("SENTRY_DSN", ''),
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+}
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
@@ -127,6 +135,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'apps.alertdb',
     'apps.people',
+    'raven.contrib.django.raven_compat',
     'django.contrib.admin',
     'bootstrapform',
     'djrill',
