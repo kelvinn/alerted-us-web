@@ -8,7 +8,7 @@ set -e
 OS_USER=$1
 
 ssh-keyscan -H -p 22 production-alerted.rhcloud.com >> ~/.ssh/known_hosts
-git remote add production "ssh://$OS_USER@production-alerted.rhcloud.com/~/git/production.git/"
+git remote set-url production "ssh://$OS_USER@production-alerted.rhcloud.com/~/git/production.git/"
 git push --force production master
 pip install requests
 python tests/smoke.py https://alerted.us
