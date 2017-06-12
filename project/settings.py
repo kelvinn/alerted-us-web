@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
-import raven
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -110,13 +109,6 @@ elif ON_STAGING:
     DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_PORT']
 
-
-RAVEN_CONFIG = {
-    'dsn': os.getenv("SENTRY_DSN", ''),
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
-}
 
 TEMPLATE_DEBUG = True
 
