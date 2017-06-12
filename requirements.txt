@@ -35,4 +35,3 @@ capparselib==0.5.2
 dj-static==0.0.6
 django-debug-toolbar==1.4
 uwsgi==2.0.12
-raven
