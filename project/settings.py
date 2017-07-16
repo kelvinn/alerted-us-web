@@ -86,11 +86,6 @@ if ON_DEVELOPMENT:
     DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
     DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
     DB_PORT = os.getenv('DB_PORT', '5432')
-    OPBEAT = {
-        'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
-        'APP_ID': os.getenv("APP_ID", ''),
-        'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
-    }
 
 elif ON_PRODUCTION:
     REDIS_ENDPOINT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_ADDR"]
@@ -102,11 +97,12 @@ elif ON_PRODUCTION:
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_PORT']
-    OPBEAT = {
-        'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
-        'APP_ID': os.getenv("APP_ID", ''),
-        'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
-    }
+
+OPBEAT = {
+    'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
+    'APP_ID': os.getenv("APP_ID", ''),
+    'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
+}
 
 TEMPLATE_DEBUG = True
 
