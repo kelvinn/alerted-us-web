@@ -97,6 +97,11 @@ elif ON_PRODUCTION:
     DB_PASSWD = os.environ['DB_PASSWORD']
     DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_ADDR']
     DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_PORT']
+    OPBEAT = {
+        'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
+        'APP_ID': os.getenv("APP_ID", ''),
+        'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
+    }
 
 elif ON_STAGING:
     REDIS_ENDPOINT = os.environ["ALERTED_US_REDIS_STAGING_PORT_6379_TCP_ADDR"]
@@ -135,6 +140,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_gis',
     'rest_framework.authtoken',
+    'opbeat.contrib.django',
 )
 
 # Show toolbar to anybody when enabled
@@ -170,6 +176,7 @@ SESSION_CACHE_ALIAS = 'default'
 
 
 MIDDLEWARE_CLASSES = (
+    'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
