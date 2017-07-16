@@ -86,6 +86,11 @@ if ON_DEVELOPMENT:
     DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
     DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
     DB_PORT = os.getenv('DB_PORT', '5432')
+    OPBEAT = {
+        'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
+        'APP_ID': os.getenv("APP_ID", ''),
+        'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
+    }
 
 elif ON_PRODUCTION:
     REDIS_ENDPOINT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_ADDR"]
@@ -102,18 +107,6 @@ elif ON_PRODUCTION:
         'APP_ID': os.getenv("APP_ID", ''),
         'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
     }
-
-elif ON_STAGING:
-    REDIS_ENDPOINT = os.environ["ALERTED_US_REDIS_STAGING_PORT_6379_TCP_ADDR"]
-    REDIS_PORT = os.environ["ALERTED_US_REDIS_STAGING_PORT_6379_TCP_PORT"]
-    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", '')
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['DB_USER']
-    DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_ADDR']
-    DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_STAGING_PORT_5432_TCP_PORT']
-
 
 TEMPLATE_DEBUG = True
 
