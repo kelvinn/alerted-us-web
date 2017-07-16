@@ -14,6 +14,13 @@ import logging
 
 
 class AlertListAPI(APIView):
+    """
+    get:
+    Return a list of all the existing alerts.
+
+    post:
+    Create a new CAP-based alert.
+    """
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
     parser_classes = (CAPXMLParser,)
 

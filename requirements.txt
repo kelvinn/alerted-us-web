@@ -1,5 +1,5 @@
 Django==1.9.13
-six
+six>=1.10.0
 WebTest==2.0.15
 python-dateutil==2.2
 fabric==1.9.0
@@ -8,10 +8,10 @@ psycopg2==2.5.3
 coverage==3.7.1
 pylint==1.2.1
 redis==2.10.5
-djangorestframework==3.3.3
-djangorestframework-gis==0.11.0
+djangorestframework==3.6.3
+djangorestframework-gis==0.11.2
 coreapi
-markdown==2.4.1
+markdown
 django-bootstrap-form==3.1
 django-filter==0.7
 django-allauth
@@ -35,3 +35,4 @@ capparselib==0.5.2
 dj-static==0.0.6
 django-debug-toolbar==1.4
 uwsgi==2.0.12
+pygments

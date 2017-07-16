@@ -8,8 +8,12 @@ from apps.people.api import LocationDetail, LocationList, UserDetail, UserList
 from apps.alertdb.views import AlertDetailView
 from apps.alertdb.api import AlertListAPI, AlertDetailAPI, AlertAreaAPI
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.documentation import include_docs_urls
+from rest_framework.schemas import get_schema_view
 
 admin.autodiscover()
+
+schema_view = get_schema_view(title='Pastebin API')
 
 private_apis = patterns('',
                         url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
@@ -20,6 +24,7 @@ private_apis = patterns('',
                         url(r'^api/v1/users/locations/$', LocationList.as_view()),
                         url(r'^api/v1/users/locations/(?P<pk>[0-9]+)/$', LocationDetail.as_view()),
                         )
+
 
 # A section for APIs (goes first)
 # Private APIs are given a namespace in case we want to use Swagger to do API documentation
@@ -32,6 +37,7 @@ urlpatterns = [
 
 # The rest of stuff
 urlpatterns = urlpatterns + [
+    url(r'^schema/$', schema_view),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
     url(r'^dashboard/$', login_required(SettingsView.as_view()), name='settings-view'),
     url(r'^dashboard/locations/$', login_required(LocationView.as_view()), name='location-view'),
@@ -46,6 +52,11 @@ urlpatterns = urlpatterns + [
 # Flatpages
 urlpatterns = urlpatterns + [
     url(r'^pages/', include('django.contrib.flatpages.urls')),
+]
+
+# Flatpages
+urlpatterns = urlpatterns + [
+    url(r'^docs/', include_docs_urls(title='Alerted API Usage')),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html', 'geojson'])

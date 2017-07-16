@@ -52,7 +52,6 @@ class AlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alert
         fields = '__all__'
-        depth = 1
 
     def create(self, validated_data):
         info_data_set = validated_data.pop('info_set')

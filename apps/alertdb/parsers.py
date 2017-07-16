@@ -181,9 +181,9 @@ class CAPXMLParser(BaseParser):
                         if len(geocode_list) > 0:
                             logging.info("Looking up MultiPolygon with value_name %s" % value_name_save)
                             geom = self.geocodeToMultiPolygon(geocode_list, value_name_save)
-                            if geom:  # This is mainly for t esting, as it will likely not have a geom
+                            if geom:  # This is mainly for testing, as it will likely not have a geom
                                 area_obj['geom'] = geom
-                            area_obj['geocode_list'] = geocode_list
+                            area_obj['geocode_list'] = str(geocode_list)
                         else:
                             logging.error("No value_name")
 
@@ -215,7 +215,7 @@ class CAPXMLParser(BaseParser):
                 if alert_key in SIMPLE_CAP_TYPES:
                     if 'cap_sent' == alert_key:
                         alert_value = dparser.parse(str(alert_value))
-                    alert_obj[alert_key] = alert_value
+                    alert_obj[alert_key] = str(alert_value)
 
                 elif alert_key == 'cap_info':
                     item_obj_list = []

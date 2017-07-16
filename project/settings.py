@@ -77,15 +77,15 @@ if ON_OPENSHIFT:
     DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
 
 if ON_DEVELOPMENT:
-    REDIS_ENDPOINT = os.environ["REDIS_ENDPOINT"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
+    REDIS_ENDPOINT = os.getenv('REDIS_ENDPOINT', '127.0.0.1')
+    REDIS_PORT = os.getenv('REDIS_PORT', '6379')
     REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.getenv('DB_NAME', 'cozysiren')
+    DB_NAME = os.getenv('DB_NAME', 'postgres')
     DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['DB_HOST']
-    DB_PORT = os.environ['DB_PORT']
+    DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
+    DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
+    DB_PORT = os.getenv('DB_PORT', '5432')
 
 elif ON_PRODUCTION:
     REDIS_ENDPOINT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_ADDR"]

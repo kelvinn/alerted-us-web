@@ -17,8 +17,7 @@ admin.site.register(Geocode, GeocodeAdmin)
 class AreaAdmin(admin.GeoModelAdmin):
     def __init__(self, *args, **kwargs):
         super(AreaAdmin, self).__init__(*args, **kwargs)
-        self.list_display_links = (None, )
-
+        self.list_display_links = ('area_link', )
 
     search_fields = ['area_description']
     readonly_fields = ['cap_info']
