@@ -15,6 +15,7 @@ services:
       - "6379"
 
   web:
+    image: alerted-us-web:latest
     build: .
     volumes:
       - .:/code
