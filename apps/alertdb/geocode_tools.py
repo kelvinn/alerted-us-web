@@ -197,6 +197,7 @@ class GeocodeLoader():
         self.sample = sample
         self.start()
 
+
 def main():
     if 'RACK_ENV' in os.environ:
         if os.environ['RACK_ENV'] == "development" or os.environ['RACK_ENV'] == "staging":

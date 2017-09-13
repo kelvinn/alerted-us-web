@@ -11,7 +11,7 @@
     redis_endpoint: 127.0.0.1
     redis_port: 6379
     rack_env: "development"
-    postgresql_listen_addr: 127.0.0.1
+    postgresql_listen_addr: 0.0.0.0
     django_secret_key: "ABC123"
 
   tasks:
@@ -84,6 +84,10 @@
       sudo_user: postgres
       action: command psql -d {{ db_name }} -c 'CREATE EXTENSION postgis_topology;'
       when: createdb_status.changed
+
+    - lineinfile:
+        path: /etc/postgresql/9.3/main/postgresql.conf
+        line: "listen_addresses = '0.0.0.0'"
 
     # Setup packages for Django app
 

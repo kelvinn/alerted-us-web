@@ -15,13 +15,14 @@ The fastest way to get going is to use Docker Compose.
 Download Docker and Docker Compose; install them. Then...
 
     $ cd alerted-us-web
-    $ docker-compose up -d
+    $ docker-compose start db
+    $ docker-compose start redis
 
 This will install all known dependencies and configure a database for you. Next, you can set the superuser account and start Django's development server within Docker:
 
     $ docker-compose run web python manage.py createsuperuser
     $ docker-compose run web python manage.py migrate
-    $ docker-compose run web python manage.py runserver 0.0.0.0:8000
+    $ docker-compose run -p web python manage.py runserver 0.0.0.0:8000
 
 Browse to http://127.0.0.1:8000 and you should see the index page, or http://127.0.0.1:8000/admin for the admin UI.
 

@@ -14,5 +14,6 @@ coverage.xml
 /static/
 .DS_Store
 .elasticbeanstalk/
-
 htmlcov/
+docker-compose.override.yml
+jmeter.log
