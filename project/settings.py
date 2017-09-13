@@ -88,15 +88,15 @@ if ON_DEVELOPMENT:
     DB_PORT = os.getenv('DB_PORT', '5432')
 
 elif ON_PRODUCTION:
-    REDIS_ENDPOINT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_ADDR"]
-    REDIS_PORT = os.environ["REDIS_D7290B5E_PORT_6379_TCP_PORT"]
+    REDIS_ENDPOINT = os.environ["REDIS_ADDR"]
+    REDIS_PORT = os.environ["REDIS_PORT"]
     REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", '')
     REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
     DB_NAME = os.environ['DB_NAME']
     DB_USER = os.environ['DB_USER']
     DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_ADDR']
-    DB_PORT = os.environ['ALERTED_US_POSTGIS_WALE_PROD_PORT_5432_TCP_PORT']
+    DB_HOST = os.environ['DB_HOST_ADDR']
+    DB_PORT = os.environ['DB_HOST_PORT']
 
 OPBEAT = {
     'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
