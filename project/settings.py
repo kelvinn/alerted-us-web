@@ -31,8 +31,17 @@ else:
     GCM_API_KEY = None
 
 if "MANDRILL_API_KEY" in os.environ:
+
     MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
-    EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+
+    ANYMAIL = {
+        # (exact settings here depend on your ESP...)
+        "MANDRILL_API_KEY": MANDRILL_API_KEY,
+        "MANDRILL_SENDER_DOMAIN": 'alerted.us',  # your Mailgun domain, if needed
+    }
+    EMAIL_BACKEND = "anymail.backends.mandrill.EmailBackend"  # or sendgrid.EmailBackend, or...
+    DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
+
     DEFAULT_FROM_EMAIL = 'no-reply@alerted.us'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
@@ -46,15 +55,6 @@ ON_OPENSHIFT = False
 ENABLE_DEBUG_TOOLBAR = False
     
 DEBUG = False
-if 'RACK_ENV' in os.environ:
-    if os.environ['RACK_ENV'] == "production":
-        ON_PRODUCTION = True
-    elif os.environ['RACK_ENV'] == 'staging':
-        ON_STAGING = True
-    elif os.environ['RACK_ENV'] == 'development':
-        ON_DEVELOPMENT = True
-    elif os.environ['RACK_ENV'] == 'openshift':
-        ON_OPENSHIFT = True
 
 # This will force debug to be on if using the development server or if set in an env variable
 if not len(sys.argv) < 2:
@@ -65,38 +65,11 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-if ON_OPENSHIFT:
-    REDIS_ENDPOINT = os.environ["OPENSHIFT_REDIS_DB_HOST"]
-    REDIS_PORT = os.environ["OPENSHIFT_REDIS_DB_PORT"]
-    REDIS_PASSWORD = os.getenv('OPENSHIFT_REDIS_DB_PASSWORD', '')
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
-    DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
-    DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
-    DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
-
-if ON_DEVELOPMENT:
-    REDIS_ENDPOINT = os.getenv('REDIS_ENDPOINT', '127.0.0.1')
-    REDIS_PORT = os.getenv('REDIS_PORT', '6379')
-    REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', '')
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.getenv('DB_NAME', 'postgres')
-    DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
-    DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
-    DB_PORT = os.getenv('DB_PORT', '5432')
-
-elif ON_PRODUCTION:
-    REDIS_ENDPOINT = os.environ["REDIS_ADDR"]
-    REDIS_PORT = os.environ["REDIS_PORT"]
-    REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", '')
-    REDIS_URL = '%s:%s:1' % (REDIS_ENDPOINT, REDIS_PORT)
-    DB_NAME = os.environ['DB_NAME']
-    DB_USER = os.environ['DB_USER']
-    DB_PASSWD = os.environ['DB_PASSWORD']
-    DB_HOST = os.environ['DB_HOST_ADDR']
-    DB_PORT = os.environ['DB_HOST_PORT']
+DB_NAME = os.getenv('DB_NAME', 'postgres')
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
+DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
+DB_PORT = os.getenv('DB_PORT', '5432')
 
 OPBEAT = {
     'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
@@ -106,7 +79,8 @@ OPBEAT = {
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101", "127.*.*.*", "localhost", ".rhcloud.com"]
+ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101",
+                 "alerted-us-web-staging.dokku.kelvinism.com", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 
@@ -123,7 +97,7 @@ INSTALLED_APPS = (
     'apps.people',
     'django.contrib.admin',
     'bootstrapform',
-    'djrill',
+    'anymail',
     'allauth',
     'allauth.account',
     'rest_framework',
@@ -132,9 +106,11 @@ INSTALLED_APPS = (
     'opbeat.contrib.django',
 )
 
+
 # Show toolbar to anybody when enabled
 def show_toolbar(request):
     return True
+
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS += (
@@ -146,27 +122,8 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
         'SHOW_TOOLBAR_CALLBACK' : show_toolbar,
     }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'PASSWORD': REDIS_PASSWORD,  # Optional
-            'CONNECTION_POOL_KWARGS': {'max_connections': 1000}
-        }
-    }
-}
-
-
-CACHE_MIDDLEWARE_SECONDS = 60
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
-
-
 MIDDLEWARE_CLASSES = (
     'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -175,7 +132,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'apps.alertdb.middleware.ProfilerMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
