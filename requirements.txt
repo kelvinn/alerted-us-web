@@ -32,6 +32,7 @@ capparselib==0.5.2
 dj-static
 django-debug-toolbar
 uwsgi
+gunicorn
 pygments
 opbeat
 fabric
