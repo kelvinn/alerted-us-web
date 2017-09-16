@@ -17,7 +17,6 @@ django-allauth
 requests
 simplejson
 django_nose
-newrelic
 GPolyEncode
 honcho
 kombu
@@ -33,6 +32,7 @@ dj-static
 django-debug-toolbar
 uwsgi
 gunicorn
+statsd
 pygments
 opbeat
 fabric
