@@ -8,12 +8,6 @@ services:
       POSTGRES_PASSWORD: password
       PGPASSWORD: password
 
-  redis:
-    restart: always
-    image: redis
-    ports:
-      - "6379"
-
   web:
     image: alerted-us-web:latest
     build: .

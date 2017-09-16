@@ -31,6 +31,7 @@ lxml
 capparselib==0.5.2
 dj-static
 django-debug-toolbar
+uwsgi
 pygments
 opbeat
 fabric
