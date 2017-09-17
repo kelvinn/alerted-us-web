@@ -27,7 +27,7 @@ pytz
 sqlparse
 django-anymail[mandrill]
 django-uuidfield
-lxml
+lxml==3.2.5
 capparselib==0.5.2
 dj-static
 django-debug-toolbar
