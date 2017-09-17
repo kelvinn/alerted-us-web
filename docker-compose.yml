@@ -17,12 +17,7 @@ services:
       - "8000"
     environment:
       RACK_ENV: development
-      DB_PASSWORD: "password"
-      DB_NAME: postgres
-      DB_USER: postgres
-      DB_HOST: db
-      DB_PORT: 5432
-      DEBUG: 'True'
+      DATABASE_URL: postgis://postgres:password@db:5432/postgres
     links:
       - db
     depends_on:

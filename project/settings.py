@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -64,12 +65,6 @@ if not len(sys.argv) < 2:
 elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
-
-DB_NAME = os.getenv('DB_NAME', 'postgres')
-DB_USER = os.getenv('DB_USER', 'postgres')
-DB_PASSWD = os.getenv('DB_PASSWORD', 'password')
-DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
-DB_PORT = os.getenv('DB_PORT', '5432')
 
 OPBEAT = {
     'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
@@ -168,16 +163,10 @@ TEMPLATE_DIRS = (
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': DB_NAME,
-        'PASSWORD': DB_PASSWD,
-        'USER': DB_USER,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-    }
-}
+DATABASES = {}
+
+DATABASES['default'] = dj_database_url.config(default='postgis://postgres:password@127.0.0.1:5432/postgres', conn_max_age=600)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
