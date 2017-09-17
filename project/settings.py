@@ -109,8 +109,9 @@ def show_toolbar(request):
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
     INSTALLED_APPS += (
-        'debug_toolbar.apps.DebugToolbarConfig',
+        'debug_toolbar',
     )
+
 
     DEBUG_TOOLBAR_CONFIG = {
         'INTERCEPT_REDIRECTS': False,

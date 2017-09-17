@@ -10,6 +10,9 @@ from apps.alertdb.api import AlertListAPI, AlertDetailAPI, AlertAreaAPI
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
 from rest_framework.schemas import get_schema_view
+import settings
+
+
 
 admin.autodiscover()
 
@@ -58,5 +61,12 @@ urlpatterns = urlpatterns + [
 urlpatterns = urlpatterns + [
     url(r'^docs/', include_docs_urls(title='Alerted API Usage')),
 ]
+
+# For Django Debug Toolbar
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = urlpatterns + [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html', 'geojson'])
