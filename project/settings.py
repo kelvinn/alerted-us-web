@@ -37,7 +37,7 @@ if "MAILGUN_API_KEY" in os.environ:
 
     ANYMAIL = {
         # (exact settings here depend on your ESP...)
-        "MAILGUN_API_KEY": "<your Mailgun key>",
+        "MAILGUN_API_KEY": MAILGUN_API_KEY,
         "MAILGUN_SENDER_DOMAIN": 'mg.alerted.us',  # your Mailgun domain, if needed
     }
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
