@@ -170,7 +170,7 @@ class Area(models.Model):
 
     # GeoDjango-specific: a geometry field (MultiPolygonField), and
     # overriding the default manager with a GeoManager instance.
-    geom = models.MultiPolygonField(blank=True, null=True, srid=4326)
+    geom = models.MultiPolygonField(blank=True, null=True, srid=4326, spatial_index=True, geography=True)
     objects = models.GeoManager()
 
     def __unicode__(self):
