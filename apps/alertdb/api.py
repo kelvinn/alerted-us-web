@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import status
-from apps.alertdb.models import Alert, Area
+from apps.alertdb.models import Alert, Info, Area
 from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from statsd.defaults.django import statsd
@@ -52,6 +52,7 @@ class AlertListAPI(APIView):
             cap_date_received = None
 
         pnt = Point(lng, lat)
+
         if cap_date_received is not None:
             alert = Alert.objects.filter(
                 cap_date_received__gte=cap_date_received
@@ -60,12 +61,19 @@ class AlertListAPI(APIView):
             alert = Alert.objects.all()
 
         alert = alert.filter(
-            info__area__geom__dwithin=(pnt, D(m=5))
-        )
-
-        alert.filter(
+            info__area__geom__dwithin=(pnt, 0.02)
+            #info__area__geom__dwithin=(pnt, D(m=5))
+        ).filter(
             info__cap_expires__gte=datetime.now()
         ).prefetch_related('info_set')
+
+        """
+        alert = alert.filter(
+            info__area__geom__dwithin=(pnt, 0.02)
+        ).filter(
+            info__cap_expires__gte=datetime.now()
+        )
+        """
 
         if len(alert) > 0:
             serializer = AlertSerializer(alert, many=True)
