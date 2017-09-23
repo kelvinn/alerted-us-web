@@ -46,4 +46,3 @@ The geocode_tools.py script will download 100MB of data, so don't do it over 3G 
 
 + Fix performance issues when Postgres gets large
 + Publish API docs (even basic ones just for auth)
-+ Better isolate the apps (microservices)

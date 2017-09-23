@@ -23,7 +23,7 @@ Fixtures can be re-created like so (really for my own record):
 3) python manage.py createsuperuser (then 'admin'/'password')
 4) python geocode_tools.py (in order to create geocode objects)
 5) Create a new alert (via API) using weather.cap as the body, and the new token from the create user step above
-6) python manage.py dumpdata alertdb people auth.Users > alertdb_people_auth.json
+6) python manage.py dumpdata alertdb people auth.user > alertdb_people_auth.json
 
 """
 
@@ -199,7 +199,6 @@ class AlertdbAPITests(APITestCase):
 
         cap_sender = response.data[0]['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
-
 
     def test_alert_api_query_by_coord_within(self):
         user, created = User.objects.get_or_create(username='apiuser')
