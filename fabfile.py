@@ -24,7 +24,6 @@ def deploy(version):
     env.user = 'core'
     run('sudo docker service update --image %s:%s %s' % (IMAGE, version, SERVICE))
     print "Deployed %s:%s to %s" % (IMAGE, version, SERVICE)
-    docker_clean()
 
 
 def docker_clean():
