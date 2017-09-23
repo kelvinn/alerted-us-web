@@ -61,8 +61,8 @@ class AlertListAPI(APIView):
             alert = Alert.objects.all()
 
         alert = alert.filter(
-            info__area__geom__dwithin=(pnt, 0.02)
-            #info__area__geom__dwithin=(pnt, D(m=5))
+            #info__area__geom__dwithin=(pnt, 0.02)
+            info__area__geom__dwithin=(pnt, D(m=2000))
         ).filter(
             info__cap_expires__gte=datetime.now()
         ).prefetch_related('info_set')
