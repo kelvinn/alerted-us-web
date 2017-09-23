@@ -31,18 +31,16 @@ if "GCM_API_KEY" in os.environ:
 else:
     GCM_API_KEY = None
 
-if "MANDRILL_API_KEY" in os.environ:
+if "MAILGUN_API_KEY" in os.environ:
 
-    MANDRILL_API_KEY = os.environ['MANDRILL_API_KEY']
+    MAILGUN_API_KEY = os.environ['MAILGUN_API_KEY']
 
     ANYMAIL = {
         # (exact settings here depend on your ESP...)
-        "MANDRILL_API_KEY": MANDRILL_API_KEY,
-        "MANDRILL_SENDER_DOMAIN": 'alerted.us',  # your Mailgun domain, if needed
+        "MAILGUN_API_KEY": "<your Mailgun key>",
+        "MAILGUN_SENDER_DOMAIN": 'mg.alerted.us',  # your Mailgun domain, if needed
     }
-    EMAIL_BACKEND = "anymail.backends.mandrill.EmailBackend"  # or sendgrid.EmailBackend, or...
-    DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
-
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
     DEFAULT_FROM_EMAIL = 'no-reply@alerted.us'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'

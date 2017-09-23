@@ -2,12 +2,9 @@ Django==1.9.13
 six>=1.10.0
 WebTest==2.0.15
 python-dateutil==2.2
-fabric==1.9.0
 pep8==1.5.7
-psycopg2==2.5.3
 coverage==3.7.1
 pylint==1.2.1
-redis
 dj-database-url
 djangorestframework==3.6.3
 djangorestframework-gis==0.11.2
@@ -27,13 +24,10 @@ billiard==3.3.0.18
 pytz==2014.7
 sqlparse==0.1.11
 statsd==3.0.1
-djrill==1.1.1
 django-uuidfield==0.5.0
-lxml==4.0.0
-django-anymail[mandrill]
+django-anymail[mailgun]
 capparselib==0.5.2
 dj-static==0.0.6
 django-debug-toolbar
-uwsgi==2.0.12
 pygments
 opbeat
