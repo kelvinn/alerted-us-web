@@ -29,7 +29,7 @@ sqlparse==0.1.11
 statsd==3.0.1
 djrill==1.1.1
 django-uuidfield==0.5.0
-lxml==3.4.4
+lxml==4.0.0
 django-anymail[mandrill]
 capparselib==0.5.2
 dj-static==0.0.6
