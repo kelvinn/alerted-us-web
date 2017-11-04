@@ -78,7 +78,7 @@ def queryset_iterator(queryset, chunksize=250):
 
 def dlfile(shape_zip_file_name):
     # Open the url
-    url = "http://cdn.kelvinism.com/cozysiren/%s" % shape_zip_file_name
+    url = "https://d2382d6dswfsst.cloudfront.net/cozysiren/%s" % shape_zip_file_name
     try:
         f = urlopen(url)
         print "downloading " + url
@@ -149,7 +149,7 @@ class GeocodeLoader():
                 g = i.geom.buffer(-0.0000001)
 
                 # Simplify the polygons and convert to multipolygon
-                g = g.simplify(0.003, preserve_topology=True)
+                g = g.simplify(0.04, preserve_topology=True)
                 if g.geom_type != 'MultiPolygon':
                     i.geom = MultiPolygon(g)
                 else:
