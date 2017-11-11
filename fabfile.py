@@ -2,7 +2,6 @@ from fabric.api import env, run, local
 from fabric.operations import put
 
 IMAGE = "zephell/alerted-us-web"
-SERVICE = "web"
 
 
 def create(service): # Doesn't work yet
@@ -19,11 +18,11 @@ def update():
     run('sudo docker service update webweb')
 
 
-def deploy(version):
+def deploy(version, service):
     """ deploy specified version of image to cluster """
     env.user = 'core'
-    run('sudo docker service update --image %s:%s %s' % (IMAGE, version, SERVICE))
-    print "Deployed %s:%s to %s" % (IMAGE, version, SERVICE)
+    run('sudo docker service update --image %s:%s %s' % (IMAGE, version, service))
+    print "Deployed %s:%s to %s" % (IMAGE, version, service)
 
 
 def docker_clean():
