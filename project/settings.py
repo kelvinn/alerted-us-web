@@ -21,10 +21,7 @@ POSTGIS_VERSION = (2, 1, 1)
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if "SECRET_KEY" in os.environ:
-    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-else:
-    SECRET_KEY = 'ABCDEFG'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'ABCDEFG')
 
 if "GCM_API_KEY" in os.environ:
     GCM_API_KEY = os.environ['GCM_API_KEY']
@@ -45,10 +42,6 @@ if "MAILGUN_API_KEY" in os.environ:
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
-ON_DEVELOPMENT = False
-ON_PRODUCTION = False
-ON_STAGING = False
-ON_OPENSHIFT = False
 
 # Enable this to view the toolbar
 ENABLE_DEBUG_TOOLBAR = False
