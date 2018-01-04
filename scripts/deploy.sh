@@ -19,6 +19,10 @@ chmod 600 ~/.netrc
 heroku container:login
 heroku container:push web --app $APP_NAME
 
+# Wait for deploy to finish. Not pretty, I know.
+
+sleep 10
+
 pip install requests
 python tests/smoke.py $SMOKE_URL
 
