@@ -5,6 +5,7 @@ jobs:
       - image: circleci/python:2.7
     steps:
       - checkout
+      - setup_remote_docker
       - run: bash ./scripts/build.sh
   test:
     docker:
