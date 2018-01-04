@@ -1,12 +1,23 @@
 version: 2
 jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - checkout
+      - run: bash ./scripts/build.sh
   test:
     docker:
       - image: circleci/python:2.7
     steps:
       - checkout
-      - run: bash ./scripts/ci_tests.sh
+      - run: bash ./scripts/test.sh
   deploy_staging:
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - run: echo "Hello World"
+  deploy_prod:
     docker:
       - image: circleci/python:2.7
     steps:
@@ -17,7 +28,10 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
+      - build
       - test:
-      - deploy_staging:
+          requires:
+            - build
+      - deploy:
           requires:
             - test
