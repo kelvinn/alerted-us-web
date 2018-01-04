@@ -3,15 +3,22 @@
 # Abort the script if any command fails
 set -e
 
-# Call this like deploy.sh some-name-on-docker-cloud https://some-name.com
+# Call this like deploy.sh heroku-app-name https://some-name.com
+# Do not include a trailing slash
+# heroku-app-name = name of app on Heroku
+# https://some-name.com = where to run smoketest
 
-OS_USER=$1
+APP_NAME=$1
+SMOKE_URL=$2
 
-ssh-keyscan -H -p 22 production-alerted.rhcloud.com >> ~/.ssh/known_hosts
-git remote set-url production "ssh://$OS_USER@production-alerted.rhcloud.com/~/git/production.git/"
-git push --force production master
+if ! foobar_loc="$(type -p "heroku")" || [ -z "/usr/local/bin/" ]; then
+  brew install heroku/brew/heroku
+fi
+
+heroku container:push web --app $APP_NAME
+
 pip install requests
-python tests/smoke.py https://alerted.us
+python tests/smoke.py $SMOKE_URL
 
 # Deploy should have succeeded now, so posting release
 

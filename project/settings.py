@@ -66,7 +66,7 @@ OPBEAT = {
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101",
-                 "alerted-us-web-staging.dokku.kelvinism.com", "127.*.*.*", "localhost", ".rhcloud.com"]
+                 ".herokuapp.com", "127.*.*.*", "localhost", ".rhcloud.com"]
 
 # Application definition
 

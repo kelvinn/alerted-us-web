@@ -19,5 +19,6 @@ echo "Starting uWSGI server..."
 #uwsgi --http-socket :8000 --wsgi-file project/wsgi.py --master --processes 2 --threads 2
 #uwsgi --enable-threads --single-interpreter --plugins python --vacuum --http-socket :8000 --module project.wsgi
 
+[ -z "$PORT" ] && export PORT=8000;
 
-uwsgi --socket 0.0.0.0:8000 --protocol=http -w project.wsgi:application
+uwsgi --socket 0.0.0.0:$PORT --protocol=http -w project.wsgi:application
