@@ -63,6 +63,9 @@ OPBEAT = {
     'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
 }
 
+LOGZ_TOKEN = os.getenv("LOGZ_TOKEN", '')
+LOGZ_URL = os.getenv("LOGZ_URL", '')
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [".alerted.us", "127.0.0.1", "192.168.83.*", ".tutum.io", ".kelvinism.com", "trusty64", "172.17.8.101",
@@ -284,5 +287,46 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+    }
+}
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'logzioFormat': {
+            'format': '{"additional_field": "value"}'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'verbose'
+        },
+        'logzio': {
+            'class': 'logzio.handler.LogzioHandler',
+            'level': 'INFO',
+            'formatter': 'logzioFormat',
+            'token': LOGZ_TOKEN,
+            'logzio_type': "django",
+            'logs_drain_timeout': 5,
+            'url': LOGZ_URL,
+            'debug': True
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', ],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO')
+        },
+        'appname': {
+            'handlers': ['console', 'logzio'],
+            'level': 'INFO'
+        }
     }
 }
