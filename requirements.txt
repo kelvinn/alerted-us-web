@@ -33,3 +33,5 @@ pygments
 opbeat
 uwsgi
 logzio-python-handler
+ddtrace
+gunicorn
