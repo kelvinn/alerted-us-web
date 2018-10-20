@@ -19,6 +19,20 @@ jobs:
       - image: circleci/python:2.7
     steps:
       - run: echo "Hello World"
+
+      - run:
+          name: Install system packages
+          command: |
+            yum install -y python-virtualenv python2-setuptools tar gzip
+
+      - run:
+          name: Deploy to Heroku
+          command: |
+            virtualenv ~/venv
+            source ~/venv/bin/activate
+            dig +short myip.opendns.com @resolver1.opendns.com
+            bash ./scripts/deploy.sh glacial-bastion-40864 https://staging.alerted.us
+
   deploy_prod:
     docker:
       - image: circleci/python:2.7

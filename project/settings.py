@@ -57,12 +57,6 @@ elif os.getenv('DEBUG', 'False') == 'True':
     ENABLE_DEBUG_TOOLBAR = True
     DEBUG = True
 
-OPBEAT = {
-    'ORGANIZATION_ID': os.getenv("ORGANIZATION_ID", ''),
-    'APP_ID': os.getenv("APP_ID", ''),
-    'SECRET_TOKEN': os.getenv("SECRET_TOKEN", ''),
-}
-
 LOGZ_TOKEN = os.getenv("LOGZ_TOKEN", '')
 LOGZ_URL = os.getenv("LOGZ_URL", '')
 
@@ -92,7 +86,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework_gis',
     'rest_framework.authtoken',
-    'opbeat.contrib.django',
 )
 
 
@@ -113,7 +106,6 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
     }
 
 MIDDLEWARE_CLASSES = (
-    'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

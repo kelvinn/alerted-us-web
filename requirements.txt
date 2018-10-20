@@ -4,7 +4,6 @@ WebTest==2.0.15
 python-dateutil==2.2
 pep8==1.5.7
 coverage==3.7.1
-pylint==1.2.1
 dj-database-url
 djangorestframework==3.6.3
 djangorestframework-gis==0.11.2
@@ -30,7 +29,7 @@ capparselib==0.5.2
 dj-static==0.0.6
 django-debug-toolbar==1.8
 pygments
-opbeat
+newrelic
 uwsgi
 logzio-python-handler
 ddtrace
