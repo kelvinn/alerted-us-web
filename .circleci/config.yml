@@ -9,10 +9,13 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Build Container
-          run: bash ./scripts/build.sh
+          command: |
+            bash ./scripts/build.sh
       - run:
           name: Run Tests
-          run: bash ./scripts/ci_tests.sh
+          command: |
+            bash ./scripts/ci_tests.sh
       - run:
           name: Build and push Docker image
-          run: echo "Publish docker image"
+          command: |
+            echo "Publish docker image"
