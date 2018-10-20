@@ -2,54 +2,17 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:2.7
+      - image: circleci/python:2.7.14
     steps:
       - checkout
-      - setup_remote_docker
-          docker_layer_caching: true
-      - run: bash ./scripts/build.sh
-  test:
-    docker:
-      - image: circleci/python:2.7
-    steps:
-      - checkout
-      - setup_remote_docker
-          docker_layer_caching: true
-      - run: bash ./scripts/ci_test.sh
-  deploy_staging:
-    docker:
-      - image: circleci/python:2.7
-    steps:
-      - run: echo "Hello World"
-
       - run:
-          name: Install system packages
-          command: |
-            yum install -y python-virtualenv python2-setuptools tar gzip
-
+          name: Build Container
+          run: bash ./scripts/build.sh
       - run:
-          name: Deploy to Heroku
-          command: |
-            virtualenv ~/venv
-            source ~/venv/bin/activate
-            dig +short myip.opendns.com @resolver1.opendns.com
-            bash ./scripts/deploy.sh glacial-bastion-40864 https://staging.alerted.us
-
-  deploy_prod:
-    docker:
-      - image: circleci/python:2.7
-    steps:
-      - run: echo "Hello World"
-
-
-workflows:
-  version: 2
-  build-test-and-deploy:
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
-      - deploy_staging:
-          requires:
-            - test
+          name: Run Tests
+          - run: bash ./scripts/ci_tests.sh
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build and push Docker image
+          run: echo "Publish docker image"
