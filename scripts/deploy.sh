@@ -18,6 +18,7 @@ fi
 touch ~/.netrc && chmod 600 ~/.netrc
 heroku container:login
 heroku container:push web --app $APP_NAME
+heroku container:release web --app $APP_NAME
 
 # Wait for deploy to finish. Not pretty, I know.
 

@@ -8,7 +8,7 @@ source ~/venv/bin/activate
 pip install -U docker-compose
 
 docker-compose build
-docker-compose up -d
+docker-compose down && docker-compose up -d
 
 sleep 15 # Wait for DB to come up before proceeding. Can be better...
 
