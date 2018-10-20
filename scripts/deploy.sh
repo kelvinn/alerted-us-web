@@ -15,7 +15,7 @@ if ! foobar_loc="$(type -p "heroku")" || [ -z "/usr/local/bin/" ]; then
   brew install heroku/brew/heroku
 fi
 
-chmod 600 ~/.netrc
+touch ~/.netrc && chmod 600 ~/.netrc
 heroku container:login
 heroku container:push web --app $APP_NAME
 
