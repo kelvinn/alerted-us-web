@@ -5,14 +5,14 @@ jobs:
       - image: circleci/python:2.7.14
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Container
           run: bash ./scripts/build.sh
       - run:
           name: Run Tests
-          - run: bash ./scripts/ci_tests.sh
-      - setup_remote_docker:
-          docker_layer_caching: true
+          run: bash ./scripts/ci_tests.sh
       - run:
           name: Build and push Docker image
           run: echo "Publish docker image"
