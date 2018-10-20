@@ -6,6 +6,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+          docker_layer_caching: true
       - run: bash ./scripts/build.sh
   test:
     docker:
@@ -13,7 +14,8 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: bash ./scripts/test.sh
+          docker_layer_caching: true
+      - run: bash ./scripts/ci_test.sh
   deploy_staging:
     docker:
       - image: circleci/python:2.7
@@ -48,6 +50,6 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
+      - deploy_staging:
           requires:
             - test
