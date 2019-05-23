@@ -7,4 +7,4 @@ before_script:
   - pip install virtualenv
 
 script:
-  - scripts/ci_tests.sh
+  - bash ./scripts/ci_tests.sh
