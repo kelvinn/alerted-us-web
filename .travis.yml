@@ -1,0 +1,10 @@
+language: generic
+
+services:
+  - docker
+
+before_script:
+  - pip install virtualenv
+
+script:
+  - scripts/ci_tests.sh

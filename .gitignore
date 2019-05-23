@@ -2,6 +2,7 @@
 .vagrant/
 nosetests.xml
 *.pyc
+.venv/
 captools/fips6.zip
 captools/output.xml
 reports/coverage.xml
