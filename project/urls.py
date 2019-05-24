@@ -1,4 +1,4 @@
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, url
 from django.contrib.gis import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -10,33 +10,32 @@ from apps.alertdb.api import AlertListAPI, AlertDetailAPI, AlertAreaAPI
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
 from rest_framework.schemas import get_schema_view
-import settings
-
+from rest_framework.authtoken import views
+from project import settings
 
 
 admin.autodiscover()
 
 schema_view = get_schema_view(title='Pastebin API')
 
-private_apis = patterns('',
-                        url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
-                        url(r'^api/v1/users/$', UserList.as_view()),
-                        url(r'^api/v1/users/(?P<pk>[0-9]+)/$', UserDetail.as_view()),
-                        url(r'^api/v1/users/profiles/$', UserDetail.as_view()),
-                        url(r'^api/v1/users/profiles/(?P<pk>[0-9]+)/$', UserDetail.as_view()),
-                        url(r'^api/v1/users/locations/$', LocationList.as_view()),
-                        url(r'^api/v1/users/locations/(?P<pk>[0-9]+)/$', LocationDetail.as_view()),
-                        )
+private_apis = [
+                url(r'^api-token-auth/', views.obtain_auth_token),
+                url(r'^api/v1/users/$', UserList.as_view()),
+                url(r'^api/v1/users/(?P<pk>[0-9]+)/$', UserDetail.as_view()),
+                url(r'^api/v1/users/profiles/$', UserDetail.as_view()),
+                url(r'^api/v1/users/profiles/(?P<pk>[0-9]+)/$', UserDetail.as_view()),
+                url(r'^api/v1/users/locations/$', LocationList.as_view()),
+                url(r'^api/v1/users/locations/(?P<pk>[0-9]+)/$', LocationDetail.as_view())
+                ]
 
 
 # A section for APIs (goes first)
 # Private APIs are given a namespace in case we want to use Swagger to do API documentation
 urlpatterns = [
-    url(r'^', include(private_apis, namespace="private_apis")),
     url(r'^api/v1/alerts/$', AlertListAPI.as_view()),
     url(r'^api/v1/alerts/(?P<cap_slug>\w+)/$', cache_page(60*60)(AlertDetailAPI.as_view())),
     url(r'^api/v1/alerts/(?P<cap_slug>\w+)/areas/$', AlertAreaAPI.as_view()),
-]
+] + private_apis
 
 # The rest of stuff
 urlpatterns = urlpatterns + [

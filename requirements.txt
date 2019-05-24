@@ -1,4 +1,4 @@
-Django==1.9.13
+Django==1.11.20
 six>=1.10.0
 WebTest==2.0.15
 python-dateutil==2.2
@@ -9,9 +9,9 @@ djangorestframework==3.6.3
 djangorestframework-gis==0.11.2
 coreapi
 markdown
-django-bootstrap-form==3.1
+django-bootstrap-form==3.3
 django-filter==0.7
-django-allauth==0.34.0
+django-allauth==0.39.1
 requests
 simplejson
 django_nose
@@ -30,7 +30,7 @@ dj-static==0.0.6
 django-debug-toolbar==1.8
 pygments
 newrelic
-uwsgi
 logzio-python-handler
 ddtrace
 gunicorn
+psycopg2-binary

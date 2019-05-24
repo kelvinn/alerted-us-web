@@ -147,8 +147,21 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, "templates/admin/alertdb/info/"),
 )
 
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': TEMPLATE_DIRS,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 DATABASES = {}
 
@@ -219,16 +232,6 @@ REST_FRAMEWORK = {
 }
 
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-
-    # Required by allauth template tags
-    "django.core.context_processors.request",
-    'django.contrib.auth.context_processors.auth',
-    # allauth specific context processors
-    #"allauth.account.context_processors.account",
-
-)
-
 AUTHENTICATION_BACKENDS = (
 
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -247,8 +250,6 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 LOGIN_REDIRECT_URL = '/dashboard/settings/'
 
 ACCOUNT_LOGOUT_ON_GET = True
-
-
 
 BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
 BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}

@@ -1,10 +1,17 @@
-FROM python:2.7.16-slim
+FROM alpine:3.9.4
 ENV PYTHONUNBUFFERED 1
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install --fix-missing -y build-essential libffi-dev python-psycopg2 python-lxml libpq-dev python-dev binutils libproj-dev gdal-bin libxml2-dev libxslt1-dev && rm -rf /var/lib/apt/lists/*
+RUN apk add \
+  --no-cache \
+  --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+  --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  gdal gdal-dev proj4-dev
+RUN apk update && apk upgrade
+RUN apk add binutils python2-dev libpq postgresql-dev py2-psycopg2 py2-lxml libffi-dev gcc make  \
+libxml2-dev libxml2 libxslt py2-pip musl-dev
 EXPOSE 8000
 RUN mkdir /code
 WORKDIR /code
-ENV PYTHONPATH $PYTHONPATH:/usr/lib/python2.7/dist-packages
+ENV PYTHONPATH $PYTHONPATH:/usr/lib/python2.7/site-packages
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt --upgrade
 ADD . /code/
