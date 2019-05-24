@@ -3,6 +3,7 @@
 nosetests.xml
 *.pyc
 .venv/
+.venv27/
 captools/fips6.zip
 captools/output.xml
 reports/coverage.xml

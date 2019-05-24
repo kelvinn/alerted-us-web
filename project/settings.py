@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import sys
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+SENTRY_DSN = os.getenv('SENTRY_DSN', None)
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[DjangoIntegration()]
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 

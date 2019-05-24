@@ -30,6 +30,7 @@ dj-static==0.0.6
 django-debug-toolbar==1.8
 pygments
 newrelic
+sentry-sdk==0.8.0
 logzio-python-handler
 ddtrace
 gunicorn
