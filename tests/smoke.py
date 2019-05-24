@@ -1,5 +1,6 @@
 import requests
 import sys
+import ssl
 from time import sleep
 
 if __name__ == '__main__':
@@ -11,7 +12,7 @@ if __name__ == '__main__':
         get_urls = ['/accounts/signup/', '/accounts/login/', '/']
         sleep(10)  # Wait for things to come back up
         for url in get_urls:
-            r = requests.get(host_address + url, verify=False)
+            r = requests.get(host_address + url, verify=False, timeout=10)
             if r.status_code != 200:
                 print "[ERROR] when calling [" + url + "] got back HTTP response code: " + str(r.status_code)
                 sys.exit(1)

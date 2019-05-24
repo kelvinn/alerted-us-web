@@ -28,7 +28,7 @@ virtualenv .venv && source .venv/bin/activate
 
 git status
 
-pip install requests
+pip install requests pyOpenSSL ndg-httpsclient pyasn1
 python tests/smoke.py $SMOKE_URL
 
 # Deploy should have succeeded now, so posting release
