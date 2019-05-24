@@ -1,5 +1,6 @@
 import requests
 import sys
+from time import sleep
 
 if __name__ == '__main__':
     host_address = sys.argv[1:][0]
@@ -8,6 +9,7 @@ if __name__ == '__main__':
         sys.exit(2)
     else:
         get_urls = ['/accounts/signup/', '/accounts/login/', '/']
+        sleep(10)  # Wait for things to come back up
         for url in get_urls:
             r = requests.get(host_address + url, verify=False)
             if r.status_code != 200:
