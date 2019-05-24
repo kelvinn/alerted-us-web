@@ -24,6 +24,8 @@ heroku container:release web --app $APP_NAME
 
 sleep 10
 
+virtualenv .venv && source .venv/bin/activate
+
 pip install requests
 python tests/smoke.py $SMOKE_URL
 

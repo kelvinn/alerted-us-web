@@ -8,3 +8,9 @@ before_script:
 
 script:
   - bash ./scripts/ci_tests.sh
+
+deploy:
+  provider: script
+  script: bash scripts/deploy.sh $APP_NAME $STAGING_SMOKE_URL
+  on:
+    branch: master
