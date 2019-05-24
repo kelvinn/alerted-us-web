@@ -26,6 +26,8 @@ sleep 10
 
 virtualenv .venv && source .venv/bin/activate
 
+git status
+
 pip install requests
 python tests/smoke.py $SMOKE_URL
 
