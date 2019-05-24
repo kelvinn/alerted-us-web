@@ -3,14 +3,16 @@ language: generic
 services:
   - docker
 
-before_script:
-  - pip install virtualenv
-
-script:
-  - bash ./scripts/ci_tests.sh
-
-deploy:
-  provider: script
-  script: bash scripts/deploy.sh $APP_NAME $STAGING_SMOKE_URL
-  on:
-    branch: master
+jobs:
+  include:
+    - stage: install
+      script: pip install virtualenv
+    - stage: tests
+      script: bash ./scripts/ci_tests.sh
+    - stage: deploy to staging
+      script: skip
+      deploy:
+        provider: script
+        script: bash scripts/deploy.sh $APP_NAME $STAGING_SMOKE_URL
+        on:
+          branch: master
