@@ -4,7 +4,7 @@ RUN apk add \
   --no-cache \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-  gdal gdal-dev proj4-dev
+  gdal gdal-dev proj-dev
 RUN apk update && apk upgrade
 RUN apk add binutils python2-dev libpq postgresql-dev py2-psycopg2 py2-lxml libffi-dev gcc make  \
 libxml2-dev libxml2 libxslt py2-pip musl-dev
