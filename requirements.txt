@@ -17,7 +17,7 @@ simplejson
 django_nose
 GPolyEncode
 honcho==0.5.0
-kombu==3.0.22
+kombu==4.6.5
 boto==2.32.1
 billiard==3.3.0.18
 pytz==2014.7
