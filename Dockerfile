@@ -7,7 +7,7 @@ RUN apk add \
   gdal gdal-dev proj-dev
 RUN apk update && apk upgrade
 RUN apk add binutils python2-dev libpq postgresql-dev py2-psycopg2 py2-lxml libffi-dev gcc make  \
-libxml2-dev libxml2 libxslt py2-pip musl-dev
+libxml2-dev libxslt-dev libxml2 libxslt py2-pip musl-dev
 EXPOSE 8000
 RUN mkdir /code
 WORKDIR /code

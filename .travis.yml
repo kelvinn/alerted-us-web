@@ -9,6 +9,8 @@ jobs:
       script: pip install virtualenv
     - stage: tests
       script: bash ./scripts/ci_tests.sh
+    - stage: coverage
+      script: coveralls
     - stage: deploy to staging
       script: skip
       deploy:

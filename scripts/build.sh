@@ -5,6 +5,6 @@ set -e
 
 virtualenv ~/venv
 source ~/venv/bin/activate
-pip install -U docker-compose
+pip install -U docker-compose coveralls
 
 docker-compose build
