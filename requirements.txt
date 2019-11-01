@@ -1,4 +1,4 @@
-Django==1.11.20
+Django==1.11.23
 six>=1.10.0
 WebTest==2.0.15
 python-dateutil==2.2
