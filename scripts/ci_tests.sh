@@ -16,5 +16,5 @@ docker-compose run db /bin/sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSI
 
 docker-compose run web /bin/sh -c "python manage.py migrate --noinput"
 docker-compose run web /bin/sh -c "python manage.py collectstatic --noinput"
-docker-compose run web /bin/sh -c "python manage.py test --parallel"
+docker-compose run web /bin/sh -c "coverage run manage.py test --parallel"
 docker-compose stop && docker-compose rm -f
