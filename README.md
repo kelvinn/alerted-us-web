@@ -8,6 +8,8 @@ This is the code for the web application side of things written using Python/Dja
 
 [![Build Status](https://travis-ci.org/kelvinn/alerted-us-web.svg?branch=master)](https://travis-ci.org/kelvinn/alerted-us-web)
 
+[![Coverage Status](https://coveralls.io/repos/github/kelvinn/alerted-us-web/badge.svg?branch=master)](https://coveralls.io/github/kelvinn/alerted-us-web?branch=master)
+
 The fastest way to get going is to use Docker Compose.
 
 Download Docker and Docker Compose; install them. Then...
