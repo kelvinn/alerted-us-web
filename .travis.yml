@@ -10,7 +10,7 @@ jobs:
     - stage: tests
       script: bash ./scripts/ci_tests.sh
     - stage: coverage
-      script: coveralls
+      script: pip install coveralls && coveralls
     - stage: deploy to staging
       script: skip
       deploy:
