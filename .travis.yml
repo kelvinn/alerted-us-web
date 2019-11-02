@@ -3,6 +3,11 @@ language: generic
 services:
   - docker
 
+branches:
+  only:
+  - master
+  - /^dependabot.*$/
+
 jobs:
   include:
     - stage: install

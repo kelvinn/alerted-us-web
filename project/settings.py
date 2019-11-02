@@ -261,7 +261,6 @@ LOGIN_REDIRECT_URL = '/dashboard/settings/'
 ACCOUNT_LOGOUT_ON_GET = True
 
 BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
-BROKER_TRANSPORT_OPTIONS = {'fanout_patterns': True}
 
 if DEBUG:
     CELERY_ALWAYS_EAGER = True
