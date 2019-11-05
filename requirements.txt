@@ -9,7 +9,7 @@ djangorestframework-gis==0.14
 djangorestframework==3.9.1
 coreapi
 markdown
-django-bootstrap-form==3.3
+django-bootstrap-form==3.4
 django-filter==0.7
 django-allauth==0.40.0
 requests
