@@ -22,7 +22,7 @@ boto==2.49.0
 billiard==3.3.0.18
 pytz==2014.7
 sqlparse==0.3.0
-statsd==3.0.1
+statsd==3.3.0
 django-uuidfield==0.5.0
 django-anymail[mailgun]
 capparselib==0.5.2
