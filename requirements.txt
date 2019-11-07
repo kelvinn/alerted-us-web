@@ -25,7 +25,7 @@ sqlparse==0.3.0
 statsd==3.3.0
 django-uuidfield==0.5.0
 django-anymail[mailgun]
-capparselib==0.5.2
+capparselib==0.6.2
 dj-static==0.0.6
 django-debug-toolbar==1.8
 pygments
