@@ -1,7 +1,7 @@
 Django==1.11.23
 six>=1.10.0
 WebTest==2.0.33
-python-dateutil==2.2
+python-dateutil==2.8.1
 pep8==1.7.1
 coverage==4.5.4
 dj-database-url
