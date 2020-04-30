@@ -13,7 +13,13 @@ g.run_philippines(sample=False)
 import os
 import sys
 import gc
-from urllib2 import urlopen, URLError, HTTPError
+import logging
+import tempfile
+try:
+    from urllib.request import urlopen
+    from urllib.error import URLError, HTTPError
+except ImportError:
+    from urllib2 import urlopen
 import zipfile
 from time import sleep
 import socket
@@ -30,7 +36,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 try:
     django.setup()  # Removing this halts celery in Django 1.7
 except AttributeError:
-    print django.VERSION
+    print(django.VERSION)
 
 # Third, import the needed Django stuff
 from django.contrib.gis.utils import LayerMapping
@@ -76,22 +82,25 @@ def queryset_iterator(queryset, chunksize=250):
             yield row
         gc.collect()
 
-def dlfile(shape_zip_file_name):
+
+def dlfile(temp_directory, shape_zip_file_name):
     # Open the url
     url = "https://d2382d6dswfsst.cloudfront.net/cozysiren/%s" % shape_zip_file_name
+    full_file_path = temp_directory + "/" + shape_zip_file_name
+
     try:
-        f = urlopen(url)
-        print "downloading " + url
+        f = urlopen(url) # Try running "sudo ./Install\ Certificates.command" on Mac OS X if this doesn't work
+        print("downloading " + url)
 
         # Open our local file for writing
-        with open("/tmp/%s" % shape_zip_file_name, "wb") as local_file:
+        with open(full_file_path, "wb") as local_file:
             local_file.write(f.read())
 
     # Handle possible errors
-    except HTTPError, e:
-        print "HTTP Error:", e.code, url
-    except URLError, e:
-        print "URL Error:", e.reason, url
+    except HTTPError:
+        print("HTTP Error:", url)
+    except URLError:
+        print("URL Error:", url)
 
 
 class GeocodeLoader():
@@ -99,29 +108,32 @@ class GeocodeLoader():
         self.shape_file_name = None
         self.shape_mappings = None
         self.value_name = None
+        self.dirpath = tempfile.mkdtemp()
 
     def start(self):
         # This file is populated from here:
         # http://www.nws.noaa.gov/geodata/catalog/county/html/county.htm
-        if not os.path.isfile('/tmp/%s' % self.shape_zip_file_name):
-            dlfile(self.shape_zip_file_name)
-            with zipfile.ZipFile('/tmp/%s' % self.shape_zip_file_name, "r") as z:
-                z.extractall("/tmp")
 
-        print "Finished downloading data"
+        filepath = self.dirpath + "/" + self.shape_zip_file_name
+        if not os.path.isfile(filepath):
+            dlfile(self.dirpath, self.shape_zip_file_name)
+            with zipfile.ZipFile(filepath, "r") as z:
+                z.extractall(self.dirpath)
+
+        print("Finished downloading data")
         self.load_data()
 
     def load_data(self):
 
         # First erase any existing Geocodes with the same value_name
-        print "Erasing Geocodes with value_name %s" % self.value_name
+        print("Erasing Geocodes with value_name %s" % self.value_name)
         Geocode.objects.filter(value_name=self.value_name).delete()
 
-        print "Erasing any Geocodes with None as value_name"
+        print("Erasing any Geocodes with None as value_name")
         Geocode.objects.filter(value_name=None).delete()
 
-        print "Loading new Geocodes"
-        shp_name = os.path.abspath(os.path.join('/tmp', self.shape_file_name))
+        print("Loading new Geocodes")
+        shp_name = os.path.abspath(os.path.join(self.dirpath, self.shape_file_name))
         lm = LayerMapping(Geocode, shp_name, self.shape_mappings,
                           transform=True, encoding=self.shape_encoding)
 
@@ -131,7 +143,7 @@ class GeocodeLoader():
         else:
             lm.save(strict=True, verbose=False)
 
-        print "Post-processing Geocodes"
+        print("Post-processing Geocodes")
 
         # We use this queryset_iterator function so not all objects are loaded in memory at the same time
         result = queryset_iterator(Geocode.objects.filter(value_name=None))
@@ -143,7 +155,7 @@ class GeocodeLoader():
             z += 1
             try:
 
-                print "%s %s" % (z, i.name)
+                print("%s %s" % (z, i.name))
 
                 # this is to add just a little room between the lines
                 g = i.geom.buffer(-0.0000001)
@@ -163,10 +175,10 @@ class GeocodeLoader():
                 i.save()
                 sleep(0.05)  # We do this to give the DB a second to catch its breath
 
-            except Exception, e:
-                print e
+            except Exception:
+                logging.error("error processing geocodes")
 
-        print "Finished loading data"
+        print("Finished loading data")
 
     def run_fips6(self, sample=True):
         self.shape_mappings = FIPS6_MAPPING
@@ -208,6 +220,7 @@ def main():
             return True
     else:
         raise Exception('Not allowed to load sample data outside DEV')
+
 
 if __name__ == "__main__":
     main()

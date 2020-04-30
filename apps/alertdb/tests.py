@@ -11,6 +11,7 @@ from apps.alertdb.api import AlertListAPI
 from apps.alertdb.geocode_tools import GeocodeLoader
 from apps.alertdb.admin import GeocodeAdmin
 from apps.alertdb.models import Info
+from apps.alertdb.serializers import AlertSerializer, InfoSerializer, AreaSerializer
 import datetime
 
 # Create API request factory
@@ -26,6 +27,22 @@ Fixtures can be re-created like so (really for my own record):
 6) python manage.py dumpdata alertdb people auth.user > alertdb_people_auth.json
 
 """
+
+AMBER_DATA = [{'cap_slug': '1bacc5a2165ec18a99c188b8a78ea7', 'cap_id': 'http://doj.dc.gov/amber12345',
+               'cap_sender': 'KARO@CLETS.DOJ.DC.GOV', 'cap_sent': '2010-06-03 19:15:00-05:00', 'cap_status': 'Actual',
+               'cap_source': 'SW', 'cap_scope': 'Public',
+               'info_set': [{'cap_language': 'en-US',
+                            'cap_category': 'Rescue',
+                            'cap_event': 'Child Abduction',
+                            'cap_urgency': 'Immediate',
+                            'cap_severity': 'Severe',
+                            'cap_certainty': 'Likely',
+                            'cap_headline': 'Amber Alert in Washington D.C.',
+                             'cap_description': '\n            DATE/TIME: 06/03/10, 1915 HRS. VICTIM(S): KHAYRI DOE JR. M/B BLK/BRO 3&apos;0&quot;, 40\n            1022 LBS. LIGHT COMPLEXION. DOB 06/24/06. WEARING RED SHORTS, WHITE T-SHIRT, W/BLUE COLLAR.\n            1023 LOCATION: 5721 DOE ST., WASHINGTON D.C. SUSPECT(S): KHAYRI DOE SR. DOB 04/18/71 M/B, BLK HAIR,\n            1024 BRO EYE. VEHICLE: 81&apos; BUICK 2-DR, BLUE (4XXX000).\n          ',
+                             'cap_contact': 'DET. SMITH, 5TH DIV, METROPOLITAN POLICE DEPT-MPD AT 202-727-9099',
+                             'area_set': [{'area_description': 'Washington D.C.', 'geocode_list': "['6037']"}]}],
+               'contributor': 1}
+              ]
 
 
 class SimpleTest(TestCase):
@@ -158,6 +175,14 @@ class AlertdbAPITests(APITestCase):
 
         self.assertIsNotNone(area_result.geom)
 
+        resource_result = list(info_result.resource_set.all()[:1])[0]  # Get just one.
+
+        self.assertEqual(resource_result.cap_uri, 'http://www.rfs.nsw.gov.au/dsp_content.cfm?CAT_ID=683')
+
+        parameter_result = list(info_result.parameter_set.all()[:1])[0]  # Get just one.
+
+        self.assertEqual(parameter_result.value_name, 'ControlAuthority')
+
     def test_alert_api_put_taiwan_cap12(self):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/'
@@ -166,7 +191,6 @@ class AlertdbAPITests(APITestCase):
         request = factory.post(url, self.taiwan_cap_12, content_type='application/xml')
         force_authenticate(request, user=user)
         response = view(request)
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # verify object created
 
     def test_alert_api_put_ph_cap12(self):
@@ -305,6 +329,27 @@ class AlertdbGeocodeTest(APITestCase):
         self.g.run_philippines()
         result = Geocode.objects.get(code=36900000)
         self.assertEqual(result.name, "Tarlac")
+
+
+class DRFSerializerTest(TestCase):
+    def setUp(self):
+        self.serializer_data = AMBER_DATA
+
+    def test_alertdb_serializer(self):
+        user, created = User.objects.get_or_create(username='apiuser', pk=1)
+        user.save()
+        alertdb_serializer = AlertSerializer(data=self.serializer_data, many=True)
+        self.assertTrue(alertdb_serializer.is_valid())
+
+    def test_info_serializer(self):
+        self.info_serializer = InfoSerializer(data=self.serializer_data[0]['info_set'], many=True)
+        self.assertTrue(self.info_serializer.is_valid())
+
+    def test_area_serializer(self):
+        self.area_serializer = AreaSerializer(data=self.serializer_data[0]['info_set'][0]['area_set'], many=True)
+        self.assertTrue(self.area_serializer.is_valid())
+
+
 
 
 class MockRequest(object):

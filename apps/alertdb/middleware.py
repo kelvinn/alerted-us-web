@@ -2,7 +2,7 @@ import cProfile
 import os
 import pstats
 import tempfile
-from cStringIO import StringIO
+from io import StringIO
 
 from django.conf import settings
 

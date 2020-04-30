@@ -58,7 +58,7 @@ class CAPXMLParser(BaseParser):
     capparselib library, which standardises the different CAP versions into a normal python dictionary.
     """
 
-    media_type = '*/xml'
+    media_type = 'application/xml'
 
     def format(self):
         return None
@@ -74,14 +74,14 @@ class CAPXMLParser(BaseParser):
                         geom = MultiPolygon(result)
                     else:
                         geom = result
-                except Exception,e:
+                except Exception:
                     logging.error('Error in geocodeToMultiPolygon')
                     geom = None
                 return geom
             else:
                 return None
-        except Exception, e:
-            print e
+        except Exception:
+            logging.error('Error')
 
     def circleToMultiPolygon(self, circle):
         # circle is usually of the form '-35.3888,147.0598 25.0', so the below should make sense
@@ -122,43 +122,44 @@ class CAPXMLParser(BaseParser):
 
         for info_key, info_value in item_obj.items():
             if info_key in SIMPLE_CAP_TYPES:
-                info_obj[info_key] = info_value
+                #info_obj[info_key] = info_value
+                info_obj.update({info_key: str(info_value)})
 
             #  Convert any datetime obj to datetime object
             if info_key in DATETIME_CAP_TYPE:
                 try:
                     info_value = dparser.parse(str(info_value))
                     info_obj[info_key] = info_value
-                except Exception, err:
+                except Exception:
                     logging.error('parsers.py incorrect format')
 
             if info_key == 'cap_parameter':
                 parameter_list = []
                 for ptr_item in info_value:
                     parameter_obj = dict()
-                    parameter_obj['value_name'] = ptr_item['valueName']
-                    parameter_obj['value'] = ptr_item['value']
+                    parameter_obj['value_name'] = str(ptr_item['valueName'])
+                    parameter_obj['value'] = str(ptr_item['value'])
                     parameter_obj['cap_info'] = info_obj
                     parameter_list.append(parameter_obj)
-                item_obj['parameter_set'] = parameter_list
+                info_obj['parameter_set'] = parameter_list
 
             if info_key == 'cap_resource':
                 resource_list = []
                 for res_item in info_value:
                     res_obj = dict()
-                    res_obj['cap_resource_desc'] = res_item['resourceDesc']
-                    res_obj['cap_mime_type'] = res_item['mimeType']
-                    res_obj['cap_uri'] = res_item['uri']
+                    res_obj['cap_resource_desc'] = str(res_item['resourceDesc'])
+                    res_obj['cap_mime_type'] = str(res_item['mimeType'])
+                    res_obj['cap_uri'] = str(res_item['uri'])
                     res_obj['cap_info'] = info_obj
                     resource_list.append(res_obj)
-                item_obj['resource_set'] = resource_list
+                info_obj['resource_set'] = resource_list
 
             if info_key == 'cap_area':
                 area_obj_list = []
                 for area_item in info_value:
 
                     area_obj = dict()
-                    area_obj['area_description'] = area_item['area_description']
+                    area_obj['area_description'] = str(area_item['area_description'])
                     if 'circle' in area_item:
                         circle = str(area_item['circle'])
                         if len(circle) > 5:  # CAPs sometimes have empty polygon tags
@@ -173,10 +174,10 @@ class CAPXMLParser(BaseParser):
                         geocode_list = []
                         value_name_save = None
                         for geocode in area_item['geocodes']:
-                            value_name = geocode['valueName']
+                            value_name = str(geocode['valueName'])
                             if value_name == 'FIPS6' or value_name == 'Taiwan_Geocode_100' or value_name == 'SAME':
                                 geocode_list.append(str(geocode['value']))
-                                value_name_save = value_name
+                                value_name_save = str(value_name)
 
                         if len(geocode_list) > 0:
                             logging.info("Looking up MultiPolygon with value_name %s" % value_name_save)
@@ -185,7 +186,7 @@ class CAPXMLParser(BaseParser):
                                 area_obj['geom'] = geom
                             area_obj['geocode_list'] = str(geocode_list)
                         else:
-                            logging.error("No value_name")
+                            logging.info("No value_name")
 
                     area_obj_list.append(area_obj)
                 info_obj['area_set'] = area_obj_list
@@ -199,7 +200,9 @@ class CAPXMLParser(BaseParser):
         body_text = stream.read()
         data = []
         try:
-            alerts = CAPParser(body_text, recover=True).as_dict()
+            alerts = CAPParser(body_text.decode('utf-8'), recover=True).as_dict()
+
+            #alerts = CAPParser(body_text, recover=True).as_dict()
         except:
             statsd.incr('api.CAPXMLParser.parse.error')
             logging.error(str(body_text))
