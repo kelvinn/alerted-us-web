@@ -10,8 +10,6 @@ branches:
 
 jobs:
   include:
-    - stage: install
-      script: pip3 install virtualenv
     - stage: tests
       script: bash ./scripts/ci_tests.sh
     - stage: coverage
