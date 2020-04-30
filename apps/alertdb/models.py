@@ -181,12 +181,13 @@ class Area(models.Model):
 
     def geocodeToMultiPolygon(self, geocode_list, value_name):
         try:
-            result = Geocode.objects.filter(value_name=value_name, code__in=geocode_list)
-            result = result.aggregate(models.Union('geom'))['geom__union']
-            if result.geom_type != 'MultiPolygon':
-                self.geom = MultiPolygon(result)
-            else:
-                self.geom = result
+            if value_name and geocode_list:
+                result = Geocode.objects.filter(value_name=value_name, code__in=geocode_list)
+                result = result.aggregate(models.Union('geom'))['geom__union']
+                if result.geom_type != 'MultiPolygon':
+                    self.geom = MultiPolygon(result)
+                else:
+                    self.geom = result
         except Exception:
             print("Error")
 
