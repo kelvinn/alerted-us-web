@@ -8,12 +8,11 @@ echo "Collecting static files..."
 
 python manage.py collectstatic --noinput
 
-echo "Creating symlink as needed..."
+echo "Printing Django version"
 
-#ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
+python manage.py --version
 
-echo "Starting uWSGI server..."
-
+echo "Starting Gunicorn..."
 
 #uwsgi --http-socket :8000 --wsgi-file project/wsgi.py --master --processes 2 --threads 2
 #uwsgi --enable-threads --single-interpreter --plugins python --vacuum --http-socket :8000 --module project.wsgi
