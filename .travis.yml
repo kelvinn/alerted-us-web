@@ -11,7 +11,7 @@ branches:
 jobs:
   include:
     - stage: install
-      script: apt-get install python3-venv
+      script: sudo apt-get install python3-venv
     - stage: tests
       script: bash ./scripts/ci_tests.sh
     - stage: coverage
