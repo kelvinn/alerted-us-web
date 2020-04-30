@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.auth.models import User
 from django.db.models import Manager as GeoManager
-from django.contrib.postgres.fields import ArrayField
+from sentry_sdk import capture_exception
 
 # Create your models here.
 
@@ -188,8 +188,8 @@ class Area(models.Model):
                     self.geom = MultiPolygon(result)
                 else:
                     self.geom = result
-        except Exception:
-            print("Error")
+        except Exception as e:
+            capture_exception(e)
 
     def circleToMultiPolygon(self, circle):
         # circle is usually of the form '-35.3888,147.0598 25.0', so the below should make sense
