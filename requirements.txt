@@ -27,7 +27,7 @@ django-uuidfield==0.5.0
 django-anymail[mailgun]
 capparselib==0.6.3
 dj-static==0.0.6
-django-debug-toolbar==1.8
+django-debug-toolbar==2.2
 pygments
 newrelic
 sentry-sdk==0.14.3
