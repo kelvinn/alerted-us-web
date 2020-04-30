@@ -29,7 +29,7 @@ class AuthTests(BaseTestCase):
     def test_register(self):
         self.driver.get(self.live_server_url + '/accounts/signup/')
         src = self.driver.page_source
-        print src
+
         username = self.driver.find_element_by_id('id_email')
         username.send_keys('test@alerted.us')
 

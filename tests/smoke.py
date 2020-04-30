@@ -1,6 +1,5 @@
 import requests
 import sys
-import ssl
 from time import sleep
 
 if __name__ == '__main__':
