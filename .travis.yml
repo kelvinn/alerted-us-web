@@ -13,7 +13,7 @@ jobs:
     - stage: install
       script: sudo apt-get install python3-venv python3-pip
     - stage: tests
-      script: bash ./scripts/ci_tests.sh
+      script: sudo apt-get install python3-venv && bash ./scripts/ci_tests.sh
     - stage: coverage
       script: bash ./scripts/coveralls.sh
     - stage: deploy to staging
