@@ -17,7 +17,7 @@ simplejson
 django_nose
 GPolyEncode
 honcho==1.0.1
-kombu==3.0.22
+kombu==4.6.8
 boto==2.49.0
 billiard==3.3.0.18
 pytz==2019.3
@@ -30,7 +30,7 @@ dj-static==0.0.6
 django-debug-toolbar==1.8
 pygments
 newrelic
-sentry-sdk==0.13.2
+sentry-sdk==0.14.3
 logzio-python-handler
 ddtrace
 gunicorn
