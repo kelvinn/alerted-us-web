@@ -10,6 +10,7 @@ TEST_ID_2 = getenv('TEST_ID_2', None)
 
 loader = Loaderio(API_KEY)
 
+
 def run_tests(test_id):
     result = None
     pending_result_id = loader.tests.run(test_id)
@@ -33,6 +34,7 @@ def run_tests(test_id):
             print("[ERROR] Average response time not provided from Loader.io")
     else:
         print("[ERROR] Loader.io says: %s" % pending_result_id['errors'])
+
 
 if __name__ == '__main__':
     run_tests(TEST_ID)

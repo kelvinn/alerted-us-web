@@ -5,7 +5,7 @@ set -e
 
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -U docker-compose
+python3 -m pip install install -U docker-compose
 
 docker-compose build
 docker-compose down && docker-compose up -d
