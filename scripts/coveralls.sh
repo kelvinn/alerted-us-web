@@ -3,7 +3,7 @@
 # Abort the script if any command fails
 set -e
 
-virtualenv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 
-pip install -U coveralls && coveralls
+python3 -m pip install -U coveralls && coveralls
