@@ -1,4 +1,4 @@
-language: generic
+language: python
 
 services:
   - docker
@@ -20,13 +20,13 @@ jobs:
       script: skip
       deploy:
         provider: script
-        script: sudo apt-get install python3-venv && bash scripts/deploy.sh $APP_NAME $STAGING_SMOKE_URL
+        script: bash scripts/deploy.sh $APP_NAME $STAGING_SMOKE_URL
         on:
           branch: master
     - stage: deploy to production
       script: skip
       deploy:
         provider: script
-        script: sudo apt-get install python3-venv && bash scripts/deploy.sh $PRODUCTION_APP_NAME $PRODUCTION_SMOKE_URL
+        script: bash scripts/deploy.sh $PRODUCTION_APP_NAME $PRODUCTION_SMOKE_URL
         on:
           branch: master
