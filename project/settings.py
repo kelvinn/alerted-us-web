@@ -175,7 +175,9 @@ TEMPLATES = [
 
 DATABASES = {}
 
-DATABASES['default'] = dj_database_url.config(default='postgis://postgres:password@127.0.0.1:5432/postgres', conn_max_age=600)
+DATABASES['default'] = dj_database_url.config(
+    default='postgis://postgres:password@127.0.0.1:5432/postgres', conn_max_age=600
+)
 
 
 # Internationalization
