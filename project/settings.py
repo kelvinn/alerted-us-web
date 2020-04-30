@@ -17,10 +17,12 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 SENTRY_DSN = os.getenv('SENTRY_DSN', None)
 
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    integrations=[DjangoIntegration()]
-)
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()]
+    )
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -114,19 +116,18 @@ if DEBUG and ENABLE_DEBUG_TOOLBAR:
         'SHOW_TOOLBAR_CALLBACK' : show_toolbar,
     }
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.alertdb.middleware.ProfilerMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
 if DEBUG and ENABLE_DEBUG_TOOLBAR:
-    MIDDLEWARE_CLASSES += (
+    MIDDLEWARE += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 

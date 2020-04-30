@@ -21,7 +21,8 @@ class Migration(migrations.Migration):
                 ('cap_uri', models.URLField(blank=True)),
                 ('cap_deref_rui', models.URLField(blank=True)),
                 ('cap_digest', models.CharField(max_length=75)),
-                ('cap_info', models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True)),
+                ('cap_info', models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True,
+                                               on_delete=models.CASCADE)),
             ],
             options={
             },

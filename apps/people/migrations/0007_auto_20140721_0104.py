@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notification',
             name='cap_info',
-            field=models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True),
+            field=models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True,
+                                    on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.RemoveField(

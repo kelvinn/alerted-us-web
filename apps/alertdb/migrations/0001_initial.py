@@ -90,7 +90,8 @@ class Migration(migrations.Migration):
                 ('cap_instruction', models.TextField()),
                 ('cap_link', models.URLField(blank=True)),
                 ('cap_contact', models.CharField(max_length=500)),
-                ('cap_alert', models.ForeignKey(to_field='id', blank=True, to='alertdb.Alert', null=True)),
+                ('cap_alert', models.ForeignKey(to_field='id', blank=True, to='alertdb.Alert', null=True,
+                                                on_delete=models.CASCADE)),
             ],
             options={
             },

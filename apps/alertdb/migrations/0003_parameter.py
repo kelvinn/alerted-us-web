@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('value_name', models.CharField(max_length=50)),
                 ('value', models.CharField(max_length=500)),
-                ('cap_info', models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True)),
+                ('cap_info', models.ForeignKey(to_field='id', blank=True, to='alertdb.Info', null=True,
+                                               on_delete=models.CASCADE)),
             ],
             options={
             },

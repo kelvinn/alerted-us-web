@@ -17,8 +17,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('location', models.ForeignKey(to_field='id', blank=True, to='people.Location', null=True)),
-                ('cap_area', models.ForeignKey(to_field='id', blank=True, to='alertdb.Area', null=True)),
+                ('location', models.ForeignKey(to_field='id', blank=True, to='people.Location', null=True,
+                                               on_delete=models.CASCADE)),
+                ('cap_area', models.ForeignKey(to_field='id', blank=True, to='alertdb.Area', null=True,
+                                               on_delete=models.CASCADE)),
                 ('message_id', models.CharField(max_length=300, null=True, blank=True)),
             ],
             options={

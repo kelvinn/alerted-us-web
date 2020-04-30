@@ -161,13 +161,14 @@ class UserAPITests(APITestCase):
 
         self.client.force_authenticate(user=user)
         response = self.client.patch(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         url = '/api/v1/users/10/'
 
         self.client.force_authenticate(user=user)
         response = self.client.patch(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
 
     def test_users_api(self):
 

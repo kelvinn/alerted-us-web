@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Location',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, to_field='id')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, to_field='id', on_delete=models.CASCADE)),
                 ('date_received', models.DateTimeField(auto_now_add=True)),
                 ('geom', django.contrib.gis.db.models.fields.PointField(srid=4326, null=True, blank=True)),
             ],

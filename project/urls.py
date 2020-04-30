@@ -11,6 +11,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
 from rest_framework.schemas import get_schema_view
 from rest_framework.authtoken import views
+from django.urls import path
 from project import settings
 
 
@@ -46,7 +47,7 @@ urlpatterns = urlpatterns + [
     url(r'^dashboard/settings/$', login_required(SettingsView.as_view()), name='settings-view'),
     url(r'^alerts/(?P<cap_slug>\w+)/$', cache_page(60)(AlertDetailView.as_view()), name='alert-details-view'),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^.well-known/acme-challenge/.*', https_confirmation, name="https_confirmation"),
 ]

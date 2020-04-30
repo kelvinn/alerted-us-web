@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
             name='SNSToken',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, to_field='id')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, to_field='id',
+                                           on_delete=models.CASCADE)),
                 ('sns_reg_id', models.CharField(max_length=200, null=True, blank=True)),
                 ('sns_endpoint_apn', models.CharField(max_length=200, null=True, blank=True)),
             ],
