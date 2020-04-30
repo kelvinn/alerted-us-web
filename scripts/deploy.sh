@@ -24,12 +24,12 @@ heroku container:release web --app $APP_NAME
 
 sleep 10
 
-virtualenv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 
 git status
 
-pip install requests pyOpenSSL ndg-httpsclient pyasn1
-python tests/smoke.py $SMOKE_URL
+pip3 install requests pyOpenSSL ndg-httpsclient pyasn1
+python3 tests/smoke.py $SMOKE_URL
 
 # Deploy should have succeeded now, so posting release
 
