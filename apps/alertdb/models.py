@@ -1,7 +1,8 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos.collections import MultiPolygon, Point, Polygon
 from django.contrib.auth.models import User
-
+from django.db.models import Manager as GeoManager
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -19,7 +20,7 @@ class Geocode(models.Model):
     value_name = models.CharField(max_length=50, blank=True, null=True, choices=GEOCODE_CHOICES)
 
     geom = models.MultiPolygonField(srid=4326)
-    objects = models.GeoManager()
+    objects = GeoManager()
 
     def __unicode__(self):              # __unicode__ on Python 2
         return 'Name: %s' % self.name
@@ -64,7 +65,7 @@ class Alert(models.Model):
     cap_incidents = models.CharField(max_length=500, blank=True, null=True)
     cap_date_received = models.DateTimeField(db_index=True, auto_now_add=True)
     cap_raw = models.TextField(blank=True, null=True)
-    contributor = models.ForeignKey(User, editable=True, blank=True, null=True)
+    contributor = models.ForeignKey(User, editable=True, blank=True, null=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         if self.cap_id is not None:
@@ -122,7 +123,8 @@ class Info(models.Model):
         ('AllClear', 'AllClear'),
         ('None', 'None'),
     )
-    cap_language = models.CharField(max_length=75, blank=True, null=True)
+
+    cap_language = models.CharField(max_length=75, blank=True, null=True, default='')
     cap_category = models.CharField(max_length=15, choices=CATEGORY_CHOICES)
     cap_event = models.CharField(max_length=500, blank=True, null=True)
     cap_response_type = models.CharField(max_length=15, choices=RESPONSE_TYPE_CHOICES, blank=True, null=True)
@@ -140,7 +142,7 @@ class Info(models.Model):
     cap_instruction = models.TextField(blank=True, null=True)
     cap_link = models.URLField(blank=True)
     cap_contact = models.CharField(max_length=500, blank=True, null=True)
-    cap_alert = models.ForeignKey(Alert, blank=True, null=True)
+    cap_alert = models.ForeignKey(Alert, blank=True, null=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         if self.cap_headline is not None:
@@ -148,9 +150,9 @@ class Info(models.Model):
 
 
 class Parameter(models.Model):
-    value_name = models.CharField(max_length=50)
-    value = models.CharField(max_length=500)
-    cap_info = models.ForeignKey(Info, blank=True, null=True)
+    value_name = models.CharField(max_length=50, blank=True, null=True)
+    value = models.CharField(max_length=500, blank=True, null=True)
+    cap_info = models.ForeignKey(Info, blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Resource(models.Model):
@@ -160,18 +162,18 @@ class Resource(models.Model):
     cap_uri = models.URLField(blank=True)
     cap_deref_rui = models.URLField(blank=True)
     cap_digest = models.CharField(max_length=75, blank=True, null=True)
-    cap_info = models.ForeignKey(Info, blank=True, null=True)
+    cap_info = models.ForeignKey(Info, blank=True, null=True, on_delete=models.CASCADE)
 
 
 class Area(models.Model):
-    area_description = models.TextField(blank=True, null=True)
+    area_description = models.TextField(blank=True, null=True, default='')
     geocode_list = models.TextField(blank=True, null=True)
-    cap_info = models.ForeignKey(Info, blank=True, null=True)
+    cap_info = models.ForeignKey(Info, blank=True, null=True, on_delete=models.CASCADE)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField), and
     # overriding the default manager with a GeoManager instance.
     geom = models.MultiPolygonField(blank=True, null=True, srid=4326, geography=True)
-    objects = models.GeoManager()
+    objects = GeoManager()
 
     def __unicode__(self):
         if self.area_description is not None:
@@ -185,8 +187,8 @@ class Area(models.Model):
                 self.geom = MultiPolygon(result)
             else:
                 self.geom = result
-        except Exception, e:
-            print e
+        except Exception:
+            print("Error")
 
     def circleToMultiPolygon(self, circle):
         # circle is usually of the form '-35.3888,147.0598 25.0', so the below should make sense

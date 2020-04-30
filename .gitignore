@@ -4,6 +4,7 @@ nosetests.xml
 *.pyc
 .venv/
 .venv27/
+.venv38/
 captools/fips6.zip
 captools/output.xml
 reports/coverage.xml
@@ -20,3 +21,4 @@ htmlcov/
 docker-compose.override.yml
 jmeter.log
 local
+settings.json

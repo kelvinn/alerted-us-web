@@ -260,7 +260,7 @@ LOGIN_REDIRECT_URL = '/dashboard/settings/'
 
 ACCOUNT_LOGOUT_ON_GET = True
 
-BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True}
+BROKER_TRANSPORT_OPTIONS = {'fanout_prefix': True, 'fanout_patterns': True}
 
 if DEBUG:
     CELERY_ALWAYS_EAGER = True
@@ -290,44 +290,3 @@ LOGGING = {
         },
     }
 }
-
-if LOGZ_TOKEN and LOGZ_URL:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-            },
-            'logzioFormat': {
-                'format': '{"additional_field": "value"}'
-            }
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'level': 'DEBUG',
-                'formatter': 'verbose'
-            },
-            'logzio': {
-                'class': 'logzio.handler.LogzioHandler',
-                'level': 'INFO',
-                'formatter': 'logzioFormat',
-                'token': LOGZ_TOKEN,
-                'logzio_type': "django",
-                'logs_drain_timeout': 5,
-                'url': LOGZ_URL,
-                'debug': True
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['console', ],
-                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO')
-            },
-            'appname': {
-                'handlers': ['console', 'logzio'],
-                'level': 'INFO'
-            }
-        }
-    }

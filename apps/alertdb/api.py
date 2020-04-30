@@ -92,11 +92,12 @@ class AlertListAPI(APIView):
         timer = statsd.timer('api.AlertListAPI.post')
         timer.start()
         data = request.data
+
         try:
             for item in data:
                 item['contributor'] = request.user.pk
-        except Exception, e:
-            logging.error(e)
+        except Exception:
+            logging.error("Error with contributor")
 
         serializer = AlertSerializer(data=data, many=True)
         if serializer.is_valid():
