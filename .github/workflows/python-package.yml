@@ -1,0 +1,37 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build_test_deploy:
+
+    runs-on: ubuntu-latest
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Tests
+        run: ./scripts/ci_tests.sh
+      - name: Coverage
+        run: ./scripts/coveralls.sh
+      - name: Deploy Staging
+        run: ./scripts/deploy.sh ${{ secrets.STAGING_APP_NAME }} ${{ secrets.STAGING_SMOKE_URL }}
+      - name: Deploy Production
+        run: ./scripts/deploy.sh ${{ secrets.PRODUCTION_APP_NAME }} ${{ secrets.PRODUCTION_SMOKE_URL }}
