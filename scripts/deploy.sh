@@ -31,7 +31,7 @@ echo "Login to Heroku Container"
 heroku container:login --verbose
 
 echo "Deleting any earlier built images - not great, I know."
-docker rmi alerted-us-web
+docker images
 
 echo "Push container to Heroku"
 heroku container:push web --app $APP_NAME
