@@ -23,6 +23,8 @@ admin.site.register(Geocode, GeocodeAdmin)
 
 
 class AreaAdmin(admin.GeoModelAdmin):
+    show_full_result_count = False
+    paginator = FixedCountPaginator
     def __init__(self, *args, **kwargs):
         super(AreaAdmin, self).__init__(*args, **kwargs)
         self.list_display_links = ('area_link', )
@@ -47,18 +49,24 @@ admin.site.register(Area, AreaAdmin)
 
 
 class ParameterAdmin(admin.GeoModelAdmin):
+    show_full_result_count = False
+    paginator = FixedCountPaginator
     list_display = ('value_name', 'value')
     readonly_fields = ['cap_info']
 admin.site.register(Parameter, ParameterAdmin)
 
 
 class ResourceAdmin(admin.GeoModelAdmin):
+    show_full_result_count = False
+    paginator = FixedCountPaginator
     list_display = ('cap_resource_desc', 'cap_mime_type')
     readonly_fields = ['cap_info']
 admin.site.register(Resource, ResourceAdmin)
 
 
 class InfoAdmin(admin.GeoModelAdmin):
+    show_full_result_count = False
+    paginator = FixedCountPaginator
     search_fields = ['cap_description']
     readonly_fields = ['cap_alert']
     list_display = ('cap_effective', 'cap_event_code', 'cap_category', 'cap_severity', 'cap_certainty')
