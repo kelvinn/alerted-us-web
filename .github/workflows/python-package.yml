@@ -17,7 +17,7 @@ env:
 
 
 jobs:
-  build_test_deploy:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
@@ -29,6 +29,11 @@ jobs:
           python-version: 3.8
       - name: Tests
         run: ./scripts/ci_tests.sh
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_test
+
+    steps:
       - name: Deploy Staging
         run: |
           sudo apt update && sudo apt install heroku # Let's upgrade heroku cli
