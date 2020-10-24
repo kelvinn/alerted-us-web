@@ -13,8 +13,6 @@ SMOKE_URL=$2
 
 if ! foobar_loc="$(type -p "heroku")" || [ -z "/usr/local/bin/" ]; then
   brew install heroku/brew/heroku
-else
-  heroku update
 fi
 
 touch ~/.netrc && chmod 600 ~/.netrc

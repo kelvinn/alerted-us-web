@@ -30,6 +30,8 @@ jobs:
       - name: Tests
         run: ./scripts/ci_tests.sh
       - name: Deploy Staging
-        run: ./scripts/deploy.sh ${{ secrets.STAGING_APP_NAME }} ${{ secrets.STAGING_SMOKE_URL }}
+        run: |
+          sudo apt update && sudo apt install heroku # Let's upgrade heroku cli
+          ./scripts/deploy.sh ${{ secrets.STAGING_APP_NAME }} ${{ secrets.STAGING_SMOKE_URL }}
       - name: Deploy Production
         run: ./scripts/deploy.sh ${{ secrets.PRODUCTION_APP_NAME }} ${{ secrets.PRODUCTION_SMOKE_URL }}
