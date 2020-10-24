@@ -30,6 +30,9 @@ docker info
 echo "Login to Heroku Container"
 heroku container:login --verbose
 
+echo "Show that I'm actually logged in"
+heroku apps:info $APP_NAME
+
 echo "Deleting any earlier built images - not great, I know."
 docker images
 
