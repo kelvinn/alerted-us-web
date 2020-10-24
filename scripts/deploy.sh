@@ -30,6 +30,9 @@ docker info
 echo "Login to Heroku Container"
 heroku container:login --verbose
 
+echo "DEBUG - app name"
+echo $APP_NAME
+
 echo "Push container to Heroku"
 heroku container:push web --app $APP_NAME
 
