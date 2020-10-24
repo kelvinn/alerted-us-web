@@ -6,7 +6,7 @@ This is the code for the web application side of things written using Python/Dja
 
 # Development
 
-[![Build Status](https://travis-ci.org/kelvinn/alerted-us-web.svg?branch=master)](https://travis-ci.org/kelvinn/alerted-us-web)
+![Python package](https://github.com/kelvinn/alerted-us-web/workflows/Python%20package/badge.svg)
 
 [![Coverage Status](https://coveralls.io/repos/github/kelvinn/alerted-us-web/badge.svg?branch=master)](https://coveralls.io/github/kelvinn/alerted-us-web?branch=master)
 

@@ -28,10 +28,7 @@ echo "Display some Docker information"
 docker info
 
 echo "Login to Heroku Container"
-heroku container:login --verbose
-
-echo "Show that I'm actually logged in"
-heroku apps:info shrouded-citadel-27610
+heroku container:login
 
 echo "Deleting any earlier built images - not great, I know."
 docker images
