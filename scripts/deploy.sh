@@ -24,7 +24,8 @@ heroku container:release web --app $APP_NAME
 
 sleep 10
 
-python3 -m venv .venv && source .venv/bin/activate
+# Create a virtual environment
+python -m venv .venv && source .venv/bin/activate
 
 git status
 

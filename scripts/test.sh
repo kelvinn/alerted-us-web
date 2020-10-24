@@ -3,8 +3,8 @@
 # Abort the script if any command fails
 set -e
 
-virtualenv .venv
-source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate
+
 pip install -U docker-compose
 
 docker-compose up -d
