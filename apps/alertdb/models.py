@@ -27,6 +27,7 @@ class Geocode(models.Model):
 
 
 class Alert(models.Model):
+    show_full_result_count = False
     STATUS_CHOICES = (
         ('Actual', 'Actual'),
         ('System', 'System'),
