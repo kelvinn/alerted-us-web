@@ -48,4 +48,4 @@ jobs:
           sudo apt update && sudo apt install heroku # Let's upgrade heroku cli
           ./scripts/deploy.sh $STAGING_APP_NAME $STAGING_SMOKE_URL
       - name: Deploy Production
-        run: ./scripts/deploy.sh $PRODUCTION_APP_NAME $PRODUCTION_APP_NAME
+        run: ./scripts/deploy.sh $PRODUCTION_APP_NAME $PRODUCTION_SMOKE_URL
