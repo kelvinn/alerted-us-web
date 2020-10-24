@@ -14,7 +14,10 @@ env:
   HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-
+  STAGING_APP_NAME: ${{ secrets.STAGING_APP_NAME }}
+  PRODUCTION_APP_NAME: ${{ secrets.PRODUCTION_APP_NAME }}
+  STAGING_SMOKE_URL: ${{ secrets.STAGING_SMOKE_URL }}
+  PRODUCTION_SMOKE_URL: ${{ secrets.PRODUCTION_SMOKE_URL }}
 
 jobs:
   build_and_test:
@@ -43,6 +46,6 @@ jobs:
       - name: Deploy Staging
         run: |
           sudo apt update && sudo apt install heroku # Let's upgrade heroku cli
-          ./scripts/deploy.sh ${{ secrets.STAGING_APP_NAME }} ${{ secrets.STAGING_SMOKE_URL }}
+          ./scripts/deploy.sh STAGING_APP_NAME $STAGING_SMOKE_URL
       - name: Deploy Production
-        run: ./scripts/deploy.sh ${{ secrets.PRODUCTION_APP_NAME }} ${{ secrets.PRODUCTION_SMOKE_URL }}
+        run: ./scripts/deploy.sh PRODUCTION_APP_NAME $PRODUCTION_APP_NAME
