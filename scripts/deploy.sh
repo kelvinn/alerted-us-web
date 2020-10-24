@@ -20,8 +20,20 @@ if [ "$CI" == true ]; then
 fi
 
 touch ~/.netrc && chmod 600 ~/.netrc
-heroku container:login
+echo "Printing some Heroku information"
+heroku --version
+heroku status
+
+echo "Display some Docker information"
+docker info
+
+echo "Login to Heroku Container"
+heroku container:login --verbose
+
+echo "Push container to Heroku"
 heroku container:push web --app $APP_NAME
+
+echo "Release container on Heroku"
 heroku container:release web --app $APP_NAME
 
 # Wait for deploy to finish. Not pretty, I know.
