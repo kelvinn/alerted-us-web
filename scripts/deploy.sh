@@ -15,6 +15,10 @@ if ! foobar_loc="$(type -p "heroku")" || [ -z "/usr/local/bin/" ]; then
   brew install heroku/brew/heroku
 fi
 
+if [ "$CI" == true ]; then
+  docker logout
+fi
+
 touch ~/.netrc && chmod 600 ~/.netrc
 heroku container:login
 heroku container:push web --app $APP_NAME
