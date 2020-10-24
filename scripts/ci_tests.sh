@@ -20,5 +20,11 @@ sleep 15
 docker-compose run db /bin/sh -c 'exec psql -h db -U postgres -c "CREATE EXTENSION IF NOT EXISTS POSTGIS"'
 docker-compose run web /bin/sh -c "python manage.py migrate --noinput"
 docker-compose run web /bin/sh -c "python manage.py collectstatic --noinput"
-docker-compose run web /bin/sh -c "coverage run manage.py test --parallel"
+docker-compose run web /bin/sh -c "python manage.py test"
+
+# Report coverage to coveralls, but only if in CI
+if [ "$CI" == true ]
+then
+    docker-compose run -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN web /bin/sh -c "python -m pip install -U coveralls && coveralls"
+fi
 docker-compose stop && docker-compose rm -f

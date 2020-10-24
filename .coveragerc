@@ -1,6 +1,7 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
+parallel = True
 omit =
     # omit virtualenvs
     */.venv/*
@@ -31,6 +32,7 @@ ignore_errors = True
 [paths]
 source =
     apps/
+    /code/apps/
 
 
 [html]

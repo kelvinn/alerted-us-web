@@ -28,8 +28,6 @@ jobs:
           python-version: 3.8
       - name: Tests
         run: ./scripts/ci_tests.sh
-      - name: Coverage
-        run: ./scripts/coveralls.sh
       - name: Deploy Staging
         run: ./scripts/deploy.sh ${{ secrets.STAGING_APP_NAME }} ${{ secrets.STAGING_SMOKE_URL }}
       - name: Deploy Production
