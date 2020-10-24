@@ -13,6 +13,8 @@ SMOKE_URL=$2
 
 if ! foobar_loc="$(type -p "heroku")" || [ -z "/usr/local/bin/" ]; then
   brew install heroku/brew/heroku
+else
+  heroku update
 fi
 
 touch ~/.netrc && chmod 600 ~/.netrc
@@ -29,8 +31,8 @@ python -m venv .venv && source .venv/bin/activate
 
 git status
 
-python3 -m pip install requests pyOpenSSL ndg-httpsclient pyasn1
-python3 tests/smoke.py $SMOKE_URL
+python -m pip install requests pyOpenSSL ndg-httpsclient pyasn1
+python tests/smoke.py $SMOKE_URL
 
 # Deploy should have succeeded now, so posting release
 
