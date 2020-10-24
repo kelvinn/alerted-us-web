@@ -4,9 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models import Manager as GeoManager
 from sentry_sdk import capture_exception
 
+
 # Create your models here.
-
-
 class Geocode(models.Model):
     GEOCODE_CHOICES = (
         ('FIPS6', 'FIPS6'),
@@ -27,7 +26,7 @@ class Geocode(models.Model):
 
 
 class Alert(models.Model):
-    show_full_result_count = False
+
     STATUS_CHOICES = (
         ('Actual', 'Actual'),
         ('System', 'System'),

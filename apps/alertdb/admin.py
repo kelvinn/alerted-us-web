@@ -1,10 +1,18 @@
 from django.contrib.gis import admin
 from apps.alertdb.models import Alert, Info, Area, Parameter, Resource
 from apps.alertdb.models import Geocode
+from django.core.paginator import Paginator
+
+
+# Custom paginator to stop admin from bombing out because tables so big
+class FixedCountPaginator(Paginator):
+
+    @property
+    def count(self):
+        return 1000
+
 
 # Register your models here.
-
-
 class GeocodeAdmin(admin.GeoModelAdmin):
     list_display = ('name', 'code', 'nativename',)
     search_fields = ['code']
@@ -58,6 +66,8 @@ admin.site.register(Info, InfoAdmin)
 
 
 class AlertAdmin(admin.GeoModelAdmin):
+    show_full_result_count = False
+    paginator = FixedCountPaginator
     list_filter = ('cap_scope', 'cap_sender',)
     search_fields = ['cap_description']
     list_display = ('cap_date_received', 'cap_sender', 'cap_status',)
