@@ -29,11 +29,17 @@ jobs:
           python-version: 3.8
       - name: Tests
         run: ./scripts/ci_tests.sh
+
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_test
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: Deploy Staging
         run: |
           sudo apt update && sudo apt install heroku # Let's upgrade heroku cli
