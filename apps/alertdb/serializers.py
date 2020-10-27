@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import geometry
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from rest_framework import serializers
 from apps.alertdb.models import Alert, Info, Area, Parameter, Resource
@@ -43,6 +44,7 @@ class InfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Info
+        geo_field = None
         fields = '__all__'
 
     def create(self, validated_data):
@@ -64,11 +66,18 @@ class InfoSerializer(serializers.ModelSerializer):
         return cap_info
 
 
-class AlertSerializer(serializers.ModelSerializer):
+class AlertSerializer(GeoFeatureModelSerializer):
     info_set = InfoSerializer(many=True, required=False)
+
+    area_from_alert = GeometrySerializerMethodField()
+
+    def get_area_from_alert(self, obj):
+        geom = obj.info_set.all()[0].area_set.all()[0].geom
+        return geom
 
     class Meta:
         model = Alert
+        geo_field = "area_from_alert"
         fields = '__all__'
 
     def create(self, validated_data):

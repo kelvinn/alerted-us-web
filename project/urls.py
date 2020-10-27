@@ -42,6 +42,7 @@ urlpatterns = [
 urlpatterns = urlpatterns + [
     url(r'^schema/$', schema_view),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
+    url(r'^map/$', TemplateView.as_view(template_name='alertdb/map.html'), name='map'),
     url(r'^dashboard/$', login_required(SettingsView.as_view()), name='settings-view'),
     url(r'^dashboard/locations/$', login_required(LocationView.as_view()), name='location-view'),
     url(r'^dashboard/settings/$', login_required(SettingsView.as_view()), name='settings-view'),

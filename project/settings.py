@@ -136,17 +136,6 @@ ROOT_URLCONF = 'project.urls'
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-TEST_OUTPUT_DIR = 'reports'
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=apps.people',
-    '--cover-package=apps.alertdb',
-    '--with-xunit',
-    '--xunit-file=reports/nosetests.xml'
-]
-
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 SITE_ID = 1

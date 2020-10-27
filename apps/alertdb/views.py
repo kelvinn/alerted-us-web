@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.gis.geos import GeometryCollection
 from apps.alertdb.models import Alert, Area
+from django.core.serializers import serialize
+from datetime import datetime
 
 class AlertDetailView(View):
 
@@ -19,4 +21,3 @@ class AlertDetailView(View):
         return render(request, 'alertdb/detail.html', {'alert': alert,
                                                        'bounds_lng1': bounds_lng1, 'bounds_lat1': bounds_lat1,
                                                        'bounds_lng2': bounds_lng2, 'bounds_lat2': bounds_lat2})
-

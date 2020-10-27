@@ -1,15 +1,16 @@
 from django.contrib.gis.geos import Point
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.contrib.gis.measure import D
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.gis.geos import GeometryCollection, MultiPolygon
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import status
 from apps.alertdb.models import Alert, Info, Area
 from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from statsd.defaults.django import statsd
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 
@@ -40,40 +41,32 @@ class AlertListAPI(APIView):
             # This is just normal HttpResponse so it doesn't have quotes
             return HttpResponse(str(request.query_params['hub.challenge']))
 
-        try:
-            lat = float(request.query_params['lat'])
-            lng = float(request.query_params['lng'])
-        except:
-            raise Http404
-
         if 'cap_date_received' in request.query_params:
             cap_date_received = str(request.query_params['cap_date_received'])
         else:
             cap_date_received = None
-
-        pnt = Point(lng, lat)
 
         if cap_date_received is not None:
             alert = Alert.objects.filter(
                 cap_date_received__gte=cap_date_received
             )
         else:
-            alert = Alert.objects.all()
+            alert = Alert.objects.filter(
+                cap_date_received__gte = datetime.now() - timedelta(days=1)
+            )
 
-        alert = alert.filter(
-            #info__area__geom__dwithin=(pnt, 0.02)
-            info__area__geom__dwithin=(pnt, D(m=2000))
-        ).filter(
-            info__cap_expires__gte=datetime.now()
-        ).prefetch_related('info_set')
+        lat = request.query_params.get('lat', None)
+        lng = request.query_params.get('lng', None)
 
-        """
-        alert = alert.filter(
-            info__area__geom__dwithin=(pnt, 0.02)
-        ).filter(
-            info__cap_expires__gte=datetime.now()
-        )
-        """
+        if lat and lng:
+            lat = float(lat)
+            lng = float(lng)
+            pnt = Point(lng, lat)
+            alert = alert.filter(
+                info__area__geom__dwithin=(pnt, D(m=2000))
+            ).filter(
+                info__cap_expires__gte=datetime.now()
+            )
 
         if len(alert) > 0:
             serializer = AlertSerializer(alert, many=True)

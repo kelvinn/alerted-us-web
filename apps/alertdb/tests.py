@@ -212,6 +212,8 @@ class AlertdbAPITests(APITestCase):
         info_set = Info.objects.all()
         for info in info_set:
             info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.cap_alert.cap_date_received = datetime.datetime.now()
+            info.cap_alert.save()
             info.save()
 
         view = AlertListAPI.as_view()
@@ -221,17 +223,19 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-        cap_sender = response.data[0]['cap_sender']
+        cap_sender = response.data['features'][0]['properties']['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
 
     def test_alert_api_query_by_coord_within(self):
         user, created = User.objects.get_or_create(username='apiuser')
         url = '/api/v1/alerts/?lng=-66.71266&lat=18.47906'
 
-        # Swap expired date so alert is active
+        # Swap expired date and when it was received so alert is active
         info_set = Info.objects.all()
         for info in info_set:
             info.cap_expires = datetime.date.today() + datetime.timedelta(days=1)
+            info.cap_alert.cap_date_received = datetime.datetime.now()
+            info.cap_alert.save()
             info.save()
 
         view = AlertListAPI.as_view()
@@ -241,7 +245,7 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-        cap_sender = response.data[0]['cap_sender']
+        cap_sender = response.data['features'][0]['properties']['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
 
     def test_alert_api_query_by_coord_within_filterby_date(self):
@@ -261,7 +265,7 @@ class AlertdbAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-        cap_sender = response.data[0]['cap_sender']
+        cap_sender = response.data['features'][0]['properties']['cap_sender']
         self.assertEqual(cap_sender, 'w-nws.webmaster@noaa.gov')  # test to sender
 
     def test_alert_api_query_by_coord_within_filterby_date_invalid(self):
@@ -271,7 +275,7 @@ class AlertdbAPITests(APITestCase):
         # Swap expired date so alert is inactive
         info_set = Info.objects.all()
         for info in info_set:
-            info.cap_expires = datetime.datetime(2015, 2, 14, 12, 30)
+            info.cap_expires = datetime.datetime(2000, 2, 14, 12, 30, tzinfo=datetime.timezone.utc)
             info.save()
 
         view = AlertListAPI.as_view()
@@ -280,6 +284,16 @@ class AlertdbAPITests(APITestCase):
         response = view(request)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # verify we got back a response OK
+
+    def test_alert_api_query_by_cap_date_received(self):
+        user, created = User.objects.get_or_create(username='apiuser')
+        url = '/api/v1/alerts/?cap_date_received=2012-02-17T08:03:21.156421?format=geojson'
+
+        view = AlertListAPI.as_view()
+        request = factory.get(url)
+        force_authenticate(request, user=user)
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
 
     def test_alert_area_api(self):
@@ -348,9 +362,6 @@ class DRFSerializerTest(TestCase):
     def test_area_serializer(self):
         self.area_serializer = AreaSerializer(data=self.serializer_data[0]['info_set'][0]['area_set'], many=True)
         self.assertTrue(self.area_serializer.is_valid())
-
-
-
 
 class MockRequest(object):
     pass
