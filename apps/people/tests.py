@@ -35,7 +35,6 @@ class PeopleTests(APITestCase):
         # Every test needs a client.
         self.client = Client()
 
-
     def test_settings_view(self):
         User.objects.create_user(username='testuser', password='testpassword')
         self.client.login(username='testuser', password='testpassword')
@@ -149,13 +148,12 @@ class UserAPITests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
     def test_patch_user_api(self):
         user, created = User.objects.get_or_create(username='testuser')
         user.set_password('testpassword')
 
         user.save()
-        #user = User.objects.create_user(username='testuser', password='testpassword')
+
         url = '/api/v1/users/%s/' % user.pk
         data = {u'username': user.username, u'email': u'test@alerted.us'}
 
@@ -169,7 +167,6 @@ class UserAPITests(APITestCase):
         response = self.client.patch(url, data, format='json')
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
-
     def test_users_api(self):
 
         user, created = User.objects.get_or_create(username='testuser')
@@ -180,14 +177,9 @@ class UserAPITests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
     def test_get_token(self):
-        #user, created = User.objects.get_or_create(username='admin', password='password')
-
-        user = User.objects.create_user(username='admin', password='password')
-
-
-        data = {u'username': u'admin', u'password':u'password'}
+        User.objects.create_user(username='admin', password='password')
+        data = {u'username': u'admin', u'password': u'password'}
 
         # Test getting auth token
         url = '/api-token-auth/'
@@ -195,10 +187,9 @@ class UserAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_token_by_email(self):
-        user = User.objects.create_user(username='admin@alerted.us', email='admin@alerted.us', password='password')
+        User.objects.create_user(username='admin@alerted.us', email='admin@alerted.us', password='password')
 
-
-        data = {u'username': u'admin@alerted.us', u'password':u'password'}
+        data = {u'username': u'admin@alerted.us', u'password': u'password'}
 
         # Test getting auth token
         url = '/api-token-auth/'

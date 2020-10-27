@@ -1,12 +1,11 @@
 from django.contrib.gis.geos import Point
-from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse
 from django.contrib.gis.measure import D
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.gis.geos import GeometryCollection, MultiPolygon
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import status
-from apps.alertdb.models import Alert, Info, Area
+from apps.alertdb.models import Alert, Area
 from apps.alertdb.serializers import AlertSerializer, AreaSerializer
 from apps.alertdb.parsers import CAPXMLParser
 from statsd.defaults.django import statsd
@@ -52,7 +51,7 @@ class AlertListAPI(APIView):
             )
         else:
             alert = Alert.objects.filter(
-                cap_date_received__gte = datetime.now() - timedelta(days=1)
+                cap_date_received__gte=datetime.now() - timedelta(days=1)
             )
 
         lat = request.query_params.get('lat', None)

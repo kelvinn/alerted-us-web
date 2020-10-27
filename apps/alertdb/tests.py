@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.test.client import Client
-from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
 from django.contrib.gis.geos import Polygon, MultiPolygon
 from rest_framework import status
@@ -31,16 +30,17 @@ Fixtures can be re-created like so (really for my own record):
 AMBER_DATA = [{'cap_slug': '1bacc5a2165ec18a99c188b8a78ea7', 'cap_id': 'http://doj.dc.gov/amber12345',
                'cap_sender': 'KARO@CLETS.DOJ.DC.GOV', 'cap_sent': '2010-06-03 19:15:00-05:00', 'cap_status': 'Actual',
                'cap_source': 'SW', 'cap_scope': 'Public',
-               'info_set': [{'cap_language': 'en-US',
+               'info_set': [{
+                            'cap_language': 'en-US',
                             'cap_category': 'Rescue',
                             'cap_event': 'Child Abduction',
                             'cap_urgency': 'Immediate',
                             'cap_severity': 'Severe',
                             'cap_certainty': 'Likely',
                             'cap_headline': 'Amber Alert in Washington D.C.',
-                             'cap_description': '\n            DATE/TIME: 06/03/10, 1915 HRS. VICTIM(S): KHAYRI DOE JR. M/B BLK/BRO 3&apos;0&quot;, 40\n            1022 LBS. LIGHT COMPLEXION. DOB 06/24/06. WEARING RED SHORTS, WHITE T-SHIRT, W/BLUE COLLAR.\n            1023 LOCATION: 5721 DOE ST., WASHINGTON D.C. SUSPECT(S): KHAYRI DOE SR. DOB 04/18/71 M/B, BLK HAIR,\n            1024 BRO EYE. VEHICLE: 81&apos; BUICK 2-DR, BLUE (4XXX000).\n          ',
-                             'cap_contact': 'DET. SMITH, 5TH DIV, METROPOLITAN POLICE DEPT-MPD AT 202-727-9099',
-                             'area_set': [{'area_description': 'Washington D.C.', 'geocode_list': "['6037']"}]}],
+                            'cap_description': '\n DATE/TIME: 06/03/10, 1915 HRS. VICTIM(S): KHAYRI DOE JR. M/B BLK/BRO 3&apos;0&quot;, 40\n            1022 LBS. LIGHT COMPLEXION. DOB 06/24/06. WEARING RED SHORTS, WHITE T-SHIRT, W/BLUE COLLAR.\n            1023 LOCATION: 5721 DOE ST., WASHINGTON D.C. SUSPECT(S): KHAYRI DOE SR. DOB 04/18/71 M/B, BLK HAIR,\n            1024 BRO EYE. VEHICLE: 81&apos; BUICK 2-DR, BLUE (4XXX000).\n          ',
+                            'cap_contact': 'DET. SMITH, 5TH DIV, METROPOLITAN POLICE DEPT-MPD AT 202-727-9099',
+                            'area_set': [{'area_description': 'Washington D.C.', 'geocode_list': "['6037']"}]}],
                'contributor': 1}
               ]
 
@@ -295,7 +295,6 @@ class AlertdbAPITests(APITestCase):
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # verify we got back a response OK
 
-
     def test_alert_area_api(self):
         alert = list(Alert.objects.all()[:1])[0]
         url = "/api/v1/alerts/%s/areas/" % alert.cap_slug
@@ -323,15 +322,13 @@ class AlertdbAPITests(APITestCase):
         view = AlertListAPI.as_view()
         request = factory.post(url, self.cap_11, content_type='application/xml')
         force_authenticate(request, user=user)
-        response = view(request)
+        view(request)
 
         request2 = factory.post(url, self.cap_11, content_type='application/xml')
         force_authenticate(request2, user=user)
         response2 = view(request2)
 
         self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)  # verify we got back a response OK
-
-        #self.assertRaises(Exception, view, request2)
 
 
 class AlertdbGeocodeTest(APITestCase):
@@ -363,6 +360,7 @@ class DRFSerializerTest(TestCase):
         self.area_serializer = AreaSerializer(data=self.serializer_data[0]['info_set'][0]['area_set'], many=True)
         self.assertTrue(self.area_serializer.is_valid())
 
+
 class MockRequest(object):
     pass
 
@@ -371,6 +369,7 @@ class MockSuperUser(object):
     def has_perm(self, perm):
         return True
 
+
 request = MockRequest()
 request.user = MockSuperUser()
 
@@ -378,7 +377,7 @@ request.user = MockSuperUser()
 class ModelAdminTests(TestCase):
 
     def setUp(self):
-        self.mp = MultiPolygon([Polygon( ((0, 0), (0, 1), (1, 1), (0, 0)) ), Polygon( ((1, 1), (1, 2), (2, 2), (1, 1)) )])
+        self.mp = MultiPolygon([Polygon(((0, 0), (0, 1), (1, 1), (0, 0))), Polygon(((1, 1), (1, 2), (2, 2), (1, 1)))])
         self.geocode = Geocode.objects.create(
             name='Test',
             nativename='Tests',
