@@ -72,7 +72,8 @@ class AlertSerializer(GeoFeatureModelSerializer):
     area_from_alert = GeometrySerializerMethodField()
 
     def get_area_from_alert(self, obj):
-        geom = obj.info_set.all()[0].area_set.all()[0].geom
+        # This probably won't actually work for generating geojson
+        geom = obj.info_set.first().area_set.first().geom
         return geom
 
     class Meta:
