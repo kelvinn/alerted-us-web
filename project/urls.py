@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
 from apps.people.views import LocationView, SettingsView, https_confirmation
 from apps.people.api import LocationDetail, LocationList, UserDetail, UserList
-from apps.alertdb.views import AlertDetailView
+from apps.alertdb.views import AlertDetailView, AlertListView
 from apps.alertdb.api import AlertListAPI, AlertDetailAPI, AlertAreaAPI
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
@@ -46,6 +46,7 @@ urlpatterns = urlpatterns + [
     url(r'^dashboard/$', login_required(SettingsView.as_view()), name='settings-view'),
     url(r'^dashboard/locations/$', login_required(LocationView.as_view()), name='location-view'),
     url(r'^dashboard/settings/$', login_required(SettingsView.as_view()), name='settings-view'),
+    url(r'^alerts/1234/$', cache_page(60)(AlertListView.as_view()), name='alert-list-view'),
     url(r'^alerts/(?P<cap_slug>\w+)/$', cache_page(60)(AlertDetailView.as_view()), name='alert-details-view'),
     url(r'^accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
