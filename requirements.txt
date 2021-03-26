@@ -6,7 +6,7 @@ pep8==1.7.1
 coverage==5.3
 dj-database-url>=0.5.0
 djangorestframework-gis==0.16
-djangorestframework==3.12.2
+djangorestframework==3.12.4
 coreapi
 markdown
 django-bootstrap-form==3.4
