@@ -19,7 +19,7 @@ GPolyEncode
 honcho==1.0.1
 kombu==5.0.2
 boto==2.49.0
-billiard==3.6.3.0
+billiard==3.6.4.0
 pytz==2020.4
 sqlparse==0.4.1
 statsd==3.3.0
