@@ -11,7 +11,7 @@ coreapi
 markdown
 django-bootstrap-form==3.4
 django-filter==2.4.0
-django-allauth==0.43.0
+django-allauth==0.45.0
 requests
 simplejson
 django_nose
