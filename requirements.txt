@@ -21,7 +21,7 @@ kombu==5.0.2
 boto==2.49.0
 billiard==3.6.3.0
 pytz==2020.4
-sqlparse==0.4.1
+sqlparse==0.4.2
 statsd==3.3.0
 django-uuidfield==0.5.0
 django-anymail[mailgun]
